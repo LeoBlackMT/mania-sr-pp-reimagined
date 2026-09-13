@@ -130,6 +130,18 @@ GitHub Pages is configured on the remote side; this repository intentionally car
 workflow. Publishing is therefore: run the CLI, commit `web/data/results.json`, push. The data file
 is small because it contains ids and metadata only.
 
+Two ways to serve this directory, both without adding a workflow here:
+
+* **Deploy from a branch** — repository *Settings → Pages → Source: Deploy from a branch*, branch
+  `main`, folder `/ (root)`. The site is then reachable at
+  `https://<owner>.github.io/<repo>/web/`, and `web/data/results.json` resolves relative to it.
+* **GitHub Actions (remote-generated workflow)** — if the remote generates a static-site workflow,
+  point its upload step at `web` (`path: web`) so the deployed root is the site itself and the URL
+  becomes `https://<owner>.github.io/<repo>/`.
+
+Either way the site is plain static files: no build step runs, so what is reviewed locally is
+exactly what visitors receive.
+
 Before committing a refreshed dataset, validate it — CI runs the same check:
 
 ```bash
@@ -153,3 +165,27 @@ Correctness is verified from the research repository, which owns both the Python
 implementation and the golden vectors exported from it
 (`langs/engine_check/` — a harness that replays those vectors against these crates). This keeps the
 engine free of test code while still failing loudly on any behavioural drift.
+
+Two layers are checked, and it is worth knowing which one catches what:
+
+| Layer | What it pins | Tool |
+|---|---|---|
+| **Formula layer** | every function of the reimagined algorithm against the Python reference: windows, mods, key resolution, chord/column features, `.osu` parsing, the rice variant, the No-Fail model and the full pricing pipeline (685 cases / 1880 assertions) | `langs/engine_check` (research side) |
+| **End-to-end parity** | the published `reimagined` column against the research report for the same scores, i.e. whether the engine reproduces the specification's numbers with *its own* difficulty front-end | `scripts/compare_engine_vs_research.py` (research side) |
+
+The second layer exists because R and L are measured, not copied: the engine derives them from the
+pinned fork's sunny implementation, while the research reference derives them from its vendored
+sunny build. Two independent implementations of the same algorithm do not agree bit-for-bit, so the
+parity check quantifies the difference instead of assuming it away. Measured on the current fixture
+(100 scores, 4K, NM/DT/MR):
+
+| Comparison | median | p5 | p95 |
+|---|---|---|---|
+| engine star rating / research star rating | 1.0016 | 1.0000 | 1.0045 |
+| engine rice star rating / research rice star rating | 1.0001 | 0.9988 | 1.0017 |
+| **engine `reimagined` PP / research `pp_final_surface`** | **1.0034** | 1.0005 | 1.0099 |
+
+In other words the engine reproduces the research specification's production number to within about
+0.3% at the median and 1% at p95, and the residual is explained by the two sunny implementations
+disagreeing by ~0.16% on these maps. Re-run the parity check whenever the fork revision is bumped,
+because that is exactly when this residual can change.

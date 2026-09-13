@@ -3,180 +3,270 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>mania-sr-pp-reimagined — osu!mania PP algorithm comparison</title>
+<meta name="color-scheme" content="light dark">
+<title>mania-sr-pp-reimagined — osu!mania PP algorithm</title>
+<meta name="description" content="The algorithm repository of the Reimagined osu!mania pp algorithm: a static viewer over the engine's published dataset, with Bancho, Sunny, Codexxy and Reimagined priced on the same best-performance lists.">
 <link rel="icon" href="data:,">
 <link rel="stylesheet" href="styles.css">
+
+<!-- Theme is applied before the first paint: the stylesheet answers to
+     <html data-theme>, and the stored choice (or the system preference) has to
+     be on the element before the body renders, or the page flashes. -->
+<script>
+(function () {
+  var pref = 'auto';
+  try { var v = localStorage.getItem('mania-sr-pp.theme'); if (v === 'light' || v === 'dark') pref = v; } catch (e) { /* private mode */ }
+  document.documentElement.setAttribute('data-theme', pref);
+})();
+</script>
 </head>
 <body>
+
+<a class="skip" href="#main">Skip to content</a>
 
 <header class="site-head">
   <div class="head-main">
     <h1>mania-sr-pp-reimagined</h1>
-    <p class="tagline">Four osu!mania PP algorithms over one bp list —
-      <strong>Bancho</strong> · <strong>Sunny</strong> · <strong>Codexxy</strong> · <strong>Reimagined</strong></p>
+    <!-- The point of the repository, stated first: the algorithm is the product.
+         The four-way comparison only exists because the algorithm has to be
+         validated against the algorithms it is meant to improve on. -->
+    <p class="about">This repository is the algorithm repository of the <strong>Reimagined</strong>
+      osu!mania pp algorithm, and this page renders the dataset that the engine publishes.
+      The four-algorithm comparison below is a <em>by-product of validating</em> that algorithm
+      against the ones it competes with — it is not what the repository is for, and it is not a
+      ranking of osu!mania players.</p>
+    <p class="tagline"><strong>Bancho</strong> · <strong>Sunny</strong> · <strong>Codexxy</strong>
+      · <strong>Reimagined</strong> — the same best-performance lists, priced four ways.</p>
     <p class="meta" id="meta">no dataset loaded</p>
   </div>
-  <label class="btn-file" title="Load data/index.json from your machine">
-    Load index.json
-    <input type="file" id="file-head" accept=".json,application/json" hidden>
-  </label>
+  <div class="head-actions">
+    <button type="button" class="btn" id="theme-toggle" aria-label="Colour theme: auto">
+      <span class="theme-icon" aria-hidden="true" id="theme-icon">◐</span>
+      <span id="theme-label">Auto</span>
+    </button>
+    <button type="button" class="btn" id="load-open" title="Load data/index.json from this machine">Load index.json</button>
+    <input type="file" id="file-input" accept=".json,application/json" hidden>
+  </div>
 </header>
 
-<!-- Data caveats: locally loaded file, unexpected schema_version, engine warnings. -->
+<!-- One line for every data caveat: local file, unexpected schema_version,
+     engine warnings, a failed manual load. -->
 <p class="note" id="source-note" hidden></p>
 
-<!-- Empty state: data/index.json is missing or unreadable. Manual loading is the way in. -->
-<section class="loader" id="loader" hidden>
-  <h2 id="loader-title">No dataset yet</h2>
+<!-- Empty state: data/index.json is missing or unreadable. Manual loading is
+     the only way in, so it is offered right here. -->
+<section class="loader" id="loader" hidden aria-labelledby="loader-title">
+  <h2 id="loader-title">No dataset</h2>
   <p class="why" id="loader-why"></p>
   <p class="hint" id="loader-hint"></p>
-  <pre class="cmd"><code>cargo run --release -p mania-pp-cli -- \
-  --fixture fixtures/bp-lists.tsv \
-  --maps    /path/to/osu/map/cache \
-  --out     docs/data</code></pre>
-  <div class="drop drop-zone" id="drop">
-    <strong>Drop <code>data/index.json</code> here</strong>
+  <p class="hint">The engine writes the dataset; this page only reads it. From the repository root:</p>
+  <pre class="cmd"><code id="loader-cmd"></code></pre>
+  <div class="drop" id="drop">
+    <strong>Drop <code>index.json</code> here</strong>
     <span>or</span>
-    <label class="btn-file">choose a file<input type="file" id="file-drop" accept=".json,application/json" hidden></label>
+    <button type="button" class="btn" id="loader-browse">Choose a file</button>
   </div>
-  <p class="hint">The file is read in your browser — it is not uploaded anywhere. Player shards
-    (<code>data/players/&lt;uid&gt;.json</code>) are still fetched from this directory, so the full
-    view needs the site served over HTTP; a single player shard can also be dropped here on its own.</p>
+  <p class="hint">A player shard (<code>columns</code> + <code>scores</code>) is accepted too, and renders on
+    its own with its weighted totals derived from the scores. Either way the file is read in the browser
+    — nothing is uploaded. Over HTTP the index is fetched from <code>data/</code> automatically, so the
+    local file is only needed when the dataset is absent.</p>
   <p class="err" id="loader-err" hidden></p>
 </section>
 
-<!-- Plain-English description of each algorithm, from the data file when present. -->
-<section class="legend" id="legend" hidden></section>
+<!-- Algorithm descriptions, taken from the dataset when it carries them. -->
+<section class="legend" id="legend" hidden aria-label="Algorithms compared"></section>
 
-<main>
-  <!-- 1. Per-player summary + 2. pairwise A/B selection and its bar chart. -->
-  <section class="panel" id="panel-summary" hidden>
-    <div class="panel-head">
-      <h2>Totals</h2>
-      <div class="controls">
-        <label class="pick">bp list
-          <select id="user-select"></select>
-        </label>
-        <label class="pick">A <select id="algo-a" aria-label="Algorithm A (baseline)"></select></label>
-        <label class="pick">B <select id="algo-b" aria-label="Algorithm B"></select></label>
-        <button type="button" class="btn" id="swap-ab" title="Swap A and B">swap A ⇄ B</button>
+<main id="main">
+
+  <!-- =====================================================================
+       View 1 — Rankings (#/players): every player in the index, no shard
+       needed. This is the entry point; a player view links back here.
+       ===================================================================== -->
+  <section class="view" id="view-players" hidden>
+    <div class="view-head">
+      <h2>Rankings</h2>
+      <p class="hint">Every player in <code>data/index.json</code>. Totals are weighted sums over
+        <em>that algorithm's own</em> ordering of the player's scores (<code>0.95<sup>n</sup></code>); the
+        move column is the player's rank under that algorithm against the same player's Bancho rank.</p>
+    </div>
+    <div class="toolbar">
+      <div class="search-line">
+        <label class="sr-only" for="players-q">Search players</label>
+        <input type="search" id="players-q" autocomplete="off" spellcheck="false"
+               placeholder="Search players — e.g. pp_reimagined&gt;10000, rank&lt;5, shirasu" aria-describedby="players-q-count">
+        <button type="button" class="btn" id="players-reset" title="Clear search, sort and the A / B pair">Reset</button>
+        <span class="count" id="players-q-count" role="status"></span>
       </div>
     </div>
-    <div class="summary">
-      <div class="summary-table" id="total-table"></div>
-      <div class="summary-chart" id="total-chart"></div>
-    </div>
-    <p class="ab-line" id="ab-line"></p>
-    <p class="hint" id="total-note"></p>
-  </section>
-
-  <!-- Broken or missing shard: the summary above still comes from the index. -->
-  <section class="panel panel-error" id="panel-shard-error" hidden>
-    <h2 id="shard-error-title">Player data unavailable</h2>
-    <p class="err" id="shard-error-text"></p>
-    <p class="hint">The weighted totals above are read from <code>data/index.json</code> and stay
-      valid; everything that needs the individual scores does not. Reload the page or pick another
-      bp list to try again.</p>
-    <p><button type="button" class="btn" id="shard-retry">retry this bp list</button></p>
-  </section>
-
-  <!-- 3. rank shift, 4. full metadata, 8. CSV export. -->
-  <section class="panel" id="panel-scores" hidden>
-    <div class="panel-head">
-      <h2>Scores</h2>
-      <div class="controls">
-        <span class="hint" id="ab-note"></span>
-        <span class="hint" id="score-count"></span>
-        <button type="button" class="btn" id="export-csv">Export CSV</button>
-      </div>
-    </div>
-
-    <div class="filters">
-      <input type="search" id="q" placeholder="Filter: artist, title, version, mods, beatmap id, keys…" autocomplete="off" aria-label="Free-text filter">
-      <div class="chips" role="group" aria-label="Keys filter">
-        <button type="button" class="chip is-on" data-f="keys" data-v="all" aria-pressed="true">all keys</button>
-        <button type="button" class="chip" data-f="keys" data-v="4" aria-pressed="false">4K</button>
-        <button type="button" class="chip" data-f="keys" data-v="6" aria-pressed="false">6K</button>
-        <button type="button" class="chip" data-f="keys" data-v="7" aria-pressed="false">7K</button>
-        <button type="button" class="chip" data-f="keys" data-v="other" aria-pressed="false">other K</button>
-      </div>
-      <div class="chips" role="group" aria-label="Mods filter">
-        <button type="button" class="chip is-on" data-f="mods" data-v="all" aria-pressed="true">all mods</button>
-        <button type="button" class="chip" data-f="mods" data-v="nm" aria-pressed="false">NM</button>
-        <button type="button" class="chip" data-f="mods" data-v="dt" aria-pressed="false">DT·NC</button>
-        <button type="button" class="chip" data-f="mods" data-v="ht" aria-pressed="false">HT·DC</button>
-        <button type="button" class="chip" data-f="mods" data-v="other" aria-pressed="false">other</button>
-      </div>
-      <div class="chips" role="group" aria-label="Style filter">
-        <button type="button" class="chip is-on" data-f="ln" data-v="all" aria-pressed="true">rice + mix + LN</button>
-        <button type="button" class="chip" data-f="ln" data-v="rice" aria-pressed="false">rice</button>
-        <button type="button" class="chip" data-f="ln" data-v="mix" aria-pressed="false">mix</button>
-        <button type="button" class="chip" data-f="ln" data-v="ln" aria-pressed="false">LN</button>
-      </div>
-      <button type="button" class="chip reset" id="f-reset">reset</button>
-    </div>
-
     <div class="table-wrap">
-      <table id="score-table" class="scores">
+      <table class="grid rankings" id="players-table" aria-describedby="players-note">
+        <caption class="sr-only">Players in the dataset with each algorithm's weighted total pp and rank</caption>
         <thead></thead>
         <tbody></tbody>
       </table>
     </div>
-    <p class="more"><button type="button" id="show-more" hidden>show more</button></p>
+    <p class="hint" id="players-note"></p>
   </section>
 
-  <!-- 5. Layer summary: key mode / mod family / style bucket, relative difference B vs A. -->
-  <section class="panel" id="panel-layers" hidden>
-    <div class="panel-head">
-      <h2>Layer summary</h2>
-      <span class="hint">relative difference of B against A, aggregated by layer — the same split the
-        research side reports, so the numbers are comparable</span>
-    </div>
-    <div class="table-wrap" id="layer-table"></div>
-    <p class="hint" id="layer-note"></p>
-  </section>
+  <!-- =====================================================================
+       View 2 — one player (#/player/{uid}): totals from the index, then the
+       score table, layers, disagreement list and scatter from the shard.
+       ===================================================================== -->
+  <section class="view" id="view-player" hidden>
 
-  <!-- 6. Disagreement: normalised spread over all four algorithms + an LN-ratio scatter. -->
-  <section class="panel" id="panel-disagree" hidden>
-    <div class="panel-head">
-      <h2>Where the algorithms disagree</h2>
-      <span class="hint">spread = (max − min) / mean over every algorithm that priced the score;
-        respects the filters above — click a row for detail</span>
+    <p class="crumbs"><a href="#/players" id="back-link">← Rankings</a></p>
+
+    <div class="view-head">
+      <h2 id="player-title">Player</h2>
+      <p class="hint" id="player-sub"></p>
     </div>
-    <div class="dis-agree">
-      <div class="dis-list" id="disagree"></div>
-      <div class="scatter-box">
-        <div id="scatter"></div>
-        <p class="hint" id="scatter-note"></p>
+
+    <!-- Summary: the A/B controls and the four totals. -->
+    <section class="panel" id="panel-summary">
+      <div class="panel-head">
+        <h3>Totals</h3>
+        <div class="controls">
+          <label class="pick">A <select id="algo-a" aria-label="Algorithm A — the baseline"></select></label>
+          <label class="pick">B <select id="algo-b" aria-label="Algorithm B — compared against A"></select></label>
+          <button type="button" class="btn" id="swap-ab" title="Swap A and B">Swap A ⇄ B</button>
+        </div>
       </div>
-    </div>
-  </section>
+      <div class="table-wrap">
+        <table class="grid totals" id="total-table">
+          <caption class="sr-only">Weighted total pp per algorithm for this player</caption>
+          <thead></thead>
+          <tbody></tbody>
+        </table>
+      </div>
+      <p class="ab-line" id="ab-line"></p>
+      <p class="hint" id="total-note"></p>
+    </section>
 
-  <!-- 7. Cross-player overview, straight from the index (no shards needed). -->
-  <section class="panel" id="panel-overview" hidden>
-    <div class="panel-head">
-      <h2>All players</h2>
-      <span class="hint">weighted total pp, difference against Bancho, and each player's rank under
-        each algorithm — click a row to open that bp list</span>
-    </div>
-    <div class="table-wrap" id="overview-table"></div>
-    <p class="hint" id="overview-note"></p>
+    <!-- The shard could not be fetched, or this player has no scores at all. -->
+    <section class="panel panel-error" id="panel-shard-error" hidden aria-labelledby="shard-error-title">
+      <h3 id="shard-error-title">Player data unavailable</h3>
+      <p class="err" id="shard-error-text"></p>
+      <p class="hint" id="shard-error-hint"></p>
+      <p><button type="button" class="btn" id="shard-retry">Retry this player</button></p>
+    </section>
+
+    <!-- Scores: the dense sortable table. Follows the search and the A/B pair. -->
+    <section class="panel" id="panel-scores">
+      <div class="panel-head">
+        <h3>Scores</h3>
+        <div class="controls">
+          <span class="hint" id="ab-note"></span>
+          <span class="count" id="score-count" role="status"></span>
+          <button type="button" class="btn" id="export-csv">Export CSV</button>
+        </div>
+      </div>
+
+      <div class="toolbar">
+        <div class="search-line">
+          <label class="sr-only" for="scores-q">Search scores</label>
+          <input type="search" id="scores-q" autocomplete="off" spellcheck="false"
+                 placeholder="Search scores — e.g. mod=DT key=4 star&lt;7" aria-describedby="search-state">
+          <button type="button" class="btn" id="scores-reset" title="Clear search, sort and the A / B pair">Reset</button>
+          <span class="count" id="search-state" role="status"></span>
+        </div>
+        <p class="err" id="search-warn" hidden></p>
+
+        <!-- Collapsible syntax help, with examples that are real rows of this dataset. -->
+        <details class="help" id="help">
+          <summary>Search syntax</summary>
+          <div class="help-body">
+            <p>Free text matches artist, title, difficulty, mapper and the mod string; everything is
+              case-insensitive and several terms are <strong>AND</strong>ed. A field form is
+              <code>field&lt;operator&gt;value</code> with <code>=</code>, <code>==</code>,
+              <code>:</code>, <code>!=</code>, <code>&lt;</code>, <code>&gt;</code>,
+              <code>&lt;=</code>, <code>&gt;=</code> — the same shape as
+              <a href="https://osu.ppy.sh/wiki/en/Beatmap_search" target="_blank" rel="noopener noreferrer">osu!'s
+              beatmap search</a>. Quote a value with spaces: <code>title:"eternal white"</code>.</p>
+
+            <h4>Examples in this dataset</h4>
+            <ul class="examples" id="help-examples"></ul>
+
+            <h4>Score fields</h4>
+            <p class="hint" id="help-fields-note"></p>
+            <div class="table-wrap">
+              <table class="grid fields">
+                <thead><tr><th scope="col">Field</th><th scope="col">Matches</th><th scope="col">Example</th></tr></thead>
+                <tbody id="help-fields"></tbody>
+              </table>
+            </div>
+
+            <h4>Player fields (rankings view)</h4>
+            <div class="table-wrap">
+              <table class="grid fields">
+                <thead><tr><th scope="col">Field</th><th scope="col">Matches</th><th scope="col">Example</th></tr></thead>
+                <tbody id="help-player-fields"></tbody>
+              </table>
+            </div>
+
+            <h4>Keyboard</h4>
+            <ul class="keys">
+              <li><kbd>/</kbd> focus the search box</li>
+              <li><kbd>Esc</kbd> clear it</li>
+              <li><kbd>Enter</kbd> on the rankings search open the first match</li>
+            </ul>
+          </div>
+        </details>
+      </div>
+
+      <div class="table-wrap">
+        <table class="grid scores" id="score-table">
+          <caption class="sr-only">This player's scores with each algorithm's pp, the rank under A and B, and the breakdown</caption>
+          <thead></thead>
+          <tbody></tbody>
+        </table>
+      </div>
+      <p class="more"><button type="button" class="btn" id="show-more" hidden>Show more</button></p>
+    </section>
+
+    <!-- Layer summary. Deliberately computed over the whole bp list. -->
+    <section class="panel" id="panel-layers">
+      <div class="panel-head">
+        <h3>Layer summary</h3>
+        <span class="hint">median relative difference of B against A, aggregated by layer</span>
+      </div>
+      <div class="table-wrap" id="layer-table"></div>
+      <p class="hint" id="layer-note"></p>
+    </section>
+
+    <!-- Disagreement: the widest spread over all four algorithms, plus the scatter. -->
+    <section class="panel" id="panel-disagree">
+      <div class="panel-head">
+        <h3>Where the algorithms disagree</h3>
+        <span class="hint">spread = (max − min) / mean over every algorithm that priced the score</span>
+      </div>
+      <div class="dis-agree">
+        <div class="dis-list" id="disagree"></div>
+        <figure class="scatter-box">
+          <div id="scatter"></div>
+          <figcaption class="hint" id="scatter-note"></figcaption>
+        </figure>
+      </div>
+    </section>
   </section>
 </main>
 
-<!-- 9. Provenance: exactly which build produced these numbers. -->
+<!-- Provenance: exactly which build produced these numbers. -->
 <footer>
   <h2>Provenance</h2>
   <dl class="prov" id="prov"></dl>
-  <p class="hint">Static page: no frameworks, no CDN, no build step. Dataset
-    <code>data/index.json</code> + <code>data/players/&lt;uid&gt;.json</code>, written by
-    <code>mania-pp-cli</code> — see <code>docs/web.md</code>.</p>
+  <p class="hint">Static page: no frameworks, no CDN, no build step. The dataset is
+    <code>data/index.json</code> plus <code>data/players/&lt;uid&gt;.json</code>, written by the Rust
+    engine of this repository — the front-end contract is documented in
+    <a href="web.md"><code>web.md</code></a>.</p>
 </footer>
 
 <div class="drag-hint" id="drag-hint" hidden>Drop <code>index.json</code> to load it</div>
 
-<noscript><p class="note">This page needs JavaScript to read and render
-  <code>data/index.json</code>.</p></noscript>
-<script src="app.js"></script>
+<noscript>
+  <p class="note">This page needs JavaScript: it reads <code>data/index.json</code> and renders it in
+    your browser. The dataset itself is plain JSON and can be read without this page.</p>
+</noscript>
+
+<script type="module" src="app.js"></script>
 </body>
 </html>

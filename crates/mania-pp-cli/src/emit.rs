@@ -32,7 +32,8 @@ use crate::ScoreRow;
 ///
 /// * 1 — single document, array of score objects
 /// * 2 — index + per-player columnar shards
-pub const SCHEMA_VERSION: u32 = 2;
+/// * 3 — links (score id, beatmapset id), official star column, renamed star columns
+pub const SCHEMA_VERSION: u32 = 3;
 
 /// Upstream revision this build compares against.
 ///
@@ -41,14 +42,22 @@ pub const SCHEMA_VERSION: u32 = 2;
 pub const ROSU_PP_REV: &str = "3530ba7";
 
 /// Columns of a player shard, in order. The site indexes into `scores` with these names.
-const COLUMNS: [&str; 28] = [
+const COLUMNS: [&str; 32] = [
+    // identity and links
+    "score_id",
     "beatmap_id",
+    "beatmap_set_id",
+    // map metadata
     "artist",
     "title",
     "version",
+    "mapper",
     "keys",
     "od",
+    // mods
     "mods",
+    "mods_parts",
+    // score quality
     "accuracy",
     "n320",
     "n300",
@@ -56,12 +65,16 @@ const COLUMNS: [&str; 28] = [
     "n100",
     "n50",
     "miss",
+    // prices, in algorithm order
     "pp_bancho",
     "pp_sunny",
     "pp_codexxy",
     "pp_reimagined",
-    "stars_full",
-    "stars_rice",
+    // star ratings: Bancho's own, and the two the Reimagined channels are built from
+    "star_bancho",
+    "star_sunny",
+    "star_rice",
+    // structure and Reimagined internals
     "ln_ratio",
     "l_share",
     "w",
@@ -69,7 +82,6 @@ const COLUMNS: [&str; 28] = [
     "eff_star",
     "acc_factor",
     "nf_factor",
-    "mods_parts",
 ];
 
 /// (module id, label, description) in presentation order.
@@ -89,9 +101,15 @@ pub struct ScoreOut {
     pub artist: String,
     pub title: String,
     pub version: String,
+    /// Difficulty author (`Creator`), for the map column and `creator=`/`mapper=` search.
+    pub mapper: String,
     pub keys: i32,
     pub od: f64,
     pub accuracy: f64,
+    /// Official (Bancho) star rating of the map with the score's mods.
+    pub star_bancho: f64,
+    /// Beatmapset id, for the canonical `beatmapsets/{set}#mania/{id}` link.
+    pub beatmap_set_id: i64,
     /// Space-separated mod flags the site filters on (e.g. `"DT EZ NF"`).
     pub mods_parts: String,
 }
@@ -191,13 +209,21 @@ pub fn write_dataset(
             .map(|s| {
                 let d = &s.detail;
                 json!([
+                    // identity and links
+                    s.row.score_id,
                     s.row.map_id.parse::<i64>().unwrap_or(0),
+                    s.beatmap_set_id,
+                    // map metadata
                     s.artist,
                     s.title,
                     s.version,
+                    s.mapper,
                     s.keys,
                     s.od,
+                    // mods
                     s.row.mods,
+                    s.mods_parts,
+                    // score quality
                     round3(s.accuracy),
                     s.row.counts[0],
                     s.row.counts[1],
@@ -205,12 +231,16 @@ pub fn write_dataset(
                     s.row.counts[3],
                     s.row.counts[4],
                     s.row.counts[5],
+                    // prices, in algorithm order
                     opt(s.pp.bancho),
                     opt(s.pp.sunny),
                     opt(s.pp.codexxy),
                     opt(s.pp.reimagined),
+                    // star ratings
+                    round3(s.star_bancho),
                     round3(d.stars_full),
                     round3(d.stars_rice),
+                    // structure and Reimagined internals
                     round4(d.ln_ratio),
                     round4(d.l_share),
                     round4(d.w),
@@ -218,7 +248,6 @@ pub fn write_dataset(
                     round3(d.eff_star),
                     round4(d.acc_factor),
                     round4(d.nf_factor),
-                    s.mods_parts,
                 ])
             })
             .collect();

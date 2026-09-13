@@ -28,6 +28,8 @@ pub struct ScoreRow {
     pub map_id: String,
     pub mods: String,
     pub counts: Counts,
+    /// osu! score id, when the fixture carries one. Used for the osu.ppy.sh/scores/{id} link.
+    pub score_id: Option<i64>,
 }
 
 struct Args {
@@ -149,6 +151,8 @@ fn load_tsv(text: &str) -> Result<Vec<ScoreRow>, String> {
             map_id: fields[2].trim().to_owned(),
             mods: fields[3].trim().to_owned(),
             counts,
+            // Optional 11th column: the osu! score id (present in exported fixtures).
+            score_id: fields.get(10).and_then(|f| f.trim().parse().ok()),
         });
     }
     Ok(rows)
@@ -203,6 +207,7 @@ fn load_json(text: &str) -> Result<Vec<ScoreRow>, String> {
                 map_id,
                 mods,
                 counts,
+                score_id: score.get("score_id").and_then(Value::as_i64),
             });
         }
     }
@@ -383,9 +388,12 @@ fn run() -> Result<(), String> {
                 artist: info.artist.clone(),
                 title: info.title.clone(),
                 version: info.version.clone(),
+                mapper: info.mapper.clone(),
                 keys: info.keys,
                 od: info.od,
                 accuracy: mania_pp_algorithms::reimagined::pp::custom_accuracy(&row.counts) * 100.0,
+                star_bancho: mania_pp_algorithms::bancho::stars(prepared),
+                beatmap_set_id: info.beatmap_set_id,
                 mods_parts: mod_flags(&row.mods),
             });
         }

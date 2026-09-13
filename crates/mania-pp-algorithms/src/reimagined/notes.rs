@@ -78,6 +78,12 @@ pub struct OsuMeta {
     pub version: String,
     /// `Creator` (mapper).
     pub creator: String,
+    /// `BeatmapSetID` — the beatmapset this difficulty belongs to.
+    ///
+    /// Needed because the canonical osu! link to a difficulty is
+    /// `https://osu.ppy.sh/beatmapsets/{set}#mania/{id}`: the beatmap id alone is not enough.
+    /// `-1` means the map was never uploaded (the field is absent or a negative placeholder).
+    pub beatmap_set_id: i64,
 }
 
 impl Default for OsuMeta {
@@ -94,6 +100,7 @@ impl Default for OsuMeta {
             title: String::new(),
             version: String::new(),
             creator: String::new(),
+            beatmap_set_id: -1,
         }
     }
 }
@@ -172,6 +179,10 @@ pub fn parse_meta(text: &str) -> OsuMeta {
             meta.version = v.to_string();
         } else if let Some(v) = header_value(line, "Creator:") {
             meta.creator = v.to_string();
+        } else if let Some(v) = header_value(line, "BeatmapSetID:") {
+            if let Ok(set_id) = v.trim().parse::<i64>() {
+                meta.beatmap_set_id = set_id;
+            }
         } else if let Some(v) = header_value(line, "CircleSize:") {
             if let Some(cs) = parse_f64(v) {
                 meta.cs = cs;

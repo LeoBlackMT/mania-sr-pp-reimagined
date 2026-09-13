@@ -47,11 +47,13 @@ maps/               NOT here: keep the .osu cache outside the repository
 Score list, tab separated (a header row is auto-detected and skipped):
 
 ```
-uid	username	map_id	mods	320	300	200	100	50	miss
-21207706	Shirasu-Azusa	3449961	DT	5200	210	14	2	0	1
+uid	username	map_id	mods	320	300	200	100	50	miss	score_id
+21207706	Shirasu-Azusa	3449961	DT	5200	210	14	2	0	1	6057128346
 ```
 
-`mods` uses the usual acronyms, joined with `+` (`DT+MR`, `HDHR`) or unseparated (`EZDTV2`) — both are accepted. Map metadata (artist, title, version, key count, OD, HP) is read from the `.osu` file, never from the fixture.
+`mods` uses the usual acronyms, joined with `+` (`DT+MR`, `HDHR`) or unseparated (`EZDTV2`) — both are accepted. `score_id` is optional (it only feeds the `osu.ppy.sh/scores/{id}` link on the site) and may be empty. Map metadata (artist, title, version, key count, OD, HP, beatmapset id) is read from the `.osu` file, never from the fixture.
+
+**Typing a tab**: the separator is a literal tab character, produced with the <kbd>Tab</kbd> key — not spaces and not `\t`. In Excel or LibreOffice, save as "Text (Tab delimited)" if you build a fixture by hand; in VS Code, check that "Insert Spaces" is off and press <kbd>Tab</kbd> (or use <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>P</kbd> → "Convert Indentation to Tabs", which is a different thing but shows the distinction), and in a terminal use <kbd>Ctrl</kbd>+<kbd>V</kbd> then <kbd>Tab</kbd> in some shells. Tab was chosen over a comma precisely because osu! metadata is full of commas: with tabs a row is a plain `split('\t')` and no quoting rules are needed.
 
 The JSON form is equivalent:
 
@@ -109,25 +111,40 @@ docs/data/.nojekyll             (in docs/) tells GitHub Pages not to run Jekyll
 
 ```jsonc
 // index.json
-{ "schema_version": 2,
+{ "schema_version": 3,
   "generated_at": "2026-09-13T12:00:00Z",
   "engine": { "name": "mania-pp-rs", "version": "0.1.0", "spec_version": "v1.14", "rosu_pp_rev": "3530ba7" },
   "algorithms": [ { "id": "bancho", "label": "Bancho", "description": "…" }, … ],
   "users": [ { "uid": 21207706, "username": "Shirasu-Azusa", "fixture": "bp-lists", "scores": 100,
                "file": "players/21207706.json",
                "total_pp": { "bancho": 14923.95, "sunny": 14961.18, "codexxy": 15021.09, "reimagined": 14486.37 } } ],
-  "score_count": 500,
+  "score_count": 1900,
   "warnings": [] }
-
-// players/{uid}.json — column names appear once, each score is an array in that order
-{ "schema_version": 2, "uid": 21207706, "username": "Shirasu-Azusa",
-  "columns": ["beatmap_id","artist","title","version","keys","od","mods","accuracy",
-              "n320","n300","n200","n100","n50","miss",
-              "pp_bancho","pp_sunny","pp_codexxy","pp_reimagined",
-              "stars_full","stars_rice","ln_ratio","l_share","w","coord_mod","eff_star","acc_factor","nf_factor","mods_parts"],
-  "scores": [ [3449961,"xi","Akasha","Primordial Substance",7,7.0,"DT",98.12, 5200,210,14,2,0,1,
-               512.3,560.1,548.2,540.9, 8.84,7.6,0.545,0.42,1.15,1.02,8.91,1.0,1.0,"DT"] ] }
 ```
+
+A player shard is columnar — the column names appear once and each score is an array of values in that order:
+
+```jsonc
+// players/{uid}.json
+{ "schema_version": 3, "uid": 21207706, "username": "Shirasu-Azusa",
+  "columns": [
+    "score_id", "beatmap_id", "beatmap_set_id",            // identity, for links
+    "artist", "title", "version", "keys", "od",            // map metadata
+    "mods", "mods_parts",                                  // mods (raw string, and space-separated flags)
+    "accuracy", "n320", "n300", "n200", "n100", "n50", "miss",
+    "pp_bancho", "pp_sunny", "pp_codexxy", "pp_reimagined", // prices, in algorithm order
+    "star_bancho", "star_sunny", "star_rice",              // official SR, and the two behind R/L
+    "ln_ratio", "l_share", "w", "coord_mod", "eff_star", "acc_factor", "nf_factor"
+  ],
+  "scores": [ [6011663426, 5366651, 2455603, "Ludicin", "Blossom of Ashes", "Divination of Calamity",
+               4, 7.3, "MR", "MR", 97.896, 5393, 2279, 179, 21, 14, 42,
+               797.058, 803.566, 801.235, 790.792, 8.119, 8.151, 6.979,
+               0.9215, 0.1438, 0.9806, 1.0322, 8.128, 0.9968, 1.0] ] }
+```
+
+`star_bancho` is the official star rating with the score's mods, `star_sunny` the star rating of the full map under the community algorithm, and `star_rice` the same on the map with every hold turned into a tap — the two numbers Reimagined's R and L channels are built from. `score_id` and `beatmap_set_id` can be `null`; a `pp_*` value is `null` when that algorithm could not price the score.
+
+The three id fields exist so the site can link correctly: a difficulty lives at `https://osu.ppy.sh/beatmapsets/{beatmap_set_id}#mania/{beatmap_id}` (the beatmap id alone is not a valid link), a score at `https://osu.ppy.sh/scores/{score_id}`, a player at `https://osu.ppy.sh/users/{uid}`.
 
 ### Why not one big JSON file?
 
@@ -162,6 +179,33 @@ python scripts/validate_engine_results.py            # defaults to the engine's 
 ```
 
 It checks the schema version, the algorithm ids, the provenance block, every shard's column contract, and that every PP value is finite and non-negative.
+
+### Search syntax
+
+The site's search boxes use the query language of osu!'s own beatmap search ([wiki](https://osu.ppy.sh/wiki/en/Beatmap_search)): free text, plus `field<op>value` terms that are all ANDed. Operators are `=`, `==`, `:` (equal), `!=` (not equal), `<`, `>`, `<=`, `>=`; matching is case-insensitive.
+
+The score search implements the fields our dataset actually carries, under the osu! names where one exists:
+
+| Field | Meaning | Example |
+|---|---|---|
+| *(free text)* | artist, title, difficulty or mapper | `akasha` |
+| `artist`, `title`, `diff`/`version`, `creator`/`mapper` | one specific text field | `artist=xi` |
+| `key`, `keys` | column count | `keys=4` |
+| `od` | overall difficulty of the map (before mods) | `od<7` |
+| `ln`, `lns` | percentage of objects that are long notes (osu!lazer's own `ln` filter) | `lns>90` |
+| `mod`, `mods` | mod acronym, `mod=NM` for no mod | `mod=DT` |
+| `acc` | 305-weighted accuracy in percent | `acc>=99` |
+| `pp` | PP under algorithm B | `pp>500` |
+| `rank` | position in this bp list under algorithm B | `rank<=10` |
+| `delta`, `rel` | B − A in pp, and B/A in percent | `delta<-20` |
+| `star`/`stars`/`sr` | official (Bancho) star rating with the score's mods | `star<7` |
+| `sr_sunny`, `sr_rice` | the community star rating of the full map, and of the same map with holds turned into taps | `sr_rice>6` |
+| `score_id`, `map_id`, `set_id` | osu! identifiers | `map_id=1920615` |
+| `eff_star`, `w`, `l_share`, `acc_factor`, `nf_factor` | Reimagined internals | `w>1.1` |
+
+Examples that combine several terms: `mod=DT key=4 star<7`, `lns>90 acc>=99`, `delta<-20 rank<=20`, `pp>500 mod=NM`.
+
+The player search on the rankings view uses the same syntax over the index: `uid`, free text over usernames, `scores`, `pp`/`pp_bancho`/`pp_sunny`/`pp_codexxy`/`pp_reimagined`, and `rank`/`rank_bancho`/… — for example `pp_reimagined>20000`, `scores=100 key=7`, `rank_bancho<=5`.
 
 ## Specification sync
 
@@ -200,7 +244,17 @@ Partly, and the honest split matters.
 
 *Offline calculation* — yes, and it is already proven to be buildable: `cargo build --release --target wasm32-unknown-unknown -p mania-pp-algorithms` succeeds today (0.72 MB rlib, and CI keeps it that way), so the algorithm crate is WebAssembly-ready. What is missing is only the packaging: a thin `wasm-bindgen` wrapper exposing one function (`.osu` text + mods + judgement counts → four PP values plus the detail block), the generated JS glue, and a page section where a visitor drops a `.osu` file and types their counts. Everything needed is local and no key is involved. One condition: the fork's `reports` feature must stay disabled, because it pulls in `crossterm` through `comfy-table`, which does not build for `wasm32-unknown-unknown` — that is why the engine calls `mania::sunny::calculate` directly instead of the `report_utils` helper and parses mod strings itself.
 
-*Fetching by uid/score_id from the browser* — no, not from a static page. The osu! API v2 can only hand out tokens in two ways: the client-credentials flow requires the application's **client secret**, which cannot be embedded in a public page without publishing it; and the authorization-code flow would work from a browser only with PKCE, which osu! does not support — the request has been open since 2020 and was still open in mid-2025 ([ppy/osu-web#7004](https://github.com/ppy/osu-web/issues/7004)), and browser calls to the API have also run into CORS problems. So a static page cannot obtain the scores or beatmaps for an arbitrary player.
+**What WASM is for, and what it cannot do.** WASM replaces the *computation*, not the *acquisition*. It lets the page compute four PP values for a score the visitor already has (their own `.osu` file and judgement counts) with no server and no rate limits. It cannot fetch anything by id, and that is a property of osu!'s infrastructure rather than of the build:
+
+| Test | Result |
+|---|---|
+| `HEAD https://osu.ppy.sh/scores/6425788632` | 200, but **no `Access-Control-Allow-Origin` header** — a page on another origin cannot read it |
+| `HEAD https://osu.ppy.sh/osu/1920615` (a `.osu` file) | 200, **no `Access-Control-Allow-Origin` header** |
+| `HEAD https://osu.ppy.sh/api/v2/beatmaps/1920615` | 403 — the API needs a token before it answers at all |
+
+So "give me a score_id and I will fetch the score and the map" is not achievable from a static page: the score page is HTML and cross-origin-blocked, the `.osu` endpoint is cross-origin-blocked, and the API needs credentials the page cannot hold. Also note the API v2 has no documented "get a score by id" endpoint that returns judgements plus map info — the replay download (`/scores/{score}/download`) is the closest, and it yields a `.osr` from which you would still have to resolve the beatmap by checksum. Making that work needs a token, which means either the visitor's own token or a serverless proxy holding the application secret; both were listed above, and neither is a WASM question.
+
+*Fetching by uid/score_id from the browser* — no, not from a static page. The osu! API v2 can only hand out tokens in two ways: the client-credentials flow requires the application's **client secret**, which cannot be embedded in a public page without publishing it; and the authorization-code flow would work from a browser only with PKCE, which osu! does not support — the request has been open since 2020 and was still open in mid-2025 ([ppy/osu-web#7004](https://github.com/ppy/osu-web/issues/7004)), and browser calls to the API have also run into CORS problems.
 
 Three ways to get that feature anyway, in increasing cost: (a) keep the current model — the research side pulls bp lists at 1 req/s and the engine publishes the results, which is what the dataset in this repository already is; (b) let a visitor paste their own token (obtainable through a third-party OAuth helper), which works only if CORS allows it; (c) run a small serverless proxy (Cloudflare Worker, Vercel function) that holds the client secret and exposes one read-only endpoint. Option (c) is the only way to get "type any uid and see four PP numbers" for real, and it moves part of the system off GitHub Pages.
 

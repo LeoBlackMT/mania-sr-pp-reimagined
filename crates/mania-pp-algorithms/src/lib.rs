@@ -77,12 +77,17 @@ fn game_mods_for(mods_str: &str) -> (rosu_pp::GameMods, f64) {
 /// Map metadata and structural features, read from the `.osu` file.
 #[derive(Clone, Debug)]
 pub struct MapInfo {
+    /// Key count resolved from mode/CS/key mods (see reimagined::keys::effective_keys).
     pub keys: i32,
+    /// Beatmapset id, for the canonical eatmapsets/{set}#mania/{id} link.
+    pub beatmap_set_id: i64,
     pub od: f64,
     pub hp: f64,
     pub artist: String,
     pub title: String,
     pub version: String,
+    /// Difficulty author (`Creator` tag), the mapper osu! search calls `creator`/`mapper`.
+    pub mapper: String,
     /// Hold objects divided by all objects.
     pub ln_ratio: f64,
     /// Average number of simultaneous presses (chord structure).
@@ -189,11 +194,13 @@ fn build_map_info(osu_text: &str, mods_str: &str) -> Result<MapInfo, String> {
 
     Ok(MapInfo {
         keys,
+        beatmap_set_id: meta.beatmap_set_id,
         od: meta.od,
         hp: meta.hp,
         artist: meta.artist,
         title: meta.title,
         version: meta.version,
+        mapper: meta.creator,
         ln_ratio,
         mean_chord: chord.map(|c| c.mean_chord).unwrap_or(1.0),
         rel_gap_cross: columns.map(|c| c.c_rel_gap_cross),

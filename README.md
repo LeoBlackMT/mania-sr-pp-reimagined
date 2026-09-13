@@ -1,17 +1,19 @@
 # mania-sr-pp-reimagined
 
-A multi-algorithm **osu!mania PP comparison engine**. Four mania performance algorithms live side by side in one repository, so that their output can be compared on the same beatmaps and the same scores, and inspected in a browser.
+**This is the algorithm repository of the Reimagined osu!mania pp algorithm.** It holds the algorithm itself, its specification and the engine that runs it in Rust. The four-algorithm comparison it also publishes is a **by-product** — a way to keep the algorithm honest by seeing exactly where it disagrees with the community implementations it builds on — not the product.
+
+The other three algorithms exist in the engine so that Reimagined has something to be read against:
 
 | id | algorithm | provenance |
 |---|---|---|
 | `bancho` | **Bancho** — the official osu! pp (osu!lazer) | ported upstream in the pinned [`rosu-pp`](https://github.com/ppy-sb/rosu-pp) fork |
 | `sunny` | **Sunny** — the community algorithm by [Crz]sunnyxxy (its repository is named *Star-Rating-Rebirth*) | the `mania::sunny` module of the same fork |
-| `codexxy` | **Codexxy** — sunny plus a map-based timing surface | the `pp_timing` part of the same calculation |
-| `reimagined` | **Reimagined** — this project's three-channel R / L / A algorithm | ported here from a Python research reference |
+| `codexxy` | **Codexxy** — Sunny plus a map-based timing surface | the `pp_timing` part of the same calculation |
+| `reimagined` | **Reimagined** — this project's three-channel R / L / A algorithm | implemented here, from a Python research reference |
 
-The research happens elsewhere, in Python: this repository is the **engine** — it consumes a frozen specification, produces numbers, and publishes them.
+Research happens elsewhere, in Python: the research repository owns the specification, this repository owns the engine. It consumes a frozen specification, produces numbers, and publishes them.
 
-**Why**: community mania PP is a single fused difficulty number, so disagreements between algorithms are invisible — you can see *that* two algorithms disagree about a map, never *where*. Reimagined splits play into **R** regular pressing, **L** coordination (what holding notes adds) and **A** accuracy (window tightness relative to the score), and the engine makes the disagreement between all four algorithms legible, per score and per player.
+**What Reimagined does differently**: community mania PP is a single fused difficulty number, so disagreements between algorithms are invisible — you can see *that* two algorithms disagree about a map, never *where*. Reimagined splits play into **R** regular pressing, **L** coordination (what holding notes adds) and **A** accuracy (window tightness relative to the score), keeps the three channels measurable, and fuses them only at pricing time.
 
 ## Quick start
 

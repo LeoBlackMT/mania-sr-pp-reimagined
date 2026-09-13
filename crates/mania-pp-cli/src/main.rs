@@ -1,5 +1,5 @@
 //! Comparison CLI: reads a fixture score list, computes four algorithms per score, and writes the
-//! results document consumed by the comparison site.
+//! comparison dataset consumed by the site.
 //!
 //! Fixture formats (see `docs/usage.md`):
 //!
@@ -8,11 +8,15 @@
 //! * JSON — `{"users":[{"uid":…,"username":…,"scores":[{"map_id":…,"mods":…,"counts":[…]}]}]}`.
 //!
 //! The map directory holds `{map_id}.osu` files and lives outside the repository.
+//!
+//! Output: `docs/data/index.json` plus `docs/data/players/{uid}.json` — see `emit.rs` for why the
+//! dataset is split and columnar.
 
 mod emit;
 
 use std::collections::{BTreeMap, HashMap};
 use std::path::PathBuf;
+use std::time::{Duration, Instant};
 
 use mania_pp_algorithms::{prepare, price_with_detail, Counts, Prepared};
 use serde_json::Value;
@@ -32,22 +36,29 @@ struct Args {
     out: PathBuf,
     limit: Option<usize>,
     quiet: bool,
+    bench: bool,
 }
 
 const USAGE: &str = "\
 mania-pp-cli — compare four osu!mania PP algorithms over a fixture score list
 
 USAGE:
-    mania-pp-cli --fixture <scores.tsv|scores.json> --maps <map dir> [--out <results.json>]
-                 [--limit N] [--quiet]
+    mania-pp-cli --fixture <scores.tsv|scores.json> --maps <map dir> [--out <data dir>]
+                 [--limit N] [--bench] [--quiet]
 
 OPTIONS:
     --fixture <path>   score list (TSV with an optional header, or JSON)
     --maps <dir>       directory containing {map_id}.osu files (required; never committed)
-    --out <path>       output document (default: web/data/results.json)
+    --out <dir|file>   dataset location (default: docs/data; a path ending in index.json is
+                       accepted and its parent directory is used)
     --limit N          only the first N scores per user, in input order
+    --bench            print per-algorithm single-score timings after the run
     --quiet            suppress the console summary
     -h, --help         print this help
+
+OUTPUT:
+    <out>/index.json              engine info, algorithms, per-player totals and shard paths
+    <out>/players/{uid}.json      one player's scores, columnar (see docs/usage.md)
 
 NOTES:
     Per-algorithm totals are weighted sums over that algorithm's own ranking of the user's scores
@@ -58,9 +69,10 @@ NOTES:
 fn parse_args() -> Result<Args, String> {
     let mut fixture: Option<PathBuf> = None;
     let mut maps: Option<PathBuf> = None;
-    let mut out = PathBuf::from("web/data/results.json");
+    let mut out = PathBuf::from("docs/data");
     let mut limit = None;
     let mut quiet = false;
+    let mut bench = false;
 
     let mut it = std::env::args().skip(1);
     while let Some(arg) = it.next() {
@@ -79,6 +91,7 @@ fn parse_args() -> Result<Args, String> {
                         .map_err(|_| format!("bad --limit: {raw}"))?,
                 );
             }
+            "--bench" => bench = true,
             "--quiet" => quiet = true,
             other => return Err(format!("unknown argument: {other}\n\n{USAGE}")),
         }
@@ -90,6 +103,7 @@ fn parse_args() -> Result<Args, String> {
         out,
         limit,
         quiet,
+        bench,
     })
 }
 
@@ -210,6 +224,51 @@ fn load_fixture(path: &PathBuf) -> Result<Vec<ScoreRow>, String> {
     }
 }
 
+/// Space-separated mod flags the site filters on, e.g. `"DT MR"` or `"NM"`.
+///
+/// The raw mod string is kept as well; these flags just save the page from re-parsing acronyms
+/// whenever a filter changes.
+fn mod_flags(mods_str: &str) -> String {
+    let set = mania_pp_algorithms::ModSet::parse(mods_str);
+    if set.acronyms.is_empty() {
+        return "NM".to_owned();
+    }
+    set.acronyms.join(" ")
+}
+
+fn median(values: &mut [Duration]) -> Duration {
+    if values.is_empty() {
+        return Duration::ZERO;
+    }
+    values.sort_unstable();
+    values[values.len() / 2]
+}
+
+fn mean(values: &[Duration]) -> Duration {
+    if values.is_empty() {
+        return Duration::ZERO;
+    }
+    let total: u128 = values.iter().map(|d| d.as_nanos()).sum();
+    Duration::from_nanos((total / values.len() as u128) as u64)
+}
+
+fn percentile(values: &mut [Duration], p: f64) -> Duration {
+    if values.is_empty() {
+        return Duration::ZERO;
+    }
+    values.sort_unstable();
+    let idx = ((p * values.len() as f64) as usize).min(values.len() - 1);
+    values[idx]
+}
+
+fn micros(d: Duration) -> String {
+    format!("{:.1}µs", d.as_secs_f64() * 1e6)
+}
+
+fn millis(d: Duration) -> String {
+    format!("{:.1}ms", d.as_secs_f64() * 1e3)
+}
+
 fn main() {
     if let Err(err) = run() {
         eprintln!("error: {err}");
@@ -243,6 +302,13 @@ fn run() -> Result<(), String> {
     let mut users_out = Vec::new();
     let mut warnings: Vec<String> = Vec::new();
 
+    // Bench accumulators (filled only when --bench is given).
+    let mut t_prepare: Vec<Duration> = Vec::new();
+    let mut t_bancho: Vec<Duration> = Vec::new();
+    let mut t_sunny: Vec<Duration> = Vec::new();
+    let mut t_reimagined: Vec<Duration> = Vec::new();
+    let mut t_score: Vec<Duration> = Vec::new();
+
     for uid in &order {
         let mut rows = by_user.remove(uid).unwrap_or_default();
         if let Some(limit) = args.limit {
@@ -274,8 +340,10 @@ fn run() -> Result<(), String> {
 
             let key = (row.map_id.clone(), row.mods.clone());
             if !prepared_cache.contains_key(&key) {
+                let started = Instant::now();
                 match prepare(&text, &row.mods) {
                     Ok(prepared) => {
+                        t_prepare.push(started.elapsed());
                         prepared_cache.insert(key.clone(), prepared);
                     }
                     Err(err) => {
@@ -286,7 +354,27 @@ fn run() -> Result<(), String> {
             }
             let prepared = prepared_cache.get(&key).expect("just inserted");
 
+            let score_started = Instant::now();
             let (pp, detail) = price_with_detail(prepared, &row.counts);
+            t_score.push(score_started.elapsed());
+
+            if args.bench {
+                let counts = row.counts;
+                let started = Instant::now();
+                let _ = mania_pp_algorithms::bancho::pp(prepared, &counts);
+                t_bancho.push(started.elapsed());
+
+                let started = Instant::now();
+                let perf = mania_pp_algorithms::sunny::performance(prepared, &counts);
+                let _ = mania_pp_algorithms::sunny::pattern_pp_from(&perf);
+                let _ = mania_pp_algorithms::codexxy::pp_from(&perf);
+                t_sunny.push(started.elapsed());
+
+                let started = Instant::now();
+                let _ = mania_pp_algorithms::reimagined::pp(prepared, &counts);
+                t_reimagined.push(started.elapsed());
+            }
+
             let info = prepared.map_info();
             scores_out.push(emit::ScoreOut {
                 row: row.clone(),
@@ -298,6 +386,7 @@ fn run() -> Result<(), String> {
                 keys: info.keys,
                 od: info.od,
                 accuracy: mania_pp_algorithms::reimagined::pp::custom_accuracy(&row.counts) * 100.0,
+                mods_parts: mod_flags(&row.mods),
             });
         }
 
@@ -313,11 +402,59 @@ fn run() -> Result<(), String> {
         });
     }
 
-    let document = emit::build_document(&mut users_out, warnings);
-    emit::write_json(&document, &args.out)?;
-
+    let document = emit::write_dataset(&mut users_out, warnings, &args.out)?;
     if !args.quiet {
         emit::print_summary(&document, &args.out);
     }
+    if args.bench {
+        print_bench(
+            &mut t_prepare,
+            &mut t_bancho,
+            &mut t_sunny,
+            &mut t_reimagined,
+            &mut t_score,
+        );
+    }
     Ok(())
+}
+
+fn print_bench(
+    t_prepare: &mut [Duration],
+    t_bancho: &mut [Duration],
+    t_sunny: &mut [Duration],
+    t_reimagined: &mut [Duration],
+    t_score: &mut [Duration],
+) {
+    let pairs = t_prepare.len();
+    println!("\n=== single-score timings (release build) ===");
+    println!(
+        "  {:<34} {:>10} {:>10} {:>10}",
+        "stage", "median", "mean", "p95"
+    );
+    println!(
+        "  {:<34} {:>10} {:>10} {:>10}",
+        format!("prepare per (map, mods) [n={pairs}]"),
+        millis(median(t_prepare)),
+        millis(mean(t_prepare)),
+        millis(percentile(t_prepare, 0.95))
+    );
+    let rows: [(&str, &mut [Duration]); 4] = [
+        ("bancho::pp", t_bancho),
+        ("sunny + Codexxy (one pass)", t_sunny),
+        ("reimagined::pp", t_reimagined),
+        ("total per score (four columns)", t_score),
+    ];
+    for (label, samples) in rows {
+        println!(
+            "  {:<34} {:>10} {:>10} {:>10}",
+            label,
+            micros(median(samples)),
+            micros(mean(samples)),
+            micros(percentile(samples, 0.95))
+        );
+    }
+    println!(
+        "  note: `prepare` is paid once per (map, mods) and cached; sunny and Codexxy share one\n\
+         \x20       upstream performance pass, so they are timed together."
+    );
 }

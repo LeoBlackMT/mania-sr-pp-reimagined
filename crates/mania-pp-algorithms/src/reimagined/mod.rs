@@ -34,7 +34,7 @@
 pub const ID: &str = "reimagined";
 
 /// Human-readable name for the comparison site.
-pub const LABEL: &str = "reimagined (ours)";
+pub const LABEL: &str = "Reimagined";
 
 /// One-line description shown next to the algorithm.
 pub const DESCRIPTION: &str = "three-channel R/L/A algorithm of this project: regular pressing, coordination and accuracy priced separately";

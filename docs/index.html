@@ -1,0 +1,182 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>mania-sr-pp-reimagined — osu!mania PP algorithm comparison</title>
+<link rel="icon" href="data:,">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<header class="site-head">
+  <div class="head-main">
+    <h1>mania-sr-pp-reimagined</h1>
+    <p class="tagline">Four osu!mania PP algorithms over one bp list —
+      <strong>Bancho</strong> · <strong>Sunny</strong> · <strong>Codexxy</strong> · <strong>Reimagined</strong></p>
+    <p class="meta" id="meta">no dataset loaded</p>
+  </div>
+  <label class="btn-file" title="Load data/index.json from your machine">
+    Load index.json
+    <input type="file" id="file-head" accept=".json,application/json" hidden>
+  </label>
+</header>
+
+<!-- Data caveats: locally loaded file, unexpected schema_version, engine warnings. -->
+<p class="note" id="source-note" hidden></p>
+
+<!-- Empty state: data/index.json is missing or unreadable. Manual loading is the way in. -->
+<section class="loader" id="loader" hidden>
+  <h2 id="loader-title">No dataset yet</h2>
+  <p class="why" id="loader-why"></p>
+  <p class="hint" id="loader-hint"></p>
+  <pre class="cmd"><code>cargo run --release -p mania-pp-cli -- \
+  --fixture fixtures/bp-lists.tsv \
+  --maps    /path/to/osu/map/cache \
+  --out     docs/data</code></pre>
+  <div class="drop drop-zone" id="drop">
+    <strong>Drop <code>data/index.json</code> here</strong>
+    <span>or</span>
+    <label class="btn-file">choose a file<input type="file" id="file-drop" accept=".json,application/json" hidden></label>
+  </div>
+  <p class="hint">The file is read in your browser — it is not uploaded anywhere. Player shards
+    (<code>data/players/&lt;uid&gt;.json</code>) are still fetched from this directory, so the full
+    view needs the site served over HTTP; a single player shard can also be dropped here on its own.</p>
+  <p class="err" id="loader-err" hidden></p>
+</section>
+
+<!-- Plain-English description of each algorithm, from the data file when present. -->
+<section class="legend" id="legend" hidden></section>
+
+<main>
+  <!-- 1. Per-player summary + 2. pairwise A/B selection and its bar chart. -->
+  <section class="panel" id="panel-summary" hidden>
+    <div class="panel-head">
+      <h2>Totals</h2>
+      <div class="controls">
+        <label class="pick">bp list
+          <select id="user-select"></select>
+        </label>
+        <label class="pick">A <select id="algo-a" aria-label="Algorithm A (baseline)"></select></label>
+        <label class="pick">B <select id="algo-b" aria-label="Algorithm B"></select></label>
+        <button type="button" class="btn" id="swap-ab" title="Swap A and B">swap A ⇄ B</button>
+      </div>
+    </div>
+    <div class="summary">
+      <div class="summary-table" id="total-table"></div>
+      <div class="summary-chart" id="total-chart"></div>
+    </div>
+    <p class="ab-line" id="ab-line"></p>
+    <p class="hint" id="total-note"></p>
+  </section>
+
+  <!-- Broken or missing shard: the summary above still comes from the index. -->
+  <section class="panel panel-error" id="panel-shard-error" hidden>
+    <h2 id="shard-error-title">Player data unavailable</h2>
+    <p class="err" id="shard-error-text"></p>
+    <p class="hint">The weighted totals above are read from <code>data/index.json</code> and stay
+      valid; everything that needs the individual scores does not. Reload the page or pick another
+      bp list to try again.</p>
+    <p><button type="button" class="btn" id="shard-retry">retry this bp list</button></p>
+  </section>
+
+  <!-- 3. rank shift, 4. full metadata, 8. CSV export. -->
+  <section class="panel" id="panel-scores" hidden>
+    <div class="panel-head">
+      <h2>Scores</h2>
+      <div class="controls">
+        <span class="hint" id="ab-note"></span>
+        <span class="hint" id="score-count"></span>
+        <button type="button" class="btn" id="export-csv">Export CSV</button>
+      </div>
+    </div>
+
+    <div class="filters">
+      <input type="search" id="q" placeholder="Filter: artist, title, version, mods, beatmap id, keys…" autocomplete="off" aria-label="Free-text filter">
+      <div class="chips" role="group" aria-label="Keys filter">
+        <button type="button" class="chip is-on" data-f="keys" data-v="all" aria-pressed="true">all keys</button>
+        <button type="button" class="chip" data-f="keys" data-v="4" aria-pressed="false">4K</button>
+        <button type="button" class="chip" data-f="keys" data-v="6" aria-pressed="false">6K</button>
+        <button type="button" class="chip" data-f="keys" data-v="7" aria-pressed="false">7K</button>
+        <button type="button" class="chip" data-f="keys" data-v="other" aria-pressed="false">other K</button>
+      </div>
+      <div class="chips" role="group" aria-label="Mods filter">
+        <button type="button" class="chip is-on" data-f="mods" data-v="all" aria-pressed="true">all mods</button>
+        <button type="button" class="chip" data-f="mods" data-v="nm" aria-pressed="false">NM</button>
+        <button type="button" class="chip" data-f="mods" data-v="dt" aria-pressed="false">DT·NC</button>
+        <button type="button" class="chip" data-f="mods" data-v="ht" aria-pressed="false">HT·DC</button>
+        <button type="button" class="chip" data-f="mods" data-v="other" aria-pressed="false">other</button>
+      </div>
+      <div class="chips" role="group" aria-label="Style filter">
+        <button type="button" class="chip is-on" data-f="ln" data-v="all" aria-pressed="true">rice + mix + LN</button>
+        <button type="button" class="chip" data-f="ln" data-v="rice" aria-pressed="false">rice</button>
+        <button type="button" class="chip" data-f="ln" data-v="mix" aria-pressed="false">mix</button>
+        <button type="button" class="chip" data-f="ln" data-v="ln" aria-pressed="false">LN</button>
+      </div>
+      <button type="button" class="chip reset" id="f-reset">reset</button>
+    </div>
+
+    <div class="table-wrap">
+      <table id="score-table" class="scores">
+        <thead></thead>
+        <tbody></tbody>
+      </table>
+    </div>
+    <p class="more"><button type="button" id="show-more" hidden>show more</button></p>
+  </section>
+
+  <!-- 5. Layer summary: key mode / mod family / style bucket, relative difference B vs A. -->
+  <section class="panel" id="panel-layers" hidden>
+    <div class="panel-head">
+      <h2>Layer summary</h2>
+      <span class="hint">relative difference of B against A, aggregated by layer — the same split the
+        research side reports, so the numbers are comparable</span>
+    </div>
+    <div class="table-wrap" id="layer-table"></div>
+    <p class="hint" id="layer-note"></p>
+  </section>
+
+  <!-- 6. Disagreement: normalised spread over all four algorithms + an LN-ratio scatter. -->
+  <section class="panel" id="panel-disagree" hidden>
+    <div class="panel-head">
+      <h2>Where the algorithms disagree</h2>
+      <span class="hint">spread = (max − min) / mean over every algorithm that priced the score;
+        respects the filters above — click a row for detail</span>
+    </div>
+    <div class="dis-agree">
+      <div class="dis-list" id="disagree"></div>
+      <div class="scatter-box">
+        <div id="scatter"></div>
+        <p class="hint" id="scatter-note"></p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 7. Cross-player overview, straight from the index (no shards needed). -->
+  <section class="panel" id="panel-overview" hidden>
+    <div class="panel-head">
+      <h2>All players</h2>
+      <span class="hint">weighted total pp, difference against Bancho, and each player's rank under
+        each algorithm — click a row to open that bp list</span>
+    </div>
+    <div class="table-wrap" id="overview-table"></div>
+    <p class="hint" id="overview-note"></p>
+  </section>
+</main>
+
+<!-- 9. Provenance: exactly which build produced these numbers. -->
+<footer>
+  <h2>Provenance</h2>
+  <dl class="prov" id="prov"></dl>
+  <p class="hint">Static page: no frameworks, no CDN, no build step. Dataset
+    <code>data/index.json</code> + <code>data/players/&lt;uid&gt;.json</code>, written by
+    <code>mania-pp-cli</code> — see <code>docs/web.md</code>.</p>
+</footer>
+
+<div class="drag-hint" id="drag-hint" hidden>Drop <code>index.json</code> to load it</div>
+
+<noscript><p class="note">This page needs JavaScript to read and render
+  <code>data/index.json</code>.</p></noscript>
+<script src="app.js"></script>
+</body>
+</html>

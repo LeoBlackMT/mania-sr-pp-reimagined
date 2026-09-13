@@ -1,0 +1,283 @@
+{
+  "algorithms": [
+    {
+      "description": "osu!lazer mania pp: one fused strain rating, mapped to PP with an accuracy term and a length bonus",
+      "id": "bancho",
+      "label": "Bancho"
+    },
+    {
+      "description": "community algorithm by [Crz]sunnyxxy (repository: Star-Rating-Rebirth): per-object difficulty with long-note structure and a window parameter; pattern and accuracy part only",
+      "id": "sunny",
+      "label": "Sunny"
+    },
+    {
+      "description": "sunny plus a forward timing surface: expected judgement loss, a map timing factor and a score adjustment",
+      "id": "codexxy",
+      "label": "Codexxy"
+    },
+    {
+      "description": "three-channel R/L/A algorithm of this project: regular pressing, coordination and accuracy priced separately",
+      "id": "reimagined",
+      "label": "Reimagined"
+    }
+  ],
+  "engine": {
+    "name": "mania-pp-rs",
+    "rosu_pp_rev": "3530ba7",
+    "spec_version": "v1.14",
+    "version": "0.1.0"
+  },
+  "generated_at": "2026-09-13T09:54:48Z",
+  "schema_version": 2,
+  "score_count": 1900,
+  "users": [
+    {
+      "file": "players/21207706.json",
+      "fixture": "bp-lists",
+      "scores": 100,
+      "total_pp": {
+        "bancho": 14923.947,
+        "codexxy": 15021.095,
+        "reimagined": 14486.368,
+        "sunny": 14961.185
+      },
+      "uid": 21207706,
+      "username": "Shirasu-Azusa"
+    },
+    {
+      "file": "players/7233338.json",
+      "fixture": "bp-lists",
+      "scores": 100,
+      "total_pp": {
+        "bancho": 6618.359,
+        "codexxy": 6154.786,
+        "reimagined": 6529.897,
+        "sunny": 6414.516
+      },
+      "uid": 7233338,
+      "username": "Cyfer"
+    },
+    {
+      "file": "players/10024264.json",
+      "fixture": "bp-lists",
+      "scores": 100,
+      "total_pp": {
+        "bancho": 10873.296,
+        "codexxy": 10313.424,
+        "reimagined": 10062.763,
+        "sunny": 10229.006
+      },
+      "uid": 10024264,
+      "username": "Tre"
+    },
+    {
+      "file": "players/1002726.json",
+      "fixture": "bp-lists",
+      "scores": 100,
+      "total_pp": {
+        "bancho": 8711.177,
+        "codexxy": 8367.572,
+        "reimagined": 8568.9,
+        "sunny": 8505.263
+      },
+      "uid": 1002726,
+      "username": "Morbon"
+    },
+    {
+      "file": "players/10028302.json",
+      "fixture": "bp-lists",
+      "scores": 100,
+      "total_pp": {
+        "bancho": 7387.685,
+        "codexxy": 6756.813,
+        "reimagined": 6706.201,
+        "sunny": 6802.289
+      },
+      "uid": 10028302,
+      "username": "Sorc"
+    },
+    {
+      "file": "players/106269.json",
+      "fixture": "bp-lists",
+      "scores": 100,
+      "total_pp": {
+        "bancho": 7663.866,
+        "codexxy": 7300.713,
+        "reimagined": 7541.035,
+        "sunny": 7450.795
+      },
+      "uid": 106269,
+      "username": "Elysion"
+    },
+    {
+      "file": "players/10792537.json",
+      "fixture": "bp-lists",
+      "scores": 100,
+      "total_pp": {
+        "bancho": 9783.742,
+        "codexxy": 8965.642,
+        "reimagined": 9461.997,
+        "sunny": 9057.222
+      },
+      "uid": 10792537,
+      "username": "lut"
+    },
+    {
+      "file": "players/11187151.json",
+      "fixture": "bp-lists",
+      "scores": 100,
+      "total_pp": {
+        "bancho": 8408.676,
+        "codexxy": 8277.255,
+        "reimagined": 8009.879,
+        "sunny": 8234.691
+      },
+      "uid": 11187151,
+      "username": "giraray"
+    },
+    {
+      "file": "players/12102633.json",
+      "fixture": "bp-lists",
+      "scores": 100,
+      "total_pp": {
+        "bancho": 6597.018,
+        "codexxy": 6342.439,
+        "reimagined": 6311.643,
+        "sunny": 6403.417
+      },
+      "uid": 12102633,
+      "username": "M1A300"
+    },
+    {
+      "file": "players/12249034.json",
+      "fixture": "bp-lists",
+      "scores": 100,
+      "total_pp": {
+        "bancho": 6959.742,
+        "codexxy": 6678.167,
+        "reimagined": 6658.256,
+        "sunny": 6748.514
+      },
+      "uid": 12249034,
+      "username": "yazer_osu"
+    },
+    {
+      "file": "players/13656583.json",
+      "fixture": "bp-lists",
+      "scores": 100,
+      "total_pp": {
+        "bancho": 7712.975,
+        "codexxy": 7408.152,
+        "reimagined": 7446.747,
+        "sunny": 7479.828
+      },
+      "uid": 13656583,
+      "username": "jesmoxd"
+    },
+    {
+      "file": "players/30885120.json",
+      "fixture": "bp-lists",
+      "scores": 100,
+      "total_pp": {
+        "bancho": 19590.563,
+        "codexxy": 17678.523,
+        "reimagined": 20593.488,
+        "sunny": 18113.163
+      },
+      "uid": 30885120,
+      "username": "Firefly Neko"
+    },
+    {
+      "file": "players/8273098.json",
+      "fixture": "bp-lists",
+      "scores": 100,
+      "total_pp": {
+        "bancho": 23596.451,
+        "codexxy": 22484.307,
+        "reimagined": 25112.784,
+        "sunny": 22557.878
+      },
+      "uid": 8273098,
+      "username": "My Angel Koishi"
+    },
+    {
+      "file": "players/8479894.json",
+      "fixture": "bp-lists",
+      "scores": 100,
+      "total_pp": {
+        "bancho": 11811.996,
+        "codexxy": 10208.682,
+        "reimagined": 12336.858,
+        "sunny": 10775.921
+      },
+      "uid": 8479894,
+      "username": "Mars_"
+    },
+    {
+      "file": "players/10083439.json",
+      "fixture": "bp-lists",
+      "scores": 100,
+      "total_pp": {
+        "bancho": 25786.651,
+        "codexxy": 24364.792,
+        "reimagined": 26803.213,
+        "sunny": 24325.822
+      },
+      "uid": 10083439,
+      "username": "bojii"
+    },
+    {
+      "file": "players/1033244.json",
+      "fixture": "bp-lists",
+      "scores": 100,
+      "total_pp": {
+        "bancho": 20583.556,
+        "codexxy": 19207.872,
+        "reimagined": 21707.03,
+        "sunny": 19451.364
+      },
+      "uid": 1033244,
+      "username": "jihak0210"
+    },
+    {
+      "file": "players/10790649.json",
+      "fixture": "bp-lists",
+      "scores": 100,
+      "total_pp": {
+        "bancho": 27672.903,
+        "codexxy": 26329.597,
+        "reimagined": 29016.457,
+        "sunny": 26338.919
+      },
+      "uid": 10790649,
+      "username": "Kalkai"
+    },
+    {
+      "file": "players/13313526.json",
+      "fixture": "bp-lists",
+      "scores": 100,
+      "total_pp": {
+        "bancho": 17100.482,
+        "codexxy": 15400.624,
+        "reimagined": 18048.465,
+        "sunny": 15741.15
+      },
+      "uid": 13313526,
+      "username": "Ox Q"
+    },
+    {
+      "file": "players/13656264.json",
+      "fixture": "bp-lists",
+      "scores": 100,
+      "total_pp": {
+        "bancho": 18312.809,
+        "codexxy": 16179.473,
+        "reimagined": 19232.591,
+        "sunny": 16621.886
+      },
+      "uid": 13656264,
+      "username": "palmEuEi"
+    }
+  ],
+  "warnings": []
+}

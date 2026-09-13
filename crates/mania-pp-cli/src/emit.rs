@@ -1,28 +1,83 @@
-//! Output: the `results.json` document consumed by the site, and a console summary.
+//! Output: the comparison dataset consumed by the site, plus a console summary.
 //!
-//! The document follows `docs/usage.md`. Field order is explicit and scores are sorted
-//! deterministically, so re-running over unchanged inputs produces a byte-identical file.
+//! # Why the dataset is split and columnar
+//!
+//! A bp list fixture is a few hundred scores today, but the intended scale is hundreds of players
+//! and tens of thousands of scores. One big JSON document would mean (a) every visitor downloads
+//! everything, (b) the whole thing is parsed on load, (c) a single file grows into a merge-conflict
+//! magnet in git. So the dataset is written as:
+//!
+//! ```text
+//! docs/data/index.json            engine info, algorithm list, one entry per player + weighted totals
+//! docs/data/players/{uid}.json    that player's scores only, in columnar form
+//! ```
+//!
+//! The index is small enough to load eagerly; a player's shard is fetched when it is selected.
+//! Inside a shard the column names appear **once**, and each score is a plain array of values in
+//! that order — roughly a third of the bytes of an array of objects, and much faster to turn into
+//! table rows in the browser.
+//!
+//! Field order is explicit and scores are sorted deterministically, so re-running over unchanged
+//! inputs produces byte-identical files.
 
 use std::path::Path;
 use std::time::{SystemTime, UNIX_EPOCH};
 
-use mania_pp_algorithms::{bancho, reimagined, sunny, surface, ReimaginedDetail, ScorePp};
+use mania_pp_algorithms::{bancho, codexxy, reimagined, sunny, ReimaginedDetail, ScorePp};
 use serde_json::{json, Map, Value};
 
 use crate::ScoreRow;
 
+/// Bumped whenever the dataset layout changes in a way a consumer must notice.
+///
+/// * 1 — single document, array of score objects
+/// * 2 — index + per-player columnar shards
+pub const SCHEMA_VERSION: u32 = 2;
+
 /// Upstream revision this build compares against.
 ///
-/// Keep in sync with the `rev` in the workspace `Cargo.toml`; it is reported in the data document so
-/// a published page can always be traced back to the algorithms it used.
+/// Keep in sync with the `rev` in the workspace `Cargo.toml`; it is reported in the dataset so a
+/// published page can always be traced back to the algorithms it used.
 pub const ROSU_PP_REV: &str = "3530ba7";
+
+/// Columns of a player shard, in order. The site indexes into `scores` with these names.
+const COLUMNS: [&str; 28] = [
+    "beatmap_id",
+    "artist",
+    "title",
+    "version",
+    "keys",
+    "od",
+    "mods",
+    "accuracy",
+    "n320",
+    "n300",
+    "n200",
+    "n100",
+    "n50",
+    "miss",
+    "pp_bancho",
+    "pp_sunny",
+    "pp_codexxy",
+    "pp_reimagined",
+    "stars_full",
+    "stars_rice",
+    "ln_ratio",
+    "l_share",
+    "w",
+    "coord_mod",
+    "eff_star",
+    "acc_factor",
+    "nf_factor",
+    "mods_parts",
+];
 
 /// (module id, label, description) in presentation order.
 fn algorithm_table() -> [(&'static str, &'static str, &'static str); 4] {
     [
         (bancho::ID, bancho::LABEL, bancho::DESCRIPTION),
         (sunny::ID, sunny::LABEL, sunny::DESCRIPTION),
-        (surface::ID, surface::LABEL, surface::DESCRIPTION),
+        (codexxy::ID, codexxy::LABEL, codexxy::DESCRIPTION),
         (reimagined::ID, reimagined::LABEL, reimagined::DESCRIPTION),
     ]
 }
@@ -37,6 +92,8 @@ pub struct ScoreOut {
     pub keys: i32,
     pub od: f64,
     pub accuracy: f64,
+    /// Space-separated mod flags the site filters on (e.g. `"DT EZ NF"`).
+    pub mods_parts: String,
 }
 
 pub struct UserOut {
@@ -74,10 +131,40 @@ fn sort_scores(scores: &mut [ScoreOut]) {
     });
 }
 
-pub fn build_document(users: &mut [UserOut], warnings: Vec<String>) -> Value {
+fn round3(v: f64) -> f64 {
+    (v * 1000.0).round() / 1000.0
+}
+
+fn round4(v: f64) -> f64 {
+    (v * 10_000.0).round() / 10_000.0
+}
+
+fn opt(v: Option<f64>) -> Value {
+    match v {
+        Some(x) => json!(round3(x)),
+        None => Value::Null,
+    }
+}
+
+/// Write `index.json` plus one shard per player, and return the index document.
+pub fn write_dataset(
+    users: &mut [UserOut],
+    warnings: Vec<String>,
+    out: &Path,
+) -> Result<Value, String> {
     for user in users.iter_mut() {
         sort_scores(&mut user.scores);
     }
+
+    // `--out` may be the data directory itself or the index file inside it.
+    let data_dir = if out.file_name().and_then(|n| n.to_str()) == Some("index.json") {
+        out.parent().unwrap_or(Path::new(".")).to_path_buf()
+    } else {
+        out.to_path_buf()
+    };
+    let players_dir = data_dir.join("players");
+    std::fs::create_dir_all(&players_dir)
+        .map_err(|e| format!("cannot create {}: {e}", players_dir.display()))?;
 
     let algorithms: Vec<Value> = algorithm_table()
         .iter()
@@ -86,68 +173,80 @@ pub fn build_document(users: &mut [UserOut], warnings: Vec<String>) -> Value {
         })
         .collect();
 
-    let users_json: Vec<Value> = users
-        .iter()
-        .map(|user| {
-            let mut totals = Map::new();
-            for (id, _, _) in algorithm_table() {
-                let pps: Vec<f64> = user.scores.iter().filter_map(|s| s.pp.get(id)).collect();
-                if !pps.is_empty() {
-                    totals.insert(id.to_owned(), json!(round3(weighted_total(&pps))));
-                }
+    let mut index_users: Vec<Value> = Vec::new();
+    let mut total_scores = 0usize;
+
+    for user in users.iter() {
+        let mut totals = Map::new();
+        for (id, _, _) in algorithm_table() {
+            let pps: Vec<f64> = user.scores.iter().filter_map(|s| s.pp.get(id)).collect();
+            if !pps.is_empty() {
+                totals.insert(id.to_owned(), json!(round3(weighted_total(&pps))));
             }
+        }
 
-            let scores: Vec<Value> = user
-                .scores
-                .iter()
-                .map(|score| {
-                    let mut pp = Map::new();
-                    for (id, _, _) in algorithm_table() {
-                        if let Some(value) = score.pp.get(id) {
-                            pp.insert(id.to_owned(), json!(round3(value)));
-                        }
-                    }
-                    let d = &score.detail;
-                    json!({
-                        "beatmap_id": score.row.map_id.parse::<i64>().unwrap_or(0),
-                        "artist": score.artist,
-                        "title": score.title,
-                        "version": score.version,
-                        "keys": score.keys,
-                        "od": score.od,
-                        "mods": score.row.mods,
-                        "accuracy": round3(score.accuracy),
-                        "counts": score.row.counts,
-                        "pp": Value::Object(pp),
-                        "detail": {
-                            "stars_full": round3(d.stars_full),
-                            "stars_rice": round3(d.stars_rice),
-                            "ln_ratio": round4(d.ln_ratio),
-                            "l_share": round4(d.l_share),
-                            "w": round4(d.w),
-                            "coord_mod": round4(d.coord_mod),
-                            "eff_star": round3(d.eff_star),
-                            "acc_factor": round4(d.acc_factor),
-                            "nf_factor": round4(d.nf_factor),
-                            "variety": round3(d.variety),
-                            "acc_scalar": round4(d.acc_scalar),
-                        },
-                    })
-                })
-                .collect();
-
-            json!({
-                "uid": user.uid,
-                "username": user.username,
-                "fixture": user.fixture,
-                "total_pp": Value::Object(totals),
-                "scores": scores,
+        let rows: Vec<Value> = user
+            .scores
+            .iter()
+            .map(|s| {
+                let d = &s.detail;
+                json!([
+                    s.row.map_id.parse::<i64>().unwrap_or(0),
+                    s.artist,
+                    s.title,
+                    s.version,
+                    s.keys,
+                    s.od,
+                    s.row.mods,
+                    round3(s.accuracy),
+                    s.row.counts[0],
+                    s.row.counts[1],
+                    s.row.counts[2],
+                    s.row.counts[3],
+                    s.row.counts[4],
+                    s.row.counts[5],
+                    opt(s.pp.bancho),
+                    opt(s.pp.sunny),
+                    opt(s.pp.codexxy),
+                    opt(s.pp.reimagined),
+                    round3(d.stars_full),
+                    round3(d.stars_rice),
+                    round4(d.ln_ratio),
+                    round4(d.l_share),
+                    round4(d.w),
+                    round4(d.coord_mod),
+                    round3(d.eff_star),
+                    round4(d.acc_factor),
+                    round4(d.nf_factor),
+                    s.mods_parts,
+                ])
             })
-        })
-        .collect();
+            .collect();
 
-    json!({
-        "schema_version": 1,
+        total_scores += rows.len();
+
+        let shard = json!({
+            "schema_version": SCHEMA_VERSION,
+            "uid": user.uid,
+            "username": user.username,
+            "columns": COLUMNS,
+            "scores": rows,
+        });
+        let shard_path = players_dir.join(format!("{}.json", user.uid));
+        write_json(&shard, &shard_path)?;
+
+        index_users.push(json!({
+            "uid": user.uid,
+            "username": user.username,
+            "fixture": user.fixture,
+            "scores": user.scores.len(),
+            "file": format!("players/{}.json", user.uid),
+            "total_pp": Value::Object(totals),
+        }));
+    }
+
+    let index = json!({
+        "schema_version": SCHEMA_VERSION,
         "generated_at": rfc3339_now(),
         "engine": {
             "name": "mania-pp-rs",
@@ -156,17 +255,14 @@ pub fn build_document(users: &mut [UserOut], warnings: Vec<String>) -> Value {
             "rosu_pp_rev": ROSU_PP_REV,
         },
         "algorithms": algorithms,
-        "users": users_json,
+        "users": index_users,
+        "score_count": total_scores,
         "warnings": warnings,
-    })
-}
+    });
 
-fn round3(v: f64) -> f64 {
-    (v * 1000.0).round() / 1000.0
-}
-
-fn round4(v: f64) -> f64 {
-    (v * 10_000.0).round() / 10_000.0
+    let index_path = data_dir.join("index.json");
+    write_json(&index, &index_path)?;
+    Ok(index)
 }
 
 pub fn write_json(document: &Value, path: &Path) -> Result<(), String> {
@@ -177,7 +273,7 @@ pub fn write_json(document: &Value, path: &Path) -> Result<(), String> {
         }
     }
     let text = serde_json::to_string_pretty(document)
-        .map_err(|e| format!("cannot serialize the results document: {e}"))?;
+        .map_err(|e| format!("cannot serialize the dataset: {e}"))?;
     std::fs::write(path, format!("{text}\n"))
         .map_err(|e| format!("cannot write {}: {e}", path.display()))
 }
@@ -191,7 +287,7 @@ pub fn print_summary(document: &Value, out: &Path) {
     for user in users {
         let uid = user["uid"].as_u64().unwrap_or(0);
         let name = user["username"].as_str().unwrap_or("unknown");
-        let scores = user["scores"].as_array().map(|s| s.len()).unwrap_or(0);
+        let scores = user["scores"].as_u64().unwrap_or(0);
         println!("user {name} ({uid}) — {scores} scores");
         let baseline = user["total_pp"]["bancho"].as_f64();
         println!(
@@ -211,54 +307,6 @@ pub fn print_summary(document: &Value, out: &Path) {
         }
     }
 
-    // The interesting cases: where the algorithms disagree the most.
-    let mut disagreements: Vec<(f64, String, String, f64, f64)> = Vec::new();
-    for user in users {
-        for score in user["scores"].as_array().unwrap_or(&empty) {
-            let values: Vec<f64> = table
-                .iter()
-                .filter_map(|(id, _, _)| score["pp"][id].as_f64())
-                .collect();
-            if values.len() < 2 {
-                continue;
-            }
-            let max = values.iter().cloned().fold(f64::MIN, f64::max);
-            let min = values.iter().cloned().fold(f64::MAX, f64::min);
-            let mean = values.iter().sum::<f64>() / values.len() as f64;
-            if mean <= 0.0 {
-                continue;
-            }
-            disagreements.push((
-                (max - min) / mean,
-                user["username"].as_str().unwrap_or("").to_owned(),
-                format!(
-                    "{} - {} [{}] {}K {}",
-                    score["artist"].as_str().unwrap_or(""),
-                    score["title"].as_str().unwrap_or(""),
-                    score["version"].as_str().unwrap_or(""),
-                    score["keys"],
-                    score["mods"].as_str().unwrap_or("")
-                ),
-                min,
-                max,
-            ));
-        }
-    }
-    disagreements.sort_by(|a, b| b.0.partial_cmp(&a.0).unwrap_or(std::cmp::Ordering::Equal));
-    if !disagreements.is_empty() {
-        println!("\ntop disagreements (normalised spread across the four algorithms)");
-        for (spread, user, label, min, max) in disagreements.iter().take(8) {
-            println!(
-                "  {:>6.1}%  {:<18} {:.1} … {:.1}  {}",
-                spread * 100.0,
-                user,
-                min,
-                max,
-                label
-            );
-        }
-    }
-
     let warnings = document["warnings"].as_array().cloned().unwrap_or_default();
     if !warnings.is_empty() {
         println!("\n{} warning(s):", warnings.len());
@@ -267,11 +315,15 @@ pub fn print_summary(document: &Value, out: &Path) {
         }
     }
 
-    println!("\nwrote {}", out.display());
+    println!(
+        "\nwrote {} (+ {} player shard(s))",
+        out.display(),
+        users.len()
+    );
 }
 
 /// Minimal RFC 3339 UTC timestamp (avoids a date-time dependency for one formatted field).
-fn rfc3339_now() -> String {
+pub fn rfc3339_now() -> String {
     let secs = SystemTime::now()
         .duration_since(UNIX_EPOCH)
         .map(|d| d.as_secs() as i64)

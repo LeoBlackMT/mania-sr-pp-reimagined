@@ -7,8 +7,8 @@
 //! | module | algorithm | how it is obtained |
 //! |---|---|---|
 //! | [`bancho`] | official osu! (osu!lazer) | ported upstream in the pinned `rosu-pp` dependency |
-//! | [`sunny`] | community Star-Rating-Rebirth, pattern + accuracy | `mania::sunny` of the same dependency |
-//! | [`surface`] | sunny plus the map-based timing surface | the `pp_timing` part of the same calculation |
+//! | [sunny] | community algorithm by [Crz]sunnyxxy (repo: Star-Rating-Rebirth), pattern + accuracy | `mania::sunny` of the same dependency |
+//! | [`codexxy`] | sunny plus the map-based timing surface | the `pp_timing` part of the same calculation |
 //! | [`reimagined`] | this project's three-channel R / L / A algorithm | implemented here |
 //!
 //! Everything that is expensive is computed once per `(map, mods)` pair by [`prepare`], and the four
@@ -21,18 +21,18 @@
 //! let prepared = mania_pp_algorithms::prepare(&text, "DT")?;
 //! let counts: mania_pp_algorithms::Counts = [900, 80, 15, 3, 1, 1];
 //! let pp = mania_pp_algorithms::price(&prepared, &counts);
-//! println!("bancho {:.2} sunny {:.2} surface {:.2} reimagined {:.2}",
+//! println!("bancho {:.2} sunny {:.2} codexxy {:.2} reimagined {:.2}",
 //!     pp.bancho.unwrap_or(f64::NAN), pp.sunny.unwrap_or(f64::NAN),
-//!     pp.surface.unwrap_or(f64::NAN), pp.reimagined.unwrap_or(f64::NAN));
+//!     pp.codexxy.unwrap_or(f64::NAN), pp.reimagined.unwrap_or(f64::NAN));
 //! # Ok(())
 //! # }
 //! ```
 
 pub mod bancho;
+pub mod codexxy;
 pub mod reimagined;
-pub mod rice;
+pub mod shared;
 pub mod sunny;
-pub mod surface;
 
 use rosu_pp::mania::{Mania, ManiaDifficultyAttributes, SunnyManiaDifficultyAttributes};
 use rosu_pp::model::mode::IGameMode;
@@ -42,7 +42,7 @@ pub use reimagined::mods::ModSet;
 pub use reimagined::pp::Counts;
 
 /// Algorithm ids in presentation order.
-pub const ALGORITHM_IDS: [&str; 4] = ["bancho", "sunny", "surface", "reimagined"];
+pub const ALGORITHM_IDS: [&str; 4] = ["bancho", "sunny", "codexxy", "reimagined"];
 
 /// Parse a mod acronym string into the dependency's mod representation, plus the clock rate.
 ///
@@ -121,7 +121,7 @@ impl Prepared {
 pub fn prepare(osu_text: &str, mods_str: &str) -> Result<Prepared, String> {
     let map = Beatmap::from_bytes(osu_text.as_bytes())
         .map_err(|e| format!("cannot parse the beatmap: {e}"))?;
-    let rice_text = rice::rice_variant(osu_text);
+    let rice_text = shared::rice::rice_variant(osu_text);
     let rice_map = Beatmap::from_bytes(rice_text.as_bytes())
         .map_err(|e| format!("cannot parse the rice variant: {e}"))?;
 
@@ -141,10 +141,10 @@ pub fn prepare(osu_text: &str, mods_str: &str) -> Result<Prepared, String> {
     // convention of the research reference and of the dependency's own batch tool.
     let lazer = Some(!mods_str.contains("V2"));
 
-    let sunny_full = rosu_pp::report_utils::calculate(&map, &game_mods, clock_rate, lazer, None)
+    let sunny_full = rosu_pp::mania::sunny::calculate(&map, &game_mods, clock_rate, lazer, None)
         .ok_or_else(|| "sunny difficulty failed for the map".to_owned())?;
     let sunny_rice =
-        rosu_pp::report_utils::calculate(&rice_map, &game_mods, clock_rate, lazer, None)
+        rosu_pp::mania::sunny::calculate(&rice_map, &game_mods, clock_rate, lazer, None)
             .ok_or_else(|| "sunny difficulty failed for the rice variant".to_owned())?;
     let bancho = Mania::difficulty(
         &Difficulty::new()
@@ -205,17 +205,17 @@ fn build_map_info(osu_text: &str, mods_str: &str) -> Result<MapInfo, String> {
 pub struct ScorePp {
     pub bancho: Option<f64>,
     pub sunny: Option<f64>,
-    pub surface: Option<f64>,
+    pub codexxy: Option<f64>,
     pub reimagined: Option<f64>,
 }
 
 impl ScorePp {
-    /// Lookup by algorithm id (`"bancho"`, `"sunny"`, `"surface"`, `"reimagined"`).
+    /// Lookup by algorithm id (`"bancho"`, `"sunny"`, `"codexxy"`, `"reimagined"`).
     pub fn get(&self, id: &str) -> Option<f64> {
         match id {
             "bancho" => self.bancho,
             "sunny" => self.sunny,
-            "surface" => self.surface,
+            "codexxy" => self.codexxy,
             "reimagined" => self.reimagined,
             _ => None,
         }
@@ -223,7 +223,7 @@ impl ScorePp {
 
     /// Values in [`ALGORITHM_IDS`] order.
     pub fn as_array(&self) -> [Option<f64>; 4] {
-        [self.bancho, self.sunny, self.surface, self.reimagined]
+        [self.bancho, self.sunny, self.codexxy, self.reimagined]
     }
 }
 
@@ -244,11 +244,18 @@ pub struct ReimaginedDetail {
 }
 
 /// Price one score under all four algorithms.
+///
+/// `sunny` and `codexxy` are two views of one and the same upstream calculation, so the expensive
+/// performance pass runs **once** here and both columns are derived from its output. Calling
+/// `sunny::pattern_pp` and `codexxy::pp` back to back (as an earlier version did) would run that
+/// pass twice and roughly double the cost of the two columns.
 pub fn price(prepared: &Prepared, counts: &Counts) -> ScorePp {
+    let perf = sunny::performance(prepared, counts);
+
     ScorePp {
         bancho: bancho::pp(prepared, counts),
-        sunny: sunny::pattern_pp(prepared, counts),
-        surface: surface::pp(prepared, counts),
+        sunny: Some(sunny::pattern_pp_from(&perf)),
+        codexxy: Some(codexxy::pp_from(&perf)),
         reimagined: Some(reimagined::pp(prepared, counts)),
     }
 }

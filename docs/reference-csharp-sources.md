@@ -1,8 +1,6 @@
 # Reference C# Sources — bancho (ppy/osu lazer) mania & sunny (author's C# port)
 
-Reconnaissance for the Rust "multi-algorithm osu!mania PP comparison engine". Everything below was read from the
-two trees on disk; nothing is paraphrased from memory. Where something does not exist the text says **NOT FOUND**
-and names where it was searched.
+Reconnaissance for the Rust "multi-algorithm osu!mania PP comparison engine". Everything below was read from thetwo trees on disk; nothing is paraphrased from memory. Where something does not exist the text says **NOT FOUND**and names where it was searched.
 
 ## Provenance & conventions
 
@@ -11,9 +9,7 @@ and names where it was searched.
 | **A** | `C:\Users\Leo_BlackLT\Desktop\Dev\files\osu\osu-master` | full ppy/osu lazer tree. No `.git` (`git log` → "not a git repository") → **no pinned SHA**. Has `ManiaScoreMultiplierCalculator`, `ManiaModScoreV2`, `ManiaModDualStages` → recent master. |
 | **B** | `C:\Users\Leo_BlackLT\Desktop\Dev\files\osu\osu-author-port` | full osu fork with the author's sunny port grafted in. No `.git`, no CHANGELOG/version file → **upstream revision NOT FOUND**. Older base than A: no `ManiaScoreMultiplierCalculator`, no `ManiaModScoreV2`, and the old `clockRate`-parameter `DifficultyCalculator` API (`B:osu.Game/Rulesets/Difficulty/DifficultyCalculator.cs:273,281,291`). |
 
-Paths are **relative to the respective repo root**; `file:line` citations are from the on-disk files.
-`A:`/`B:` prefixes mark the tree — unqualified paths in Part A mean tree A, in Part B mean tree B.
-Tree B paths are under `osu.Game.Rulesets.Mania/` unless stated otherwise.
+Paths are **relative to the respective repo root**; `file:line` citations are from the on-disk files.`A:`/`B:` prefixes mark the tree — unqualified paths in Part A mean tree A, in Part B mean tree B.Tree B paths are under `osu.Game.Rulesets.Mania/` unless stated otherwise.
 
 ---
 # Part A — bancho (official lazer) mania
@@ -100,9 +96,7 @@ return (countPerfect * 320 + countGreat * 300 + countGood * 200 + countOk * 100 
 | NF / EZ | `×0.75` / `×0.5` | :43-46 |
 | final | `Total = Difficulty * multiplier`; **no clamp, no floor, no pp cap** | :49,54 |
 
-`Total` is the PP; `Difficulty` (`ManiaPerformanceAttributes.cs:12-20`) is the **pre-NF/EZ** value shown in the
-breakdown. `totalHits / 1500` is **integer** division. OD, HP, columns, LN count, MaxCombo and every mod other
-than NF/EZ are **absent** from mania pp. `scoreAccuracy` ≠ the client-displayed accuracy.
+`Total` is the PP; `Difficulty` (`ManiaPerformanceAttributes.cs:12-20`) is the **pre-NF/EZ** value shown in thebreakdown. `totalHits / 1500` is **integer** division. OD, HP, columns, LN count, MaxCombo and every mod otherthan NF/EZ are **absent** from mania pp. `scoreAccuracy` ≠ the client-displayed accuracy.
 
 ## A.4 Hit windows (`ManiaHitWindows.cs`)
 ```csharp
@@ -117,31 +111,13 @@ great   = Math.Floor((34 + 3 * invertedOd) * totalMultiplier) + 0.5;   // good/o
 // :131-138 classic CONVERT branch: (Math.Round(od) > 4 ? 34 : 47) great, (… ? 67 : 77) good, then 97/121/158
 // :154-159 default branch: Math.Floor(IBeatmapDifficultyInfo.DifficultyRange(od, range) * totalMultiplier) + 0.5
 ```
-`DifficultyRange(d,min,mid,max)` is two-piece linear (`A:osu.Game/Beatmaps/IBeatmapDifficultyInfo.cs:57-65`):
-`d>5 → mid+(max−mid)(d−5)/5`; `d<5 → mid+(mid−min)(d−5)/5`; `d==5 → mid`.
-Setters: `SpeedMultiplier` via `IManiaRateAdjustmentMod` (`Mods/IManiaRateAdjustmentMod.cs:19-36`);
-`DifficultyMultiplier = 1.4` for HR (`Mods/ManiaModHardRock.cs:15,22-27`), `1/1.4` for EZ
-(`Mods/ManiaModEasy.cs:16,23-28`); `ClassicModActive` (`Mods/ManiaModClassic.cs`); `ScoreV2Active`
-(`Mods/ManiaModScoreV2.cs`); `IsConvert` from ruleset identity. `Math.Round` here is **banker's rounding** (see C).
-These are *gameplay* windows — they never reach mania SR or pp in tree A.
+`DifficultyRange(d,min,mid,max)` is two-piece linear (`A:osu.Game/Beatmaps/IBeatmapDifficultyInfo.cs:57-65`):`d>5 → mid+(max−mid)(d−5)/5`; `d<5 → mid+(mid−min)(d−5)/5`; `d==5 → mid`.Setters: `SpeedMultiplier` via `IManiaRateAdjustmentMod` (`Mods/IManiaRateAdjustmentMod.cs:19-36`);`DifficultyMultiplier = 1.4` for HR (`Mods/ManiaModHardRock.cs:15,22-27`), `1/1.4` for EZ(`Mods/ManiaModEasy.cs:16,23-28`); `ClassicModActive` (`Mods/ManiaModClassic.cs`); `ScoreV2Active`(`Mods/ManiaModScoreV2.cs`); `IsConvert` from ruleset identity. `Math.Round` here is **banker's rounding** (see C).These are *gameplay* windows — they never reach mania SR or pp in tree A.
 
 ## A.5 Score multiplier calculator (score only, never PP)
-`ManiaScoreMultiplierCalculator.cs`: EZ `0.5` :19; NF `0.5` :20; HT/DC via `rateAdjustMultiplier(SpeedChange)`
-:21-22,:88-100; NoRelease `0.9` :23; DifficultyAdjust `0.5` :47; Classic `classicMultiplier(score)` → `0.96` if
-`score.TotalScoreVersion < 30000017` else `1` (:48,:146-152); ConstantSpeed `0.9` :50; HoldOff `0.9` :51; key mods
-`keyModMultiplier(score)` → `0.9` (legacy `1` for clients before `2025.718`) :52-61,:102-144; WindUp/WindDown/
-AdaptiveSpeed `0.5` :74-77. Combination logic in `A:osu.Game/Rulesets/Scoring/ScoreMultiplierCalculator.cs:CalculateFor`.
-**It never feeds pp** — pp applies its own NF/EZ multipliers (A.3), i.e. score multiplier ≠ pp multiplier.
+`ManiaScoreMultiplierCalculator.cs`: EZ `0.5` :19; NF `0.5` :20; HT/DC via `rateAdjustMultiplier(SpeedChange)`:21-22,:88-100; NoRelease `0.9` :23; DifficultyAdjust `0.5` :47; Classic `classicMultiplier(score)` → `0.96` if`score.TotalScoreVersion < 30000017` else `1` (:48,:146-152); ConstantSpeed `0.9` :50; HoldOff `0.9` :51; key mods`keyModMultiplier(score)` → `0.9` (legacy `1` for clients before `2025.718`) :52-61,:102-144; WindUp/WindDown/AdaptiveSpeed `0.5` :74-77. Combination logic in `A:osu.Game/Rulesets/Scoring/ScoreMultiplierCalculator.cs:CalculateFor`.**It never feeds pp** — pp applies its own NF/EZ multipliers (A.3), i.e. score multiplier ≠ pp multiplier.
 
 ## A.6 Health processor (`ManiaHealthProcessor.cs`)
-Extends `LegacyDrainingHealthProcessor`; `ComputeDrainRate()` calls `base.ComputeDrainRate()` **only** to obtain
-`HpMultiplierNormal`, then `return 0;` (:18-25) → **mania has no passive drain**.
-`GetHealthIncreaseFor(hitObject, result)` (:31-68): `Miss` → `-(DR+1)*0.00375` on `HeadNote`/`TailNote`, else
-`-(DR+1)*0.0075`; `Meh` → `-(DR+1)*0.0016`; `Ok` → `0`; `Good` → `0.004 − DR*0.0004`; `Great` → `0.005 − DR*0.0005`;
-`Perfect` → `0.0055 − DR*0.0005`; positives are `× HpMultiplierNormal`. `DR` = `Beatmap.Difficulty.DrainRate`.
-Base iteration (drop test `0.00025`; `lowestHpEver/lowestHpEnd/hpRecoveryAvailable` from
-`DifficultyRange(DR, 0.975,0.8,0.3 / 0.99,0.9,0.4 / 0.04,0.02,0)`) in
-`A:osu.Game/Rulesets/Scoring/LegacyDrainingHealthProcessor.cs`. Relevant only to NF failure-risk modelling, not pp.
+Extends `LegacyDrainingHealthProcessor`; `ComputeDrainRate()` calls `base.ComputeDrainRate()` **only** to obtain`HpMultiplierNormal`, then `return 0;` (:18-25) → **mania has no passive drain**.`GetHealthIncreaseFor(hitObject, result)` (:31-68): `Miss` → `-(DR+1)*0.00375` on `HeadNote`/`TailNote`, else`-(DR+1)*0.0075`; `Meh` → `-(DR+1)*0.0016`; `Ok` → `0`; `Good` → `0.004 − DR*0.0004`; `Great` → `0.005 − DR*0.0005`;`Perfect` → `0.0055 − DR*0.0005`; positives are `× HpMultiplierNormal`. `DR` = `Beatmap.Difficulty.DrainRate`.Base iteration (drop test `0.00025`; `lowestHpEver/lowestHpEnd/hpRecoveryAvailable` from`DifficultyRange(DR, 0.975,0.8,0.3 / 0.99,0.9,0.4 / 0.04,0.02,0)`) in`A:osu.Game/Rulesets/Scoring/LegacyDrainingHealthProcessor.cs`. Relevant only to NF failure-risk modelling, not pp.
 
 ## A.7 Mods that matter (tree A)
 | mod | effect | location |
@@ -158,11 +134,7 @@ Base iteration (drop test `0.00025`; `lowestHpEver/lowestHpEnd/hpRecoveryAvailab
 | NoRelease / ConstantSpeed / HoldOff | score multiplier only | A.5 |
 
 ## A.8 Inputs the bancho formula needs
-`CreatePerformanceAttributes(ScoreInfo score, DifficultyAttributes attributes)` (:29):
-`attributes` cast to `ManiaDifficultyAttributes` → **only `StarRating`** is read (:60) (`MaxCombo`/`Mods` unused);
-`score.Statistics` → `HitResult.{Perfect,Great,Good,Ok,Meh,Miss}` counts (:33-38); `score.Mods` → presence of
-`ModNoFail`/`ModEasy` (:43-46). Nothing else: no OD, HP, columns, BPM or object count.
-For SR: the parsed beatmap (objects with `Column` and hold `EndTime`) plus mods (rate; column count for converts).
+`CreatePerformanceAttributes(ScoreInfo score, DifficultyAttributes attributes)` (:29):`attributes` cast to `ManiaDifficultyAttributes` → **only `StarRating`** is read (:60) (`MaxCombo`/`Mods` unused);`score.Statistics` → `HitResult.{Perfect,Great,Good,Ok,Meh,Miss}` counts (:33-38); `score.Mods` → presence of`ModNoFail`/`ModEasy` (:43-46). Nothing else: no OD, HP, columns, BPM or object count.For SR: the parsed beatmap (objects with `Column` and hold `EndTime`) plus mods (rate; column count for converts).
 
 ## A.9 Golden verification anchors (tree A)
 `A:osu.Game.Rulesets.Mania.Tests/ManiaDifficultyCalculatorTest.cs:17,21`
@@ -170,12 +142,7 @@ For SR: the parsed beatmap (objects with `Column` and hold `EndTime`) plus mods 
 diffcalc-test.osu   NoMod -> StarRating = 2.3493769750220914, MaxCombo = 242
 diffcalc-test.osu   DT    -> StarRating = 2.797245912537965,  MaxCombo = 242
 ```
-Harness tolerance `CHECK_PRECISION = 0.00001` (`A:osu.Game/Tests/Beatmaps/DifficultyCalculatorTest.cs:30`).
-Map = `.../Resources/Testing/Beatmaps/diffcalc-test.osu` (4K, OD 7, `Mode: 3`); the harness decodes with
-`LegacyBeatmapDecoder` and `ApplyOffsets = false` (no audio-lead-in offset).
-**NOT FOUND:** any mania *performance* (pp) test with expected pp — grepped
-`ManiaPerformanceCalculator|ManiaPerformanceAttributes` over the whole tree; only the class files and
-`ManiaRuleset.cs:61` match.
+Harness tolerance `CHECK_PRECISION = 0.00001` (`A:osu.Game/Tests/Beatmaps/DifficultyCalculatorTest.cs:30`).Map = `.../Resources/Testing/Beatmaps/diffcalc-test.osu` (4K, OD 7, `Mode: 3`); the harness decodes with`LegacyBeatmapDecoder` and `ApplyOffsets = false` (no audio-lead-in offset).**NOT FOUND:** any mania *performance* (pp) test with expected pp — grepped`ManiaPerformanceCalculator|ManiaPerformanceAttributes` over the whole tree; only the class files and`ManiaRuleset.cs:61` match.
 
 ---
 # Part B — sunny (community Star-Rating-Rebirth, author's C# port)
@@ -209,9 +176,7 @@ public static double Switches(List<Note> noteSeq, List<Note> tailSeq, double[] a
 public class ManiaPerformanceCalculator : PerformanceCalculator
 protected override PerformanceAttributes CreatePerformanceAttributes(ScoreInfo score, DifficultyAttributes attributes)
 ```
-There is **no** separate sunny ruleset/calculator type: sunny is grafted into the normal `ManiaDifficultyCalculator`
-by replacing `Strain` with `SunnySkill` (:94-97) and overriding `CreateDifficultyAttributes` (:39-61).
-Case-insensitive grep for `sunny` over tree B matches only `SunnySkill.cs` and `ManiaDifficultyCalculator.cs`.
+There is **no** separate sunny ruleset/calculator type: sunny is grafted into the normal `ManiaDifficultyCalculator`by replacing `Strain` with `SunnySkill` (:94-97) and overriding `CreateDifficultyAttributes` (:39-61).Case-insensitive grep for `sunny` over tree B matches only `SunnySkill.cs` and `ManiaDifficultyCalculator.cs`.
 
 ## B.2 The `x` parameter (OD / hit window)
 `B:.../Difficulty/ManiaDifficultyCalculator.cs:135-159` → `getHitWindow300(mods, clockRate)`:
@@ -237,11 +202,7 @@ static double applyModAdjustments(double value, Mod[] mods, double clockRate)  /
 double x = 0.3 * Math.Pow(greatHitWindow / 500.0, 0.5);
 x = Math.Min(x, 0.6 * (x - 0.09) + 0.09);
 ```
-The second line equals `min(x, 0.6x + 0.036)`, so it binds iff `x > 0.09` (≈ `greatHitWindow > 45 ms`): an upper
-compression, not a clamp. `x` is used as "harder ⇒ smaller" — `Math.Pow(x, 0.25)` in Jbar, `1/x` in Pbar/Rbar,
-`(4/x − λ3)` in the Pbar spike, `0.75·x` in `fastCross`.
-**The `od` constructor parameter is dead:** `private double od;` is assigned at :21,31 and never read
-(`rg "\bod\b"` on the file → only those two lines). All OD influence flows through `greatHitWindow`.
+The second line equals `min(x, 0.6x + 0.036)`, so it binds iff `x > 0.09` (≈ `greatHitWindow > 45 ms`): an uppercompression, not a clamp. `x` is used as "harder ⇒ smaller" — `Math.Pow(x, 0.25)` in Jbar, `1/x` in Pbar/Rbar,`(4/x − λ3)` in the Pbar spike, `0.75·x` in `fastCross`.**The `od` constructor parameter is dead:** `private double od;` is assigned at :21,31 and never read(`rg "\bod\b"` on the file → only those two lines). All OD influence flows through `greatHitWindow`.
 
 ## B.3 `MACalculator.Calculate` — the difficulty components
 ```csharp
@@ -249,8 +210,7 @@ const double lambda_n = 5;   const double lambda_1 = 0.11;  const double lambda_
 const double lambda2  = 6.0; const double lambda_4 = 0.8;   const double w0 = 0.4;
 const double w1 = 2.7;       const double p1 = 1.5;         const double w2 = 0.27;  const double p0 = 1.0;
 ```
-Data model: `class Note { int Column; int Head; int Tail; int ColumnIndex; }` (:7-21) — `Tail = -1` marks rice;
-`class CornerData { Time, Jbar, Xbar, Pbar, Abar, Rbar, C, Ks, D, Weight }` (:26-38).
+Data model: `class Note { int Column; int Head; int Tail; int ColumnIndex; }` (:7-21) — `Tail = -1` marks rice;`class CornerData { Time, Jbar, Xbar, Pbar, Abar, Rbar, C, Ks, D, Weight }` (:26-38).
 1. **Sort + index** (:71-96): `noteSeq.Sort((a,b) => Head then Column)`; rebuild per-column dicts; write back `note.ColumnIndex` = position in its column list.
 2. **LN partition** (:99-112): `LNSeq = noteSeq.Where(n => n.Tail >= 0)`; `tailSeq = LNSeq.OrderBy(n => n.Tail)`.
 3. **Time grid** (:114-161): `T = max(maxHead, maxTail) + 1`. `baseCorners` = `{Head} ∪ {Tail} ∪ {s+501, s−499, s+1} ∪ {0, T}` filtered to `[0,T]`, sorted (the `+501/−499` asymmetry encodes `[s−499, s+501)`). `ACorners` = `{Head} ∪ {Tail} ∪ {s±1000} ∪ {0,T}` filtered, sorted. `allCorners` = their union, sorted.
@@ -297,12 +257,7 @@ SR = rescaleHigh(SR);                                                           
 SR *= 0.975;                                                                                   // :915
 // rescaleHigh (:941-947): if (sr <= 9) return sr; return 9 + (sr - 9) * (1.0 / 1.2);
 ```
-So: eight weight-fraction targets collapse into two 4-element means (≈ 93 % and ≈ 83 % of *weight*), plus a
-`p = 5` weighted power-mean; then a length normalisation using a **second, different** note count (heads + half of
-capped LN durations), a high-end compression above 9★, and a flat `×0.975`.
-⚠ **`ContainsCL` selects the head-only counter `C_arr`; the non-CL path uses `C_arrV2` (heads + LN tails).**
-`ContainsCL = mods.Any(m => m is ModClassic)` (`SunnySkill.cs:71`); tree B's `ManiaModClassic` is an empty
-subclass of `ModClassic` (acronym `CL`, `B:osu.Game/Rulesets/Mods/ModClassic.cs`).
+So: eight weight-fraction targets collapse into two 4-element means (≈ 93 % and ≈ 83 % of *weight*), plus a`p = 5` weighted power-mean; then a length normalisation using a **second, different** note count (heads + half ofcapped LN durations), a high-end compression above 9★, and a flat `×0.975`.⚠ **`ContainsCL` selects the head-only counter `C_arr`; the non-CL path uses `C_arrV2` (heads + LN tails).**`ContainsCL = mods.Any(m => m is ModClassic)` (`SunnySkill.cs:71`); tree B's `ManiaModClassic` is an emptysubclass of `ModClassic` (acronym `CL`, `B:osu.Game/Rulesets/Mods/ModClassic.cs`).
 
 ## B.5 The pp metrics: variety, accScalar, spikiness, switches, totalNotes
 `B:.../Difficulty/ManiaDifficultyCalculator.cs:47-58`:
@@ -313,9 +268,7 @@ AccScalar      = ((SunnySkill)skills[0]).AccScalarValue(),
 TotalNotes     = beatmap.HitObjects.Count,
 GreatHitWindow = getHitWindow300(mods, clockRate),
 ```
-⚠ **Order dependence.** C# evaluates object-initializer assignments in source order, so `DifficultyValue()` runs
-first: it fills `spikiness`/`switches` (`SunnySkill.cs:72-73`) and **sorts `noteSeq` in place** inside
-`MACalculator.Calculate` (:71-75), while `Variety()` assumes heads are already in `(Head, Column)` order.
+⚠ **Order dependence.** C# evaluates object-initializer assignments in source order, so `DifficultyValue()` runsfirst: it fills `spikiness`/`switches` (`SunnySkill.cs:72-73`) and **sorts `noteSeq` in place** inside`MACalculator.Calculate` (:71-75), while `Variety()` assumes heads are already in `(Head, Column)` order.
 
 | metric | where | exactly how |
 |---|---|---|
@@ -380,12 +333,7 @@ return 1.1 / (1.0 + Math.Sqrt(starRating / (2 * totalNotes)));                  
 | `ManiaModClassic` (CL) | switches `effectiveWeights` to the head-only `C_arr` | `SunnySkill.cs:71`; `MACalculator.cs:837-842` |
 | DA / ScoreV2 / key mods | no effect on sunny SR or pp (no `ManiaScoreMultiplierCalculator`, no `ManiaModScoreV2`, `ManiaModDifficultyAdjust` is an empty subclass) | — |
 
-**Effective-OD transform (author port only, SR path only):** `anti_od = clamp(10 − OD_original, 0, 10)` for native
-maps → `34 + 3·anti_od`; converts → `34` if `Math.Round(OD) > 4` else `47` (`ManiaDifficultyCalculator.cs:139-146`);
-then `((int)(value·clockRate + 1e-6 [±1.4 mod scaling]) + 0.5) / clockRate`. This is **not** lazer's
-`ManiaHitWindows`: tree B's version is a plain multiplier over the base ranges
-(`B:osu.Game.Rulesets.Mania/Scoring/ManiaHitWindows.cs`, ctor `multiplier`, `GetRanges()` scaling
-`Min/Average/Max`; base ranges at `B:osu.Game/Rulesets/Scoring/HitWindows.cs:18-26`).
+**Effective-OD transform (author port only, SR path only):** `anti_od = clamp(10 − OD_original, 0, 10)` for nativemaps → `34 + 3·anti_od`; converts → `34` if `Math.Round(OD) > 4` else `47` (`ManiaDifficultyCalculator.cs:139-146`);then `((int)(value·clockRate + 1e-6 [±1.4 mod scaling]) + 0.5) / clockRate`. This is **not** lazer's`ManiaHitWindows`: tree B's version is a plain multiplier over the base ranges(`B:osu.Game.Rulesets.Mania/Scoring/ManiaHitWindows.cs`, ctor `multiplier`, `GetRanges()` scaling`Min/Average/Max`; base ranges at `B:osu.Game/Rulesets/Scoring/HitWindows.cs:18-26`).
 
 ---
 # Part C — porting notes
@@ -447,9 +395,7 @@ new ManiaPerformanceCalculator().Calculate(scoreInfo, maniaAttributes)   ManiaPe
       * (1 + 0.1 * Math.Min(1, totalHits / 1500))                         :62
  -> Total = Difficulty * multiplier                                       :49
 ```
-**(c) Score / health (not pp):** `ManiaScoreMultiplierCalculator` (`ManiaRuleset.cs:310`, A.5) and
-`ManiaHealthProcessor` (`ManiaRuleset.cs:57`, A.6). Tree A's mania `StarRating` is **not** interchangeable with
-sunny's `StarRating` — the two pipelines share only the field name.
+**(c) Score / health (not pp):** `ManiaScoreMultiplierCalculator` (`ManiaRuleset.cs:310`, A.5) and`ManiaHealthProcessor` (`ManiaRuleset.cs:57`, A.6). Tree A's mania `StarRating` is **not** interchangeable withsunny's `StarRating` — the two pipelines share only the field name.
 
 ## C.3 Minimum call-graph — sunny (tree B)
 **(a) Star rating**
@@ -488,8 +434,7 @@ new ManiaPerformanceCalculator().Calculate(scoreInfo, maniaAttributes)   B:Mania
  -> multiplier = (NF ? 0.75) * (EZ ? 0.90)                                       :41-46
  -> Total = difficultyValue * multiplier * varietyMultiplier * accMultiplier * lengthMultiplier   :52
 ```
-Required attribute fields: `StarRating`, `Variety`, `AccScalar`, `TotalNotes`
-(`B:.../ManiaDifficultyAttributes.cs:19-29`).
+Required attribute fields: `StarRating`, `Variety`, `AccScalar`, `TotalNotes`(`B:.../ManiaDifficultyAttributes.cs:19-29`).
 
 ## C.4 Explicit gaps
 - **Tree A:** no mania pp test / golden pp values — **NOT FOUND** (grepped `ManiaPerformanceCalculator`, `ManiaPerformanceAttributes` tree-wide; only the class files and `ManiaRuleset.cs:61`). Star-rating goldens exist (A.9).

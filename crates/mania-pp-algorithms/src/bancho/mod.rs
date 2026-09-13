@@ -13,7 +13,7 @@
 pub const ID: &str = "bancho";
 
 /// Human-readable name for the comparison site.
-pub const LABEL: &str = "bancho (official)";
+pub const LABEL: &str = "Bancho";
 
 /// One-line description shown next to the algorithm.
 pub const DESCRIPTION: &str = "osu!lazer mania pp: one fused strain rating, mapped to PP with an accuracy term and a length bonus";

@@ -32,8 +32,9 @@ jobs:
           restore-keys: ${{ runner.os }}-cargo-
 
       # This repository deliberately contains no test code: correctness is verified from the
-      # research repository, which owns the Python reference implementation and the golden
-      # vectors (see docs/usage.md). CI therefore checks formatting, lints and the build.
+      # research repository, which owns the Python reference implementation, the golden vectors
+      # and the dataset validator (see docs/usage.md). CI therefore checks formatting, lints and
+      # the build.
       - name: Formatting
         run: cargo fmt --all -- --check
 
@@ -43,10 +44,10 @@ jobs:
       - name: Build
         run: cargo build --release --workspace
 
-      - name: Validate the published dataset
+      # The algorithm crate must stay WebAssembly-ready: a future in-browser calculator depends on
+      # it, and the usual way to break it is to enable a dependency feature that pulls in a
+      # platform-specific crate (see docs/usage.md, FAQ).
+      - name: Build for wasm32
         run: |
-          if [ -f web/data/results.json ]; then
-            python3 tools/validate_results.py web/data/results.json
-          else
-            echo "web/data/results.json not present; skipping"
-          fi
+          rustup target add wasm32-unknown-unknown
+          cargo build --release --target wasm32-unknown-unknown -p mania-pp-algorithms

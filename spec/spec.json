@@ -1,0 +1,154 @@
+{
+  "spec_version": "v1.14",
+  "source": "mania_surface_research@1fd18e8 (Python reference implementation)",
+  "accuracy_curve": {
+    "gate": 0.8,
+    "g98": 0.45,
+    "g995": 0.035,
+    "k_tail": 0.4,
+    "acc_scalar_base": 0.87,
+    "acc_scalar_amp": 0.26,
+    "acc_scalar_k": 20.0
+  },
+  "chord": {
+    "reference": 1.471,
+    "sigma_beta": 0.321,
+    "sigma_clamp": [
+      0.7,
+      1.45
+    ],
+    "acc_beta": 0.047,
+    "acc_clamp": [
+      0.9,
+      1.15
+    ],
+    "simultaneity_ms": 1.0,
+    "typical_measured": {
+      "4": 1.471,
+      "6": 1.812,
+      "7": 2.109
+    },
+    "slope_per_key": 0.213
+  },
+  "keys": {
+    "min": 1,
+    "max": 18,
+    "ln_w_anchors": {
+      "4": 0.95,
+      "5": 1.0,
+      "6": 1.0,
+      "7": 1.15
+    },
+    "ln_w_key_min": 0.0,
+    "ln_w_key_max": 1.2,
+    "ln_w_key_step": 0.02,
+    "star_key_boost_from": 7,
+    "star_key_boost": 0.03,
+    "key_mods": {
+      "1K": 1,
+      "2K": 2,
+      "3K": 3,
+      "4K": 4,
+      "5K": 5,
+      "6K": 6,
+      "7K": 7,
+      "8K": 8,
+      "9K": 9,
+      "10K": 10
+    }
+  },
+  "channels": {
+    "r_scale": 1.0,
+    "acc_weight": 1.0
+  },
+  "coord": {
+    "transfer_beta": 0.06,
+    "gap_ref": {
+      "4": 83.0,
+      "7": 79.0
+    },
+    "gap_ref_default": 81.0,
+    "mod_clamp": [
+      0.9,
+      1.15
+    ]
+  },
+  "accuracy": {
+    "w_ref": 16.5,
+    "gamma_wide": 1.689,
+    "gamma_tight": 0.0,
+    "factor_clamp": [
+      0.5,
+      1.8
+    ]
+  },
+  "pp": {
+    "base": 9.8,
+    "star_offset": 0.15,
+    "star_floor": 0.05,
+    "star_floor_pattern": 0.2,
+    "exponent": 2.2,
+    "variety_lo": 0.945,
+    "variety_hi": 1.055,
+    "variety_k": 3.0,
+    "variety_mid": 3.25,
+    "length_numerator": 1.1
+  },
+  "nf": {
+    "curve": "exp",
+    "hp_points": [
+      [
+        0.0,
+        0.98
+      ],
+      [
+        8.0,
+        0.89
+      ],
+      [
+        9.0,
+        0.855
+      ],
+      [
+        10.0,
+        0.75
+      ]
+    ],
+    "exp_k": 4.6149,
+    "mult_min": 0.75,
+    "mult_max": 0.98,
+    "risk_r0": 0.5,
+    "risk_r1": 1.0,
+    "ez_extra_lives": 2,
+    "hp_max": 10.0
+  },
+  "diagnostics": {
+    "acc_weights": [
+      1.0,
+      0.9836065573770492,
+      0.6557377049180327,
+      0.32786885245901637,
+      0.16393442622950818,
+      0.0
+    ],
+    "penalty_weights": [
+      1.0,
+      1.1,
+      1.2,
+      1.4,
+      1.8,
+      2.6
+    ],
+    "timing_scale": 1.0,
+    "timing_clamp": [
+      0.75,
+      1.15
+    ],
+    "loss_anchor": 0.01229,
+    "loss_gamma": 0.558,
+    "map_factor_clamp": [
+      0.5,
+      1.8
+    ]
+  }
+}

@@ -1,0 +1,13 @@
+[package]
+name = "mania-pp-spec"
+description = "Tunable specification constants for the reimagined mania PP algorithm, exported from the Python research reference."
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+repository.workspace = true
+authors.workspace = true
+
+[dependencies]
+serde = { workspace = true }
+serde_json = { workspace = true }

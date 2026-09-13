@@ -1,0 +1,31 @@
+[workspace]
+resolver = "2"
+members = [
+    "crates/mania-pp-spec",
+    "crates/mania-pp-algorithms",
+    "crates/mania-pp-cli",
+]
+
+[workspace.package]
+version = "0.1.0"
+edition = "2021"
+rust-version = "1.77"
+license = "MIT"
+repository = "https://github.com/LeoBlackMT/mania-sr-pp-reimagined"
+authors = ["Leo_Black"]
+
+[workspace.dependencies]
+# The published fork that carries the community sunny algorithm and the
+# surface (map-based timing) integration as Rust modules.
+# Pinned by revision so the comparison numbers are reproducible.
+# NOTE: `rev` pins the exact upstream commit; `Cargo.lock` records it too.
+# The `reports` feature gates the `report_utils` module (map loading + sunny helpers) that
+# `mania-pp-algorithms` uses to run the community and surface calculations.
+rosu-pp = { git = "https://github.com/ppy-sb/rosu-pp", rev = "3530ba7236038650d739d11e7e21e6641fe17dd0", features = ["reports"] }
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+anyhow = "1"
+
+[profile.release]
+lto = "thin"
+codegen-units = 1

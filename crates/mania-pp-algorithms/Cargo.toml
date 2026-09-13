@@ -1,0 +1,15 @@
+[package]
+name = "mania-pp-algorithms"
+description = "The four compared osu!mania PP algorithms, one module each, behind a shared interface."
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+repository.workspace = true
+authors.workspace = true
+
+[dependencies]
+mania-pp-spec = { path = "../mania-pp-spec" }
+rosu-pp = { workspace = true }
+serde = { workspace = true }
+serde_json = { workspace = true }

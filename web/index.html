@@ -1,0 +1,123 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>mania-sr-pp-reimagined — PP algorithm comparison</title>
+<link rel="icon" href="data:,">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<header class="site-head">
+  <div class="head-main">
+    <h1>mania-sr-pp-reimagined</h1>
+    <p class="tagline">osu!mania PP algorithm comparison — bancho · sunny · surface · reimagined</p>
+    <p class="meta" id="meta">no dataset loaded</p>
+  </div>
+  <label class="btn-file" title="Load a results.json from your machine">
+    Load JSON
+    <input type="file" id="file-head" accept=".json,application/json" hidden>
+  </label>
+</header>
+
+<!-- Data caveats: locally loaded file, unexpected schema_version, engine warnings. -->
+<p class="note" id="source-note" hidden></p>
+
+<!-- Empty state: no data/results.json yet, or it could not be read. -->
+<section class="loader" id="loader" hidden>
+  <h2 id="loader-title">No dataset yet</h2>
+  <p class="why" id="loader-why"></p>
+  <p class="hint" id="loader-hint"></p>
+  <pre class="cmd"><code>cargo run --release -p mania-pp-cli -- \
+  --fixture fixtures/bp-21207706/scores.tsv \
+  --maps    /path/to/osu/map/cache \
+  --out     web/data/results.json</code></pre>
+  <div class="drop drop-zone" id="drop">
+    <strong>Drop <code>results.json</code> here</strong>
+    <span>or</span>
+    <label class="btn-file">choose a file<input type="file" id="file-drop" accept=".json,application/json" hidden></label>
+  </div>
+  <p class="hint">The file is read in your browser — it is not uploaded anywhere — and renders
+    exactly as it would over HTTP.</p>
+  <p class="err" id="loader-err" hidden></p>
+</section>
+
+<!-- Plain-English explanation of each algorithm (from the data file, else built in). -->
+<section class="legend" id="legend" hidden></section>
+
+<main>
+  <section class="panel" id="panel-summary" hidden>
+    <div class="panel-head">
+      <h2>Totals</h2>
+      <label class="pick">bp list
+        <select id="user-select"></select>
+      </label>
+    </div>
+    <div class="summary">
+      <div class="summary-table" id="total-table"></div>
+      <div class="summary-chart" id="total-chart"></div>
+    </div>
+    <p class="hint" id="total-note"></p>
+  </section>
+
+  <section class="panel" id="panel-scores" hidden>
+    <div class="panel-head">
+      <h2>Scores</h2>
+      <span class="hint" id="score-count"></span>
+    </div>
+
+    <div class="filters">
+      <input type="search" id="q" placeholder="Filter: artist, title, version, mods, beatmap id…" autocomplete="off">
+      <div class="chips" role="group" aria-label="Keys filter">
+        <button type="button" class="chip is-on" data-f="keys" data-v="all">all keys</button>
+        <button type="button" class="chip" data-f="keys" data-v="4">4K</button>
+        <button type="button" class="chip" data-f="keys" data-v="7">7K</button>
+        <button type="button" class="chip" data-f="keys" data-v="other">other K</button>
+      </div>
+      <div class="chips" role="group" aria-label="Mods filter">
+        <button type="button" class="chip is-on" data-f="mods" data-v="all">all mods</button>
+        <button type="button" class="chip" data-f="mods" data-v="nm">NM</button>
+        <button type="button" class="chip" data-f="mods" data-v="dt">DT·NC</button>
+        <button type="button" class="chip" data-f="mods" data-v="ht">HT·DC</button>
+        <button type="button" class="chip" data-f="mods" data-v="other">other</button>
+      </div>
+      <div class="chips" role="group" aria-label="Pattern filter">
+        <button type="button" class="chip is-on" data-f="ln" data-v="all">LN + rice</button>
+        <button type="button" class="chip" data-f="ln" data-v="ln">LN</button>
+        <button type="button" class="chip" data-f="ln" data-v="rc">rice</button>
+      </div>
+      <button type="button" class="chip reset" id="f-reset">reset</button>
+    </div>
+
+    <div class="table-wrap">
+      <table id="score-table" class="scores">
+        <thead></thead>
+        <tbody></tbody>
+      </table>
+    </div>
+    <p class="more"><button type="button" id="show-more" hidden>show more</button></p>
+  </section>
+
+  <section class="panel" id="panel-disagree" hidden>
+    <div class="panel-head">
+      <h2>Where the algorithms disagree</h2>
+      <span class="hint">ranked by normalised spread (max − min) / mean; respects the filters above — click a row for detail</span>
+    </div>
+    <div class="dis-list" id="disagree"></div>
+  </section>
+</main>
+
+<footer>
+  <p>
+    Static page, no dependencies, no build step. Data file:
+    <code>data/results.json</code>, produced by <code>mania-pp-cli</code> — see <code>README.md</code>.
+  </p>
+</footer>
+
+<div class="drag-hint" id="drag-hint" hidden>Drop <code>results.json</code> to load it</div>
+
+<noscript><p class="note">This page needs JavaScript to read and render <code>results.json</code>.</p></noscript>
+<script src="app.js"></script>
+</body>
+</html>

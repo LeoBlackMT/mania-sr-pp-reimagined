@@ -1,0 +1,19 @@
+[package]
+name = "mania-pp-cli"
+description = "Comparison CLI: fixture scores in, four-algorithm results document out."
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+repository.workspace = true
+authors.workspace = true
+
+[[bin]]
+name = "mania-pp-cli"
+path = "src/main.rs"
+
+[dependencies]
+mania-pp-algorithms = { path = "../mania-pp-algorithms" }
+mania-pp-spec = { path = "../mania-pp-spec" }
+serde = { workspace = true }
+serde_json = { workspace = true }

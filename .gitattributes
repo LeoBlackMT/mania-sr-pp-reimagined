@@ -1,0 +1,7 @@
+# Keep line endings normalised: the repository is developed on Windows but published and read
+# everywhere, and the web assets are served as-is by GitHub Pages.
+* text=auto eol=lf
+
+*.png binary
+*.jpg binary
+*.ico binary

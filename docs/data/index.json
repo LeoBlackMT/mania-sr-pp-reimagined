@@ -1,4 +1,1696 @@
 {
+  "aggregates": {
+    "correlation": {
+      "bancho": {
+        "bancho": 1.0,
+        "codexxy": 0.9242,
+        "reimagined": 0.9308,
+        "sunny": 0.9343
+      },
+      "codexxy": {
+        "bancho": 0.9242,
+        "codexxy": 1.0,
+        "reimagined": 0.9803,
+        "sunny": 0.9967
+      },
+      "reimagined": {
+        "bancho": 0.9308,
+        "codexxy": 0.9803,
+        "reimagined": 1.0,
+        "sunny": 0.9898
+      },
+      "sunny": {
+        "bancho": 0.9343,
+        "codexxy": 0.9967,
+        "reimagined": 0.9898,
+        "sunny": 1.0
+      }
+    },
+    "distribution": {
+      "bancho": {
+        "bin_max": 1844.03,
+        "bin_min": 0.0,
+        "bins": [
+          1661,
+          680,
+          776,
+          1804,
+          1196,
+          1170,
+          1020,
+          1323,
+          2317,
+          3983,
+          4426,
+          3835,
+          2792,
+          1925,
+          1254,
+          1006,
+          603,
+          359,
+          203,
+          103,
+          56,
+          16,
+          6,
+          2
+        ],
+        "max": 1844.03,
+        "median": 774.249,
+        "min": 0.0,
+        "n": 32516,
+        "p25": 526.838,
+        "p75": 926.881,
+        "p95": 1203.118
+      },
+      "codexxy": {
+        "bin_max": 1471.771,
+        "bin_min": 0.0,
+        "bins": [
+          881,
+          1108,
+          371,
+          442,
+          1160,
+          1247,
+          860,
+          883,
+          920,
+          1030,
+          1324,
+          1894,
+          2799,
+          3667,
+          3774,
+          3441,
+          2729,
+          1965,
+          1098,
+          548,
+          247,
+          104,
+          22,
+          2
+        ],
+        "max": 1471.771,
+        "median": 820.853,
+        "min": 0.0,
+        "n": 32516,
+        "p25": 567.41,
+        "p75": 954.485,
+        "p95": 1122.487
+      },
+      "reimagined": {
+        "bin_max": 1555.355,
+        "bin_min": 0.0,
+        "bins": [
+          882,
+          1143,
+          345,
+          523,
+          1327,
+          1231,
+          868,
+          840,
+          770,
+          753,
+          1050,
+          1261,
+          1383,
+          1988,
+          2932,
+          3754,
+          3941,
+          3198,
+          2205,
+          1284,
+          552,
+          186,
+          71,
+          29
+        ],
+        "max": 1555.355,
+        "median": 950.679,
+        "min": 0.0,
+        "n": 32516,
+        "p25": 600.604,
+        "p75": 1091.478,
+        "p95": 1250.049
+      },
+      "sunny": {
+        "bin_max": 1451.564,
+        "bin_min": 0.0,
+        "bins": [
+          785,
+          1109,
+          436,
+          350,
+          1006,
+          1320,
+          880,
+          834,
+          868,
+          875,
+          977,
+          1338,
+          2076,
+          3101,
+          3944,
+          3992,
+          3360,
+          2547,
+          1486,
+          748,
+          318,
+          124,
+          39,
+          3
+        ],
+        "max": 1451.564,
+        "median": 851.99,
+        "min": 0.0,
+        "n": 32516,
+        "p25": 582.474,
+        "p75": 975.436,
+        "p95": 1128.861
+      }
+    },
+    "layers": [
+      {
+        "family": "key mode",
+        "layer": "4K",
+        "median_pp": {
+          "bancho": 344.039,
+          "codexxy": 389.056,
+          "reimagined": 388.897,
+          "sunny": 394.537
+        },
+        "n": 10544,
+        "rel_pct": {
+          "bancho": {
+            "codexxy": 12.5759,
+            "reimagined": 11.7862,
+            "sunny": 13.8708
+          },
+          "codexxy": {
+            "bancho": -11.1964,
+            "reimagined": -0.0404,
+            "sunny": 1.1093
+          },
+          "reimagined": {
+            "bancho": -10.5565,
+            "codexxy": 0.0404,
+            "sunny": 1.2949
+          },
+          "sunny": {
+            "bancho": -12.2057,
+            "codexxy": -1.0971,
+            "reimagined": -1.2783
+          }
+        }
+      },
+      {
+        "family": "key mode",
+        "layer": "5K",
+        "median_pp": {
+          "bancho": 7.981,
+          "codexxy": 1.374,
+          "reimagined": 1.69,
+          "sunny": 1.577
+        },
+        "n": 18,
+        "rel_pct": {
+          "bancho": {
+            "codexxy": -23.467,
+            "reimagined": -23.8301,
+            "sunny": -24.7489
+          },
+          "codexxy": {
+            "bancho": 30.2468,
+            "reimagined": 15.9653,
+            "sunny": 11.8603
+          },
+          "reimagined": {
+            "bancho": 18.5675,
+            "codexxy": -13.7665,
+            "sunny": -1.6752
+          },
+          "sunny": {
+            "bancho": 22.8349,
+            "codexxy": -10.5829,
+            "reimagined": 1.7042
+          }
+        }
+      },
+      {
+        "family": "key mode",
+        "layer": "6K",
+        "median_pp": {
+          "bancho": 800.599,
+          "codexxy": 789.443,
+          "reimagined": 817.191,
+          "sunny": 810.474
+        },
+        "n": 419,
+        "rel_pct": {
+          "bancho": {
+            "codexxy": -1.5951,
+            "reimagined": -0.0162,
+            "sunny": 1.9226
+          },
+          "codexxy": {
+            "bancho": 1.6209,
+            "reimagined": 4.0399,
+            "sunny": 2.5186
+          },
+          "reimagined": {
+            "bancho": 0.0162,
+            "codexxy": -3.883,
+            "sunny": -1.4354
+          },
+          "sunny": {
+            "bancho": -1.8864,
+            "codexxy": -2.4567,
+            "reimagined": 1.4563
+          }
+        }
+      },
+      {
+        "family": "key mode",
+        "layer": "7K",
+        "median_pp": {
+          "bancho": 857.194,
+          "codexxy": 895.22,
+          "reimagined": 1045.166,
+          "sunny": 924.605
+        },
+        "n": 21526,
+        "rel_pct": {
+          "bancho": {
+            "codexxy": 3.7463,
+            "reimagined": 20.9586,
+            "sunny": 7.1716
+          },
+          "codexxy": {
+            "bancho": -3.6132,
+            "reimagined": 16.7499,
+            "sunny": 2.7441
+          },
+          "reimagined": {
+            "bancho": -17.3314,
+            "codexxy": -14.3468,
+            "sunny": -11.5315
+          },
+          "sunny": {
+            "bancho": -6.6953,
+            "codexxy": -2.6708,
+            "reimagined": 13.0346
+          }
+        }
+      },
+      {
+        "family": "key mode",
+        "layer": "8K",
+        "median_pp": {
+          "bancho": 619.44,
+          "codexxy": 637.663,
+          "reimagined": 804.477,
+          "sunny": 684.722
+        },
+        "n": 8,
+        "rel_pct": {
+          "bancho": {
+            "codexxy": -14.7457,
+            "reimagined": 7.7157,
+            "sunny": -8.3586
+          },
+          "codexxy": {
+            "bancho": 17.3848,
+            "reimagined": 21.1533,
+            "sunny": 6.8867
+          },
+          "reimagined": {
+            "bancho": -7.1622,
+            "codexxy": -17.4595,
+            "sunny": -10.1559
+          },
+          "sunny": {
+            "bancho": 9.1322,
+            "codexxy": -6.431,
+            "reimagined": 11.304
+          }
+        }
+      },
+      {
+        "family": "key mode",
+        "layer": "9K",
+        "median_pp": {
+          "bancho": 717.55,
+          "codexxy": 625.176,
+          "reimagined": 737.853,
+          "sunny": 657.317
+        },
+        "n": 1,
+        "rel_pct": {
+          "bancho": {
+            "codexxy": -12.8736,
+            "reimagined": 2.8295,
+            "sunny": -8.3943
+          },
+          "codexxy": {
+            "bancho": 14.7758,
+            "reimagined": 18.0233,
+            "sunny": 5.1411
+          },
+          "reimagined": {
+            "bancho": -2.7516,
+            "codexxy": -15.271,
+            "sunny": -10.915
+          },
+          "sunny": {
+            "bancho": 9.1636,
+            "codexxy": -4.8897,
+            "reimagined": 12.2523
+          }
+        }
+      },
+      {
+        "family": "long notes",
+        "layer": "HB",
+        "median_pp": {
+          "bancho": 819.671,
+          "codexxy": 858.612,
+          "reimagined": 998.67,
+          "sunny": 888.572
+        },
+        "n": 25294,
+        "rel_pct": {
+          "bancho": {
+            "codexxy": 4.9566,
+            "reimagined": 17.6992,
+            "sunny": 7.6899
+          },
+          "codexxy": {
+            "bancho": -4.7291,
+            "reimagined": 14.6315,
+            "sunny": 2.3352
+          },
+          "reimagined": {
+            "bancho": -15.042,
+            "codexxy": -12.7639,
+            "sunny": -10.813
+          },
+          "sunny": {
+            "bancho": -7.1491,
+            "codexxy": -2.2819,
+            "reimagined": 12.124
+          }
+        }
+      },
+      {
+        "family": "long notes",
+        "layer": "LN",
+        "median_pp": {
+          "bancho": 642.946,
+          "codexxy": 749.02,
+          "reimagined": 710.833,
+          "sunny": 747.259
+        },
+        "n": 148,
+        "rel_pct": {
+          "bancho": {
+            "codexxy": 13.1465,
+            "reimagined": 9.1932,
+            "sunny": 12.8774
+          },
+          "codexxy": {
+            "bancho": -11.619,
+            "reimagined": -1.2988,
+            "sunny": 0.307
+          },
+          "reimagined": {
+            "bancho": -8.4192,
+            "codexxy": 1.3159,
+            "sunny": 1.619
+          },
+          "sunny": {
+            "bancho": -11.4083,
+            "codexxy": -0.3061,
+            "reimagined": -1.5932
+          }
+        }
+      },
+      {
+        "family": "long notes",
+        "layer": "RC",
+        "median_pp": {
+          "bancho": 366.155,
+          "codexxy": 416.39,
+          "reimagined": 424.99,
+          "sunny": 421.728
+        },
+        "n": 7074,
+        "rel_pct": {
+          "bancho": {
+            "codexxy": 11.6167,
+            "reimagined": 20.514,
+            "sunny": 14.5471
+          },
+          "codexxy": {
+            "bancho": -10.4264,
+            "reimagined": 7.5503,
+            "sunny": 2.1458
+          },
+          "reimagined": {
+            "bancho": -17.0412,
+            "codexxy": -7.0203,
+            "sunny": -3.1874
+          },
+          "sunny": {
+            "bancho": -12.7156,
+            "codexxy": -2.1007,
+            "reimagined": 3.2923
+          }
+        }
+      },
+      {
+        "family": "mod family",
+        "layer": "NM",
+        "median_pp": {
+          "bancho": 755.706,
+          "codexxy": 803.186,
+          "reimagined": 935.957,
+          "sunny": 837.437
+        },
+        "n": 19789,
+        "rel_pct": {
+          "bancho": {
+            "codexxy": 6.6571,
+            "reimagined": 17.9752,
+            "sunny": 9.3733
+          },
+          "codexxy": {
+            "bancho": -6.2547,
+            "reimagined": 12.8368,
+            "sunny": 2.2374
+          },
+          "reimagined": {
+            "bancho": -15.2485,
+            "codexxy": -11.3764,
+            "sunny": -9.6256
+          },
+          "sunny": {
+            "bancho": -8.5896,
+            "codexxy": -2.1885,
+            "reimagined": 10.6508
+          }
+        }
+      },
+      {
+        "family": "mod family",
+        "layer": "Other mods",
+        "median_pp": {
+          "bancho": 855.153,
+          "codexxy": 878.9,
+          "reimagined": 1024.344,
+          "sunny": 908.994
+        },
+        "n": 3812,
+        "rel_pct": {
+          "bancho": {
+            "codexxy": 2.3218,
+            "reimagined": 16.1082,
+            "sunny": 4.9461
+          },
+          "codexxy": {
+            "bancho": -2.3194,
+            "reimagined": 15.6398,
+            "sunny": 2.3816
+          },
+          "reimagined": {
+            "bancho": -13.8759,
+            "codexxy": -13.5246,
+            "sunny": -11.0996
+          },
+          "sunny": {
+            "bancho": -4.7247,
+            "codexxy": -2.3262,
+            "reimagined": 12.4855
+          }
+        }
+      },
+      {
+        "family": "mod family",
+        "layer": "Rate-down",
+        "median_pp": {
+          "bancho": 733.466,
+          "codexxy": 742.619,
+          "reimagined": 872.046,
+          "sunny": 763.802
+        },
+        "n": 2147,
+        "rel_pct": {
+          "bancho": {
+            "codexxy": -0.3949,
+            "reimagined": 15.0488,
+            "sunny": 2.364
+          },
+          "codexxy": {
+            "bancho": 0.3964,
+            "reimagined": 16.7624,
+            "sunny": 2.177
+          },
+          "reimagined": {
+            "bancho": -13.0803,
+            "codexxy": -14.356,
+            "sunny": -12.4555
+          },
+          "sunny": {
+            "bancho": -2.3094,
+            "codexxy": -2.1307,
+            "reimagined": 14.2277
+          }
+        }
+      },
+      {
+        "family": "mod family",
+        "layer": "Rate-up",
+        "median_pp": {
+          "bancho": 786.377,
+          "codexxy": 850.575,
+          "reimagined": 960.493,
+          "sunny": 878.316
+        },
+        "n": 6768,
+        "rel_pct": {
+          "bancho": {
+            "codexxy": 8.8901,
+            "reimagined": 20.8397,
+            "sunny": 12.054
+          },
+          "codexxy": {
+            "bancho": -8.1722,
+            "reimagined": 12.226,
+            "sunny": 2.4638
+          },
+          "reimagined": {
+            "bancho": -17.247,
+            "codexxy": -10.8941,
+            "sunny": -9.3555
+          },
+          "sunny": {
+            "bancho": -10.7576,
+            "codexxy": -2.4046,
+            "reimagined": 10.3211
+          }
+        }
+      }
+    ],
+    "score_count": 32516,
+    "top_disagreements": [
+      {
+        "artist": "Hanasaka Yui(CV: M.A.O)",
+        "beatmap_id": 1180148,
+        "keys": 4,
+        "ln_ratio": 0.0,
+        "mods": "",
+        "pp": {
+          "bancho": 2.943,
+          "codexxy": 0.008,
+          "reimagined": 0.009,
+          "sunny": 0.009
+        },
+        "score_id": 585590769,
+        "spread": 395.3618,
+        "title": "Harumachi Clover",
+        "uid": 13662966,
+        "version": "Easy"
+      },
+      {
+        "artist": "IOSYS",
+        "beatmap_id": 87170,
+        "keys": 4,
+        "ln_ratio": 0.0,
+        "mods": "",
+        "pp": {
+          "bancho": 3.111,
+          "codexxy": 0.009,
+          "reimagined": 0.01,
+          "sunny": 0.01
+        },
+        "score_id": 555088096,
+        "spread": 395.2279,
+        "title": "Cirno's Perfect Math Class",
+        "uid": 13662966,
+        "version": "Easy"
+      },
+      {
+        "artist": "MPAA",
+        "beatmap_id": 57416,
+        "keys": 4,
+        "ln_ratio": 0.0,
+        "mods": "DT",
+        "pp": {
+          "bancho": 1.437,
+          "codexxy": 0.005,
+          "reimagined": 0.006,
+          "sunny": 0.005
+        },
+        "score_id": 386147032,
+        "spread": 394.4357,
+        "title": "Piracy - It's a Crime",
+        "uid": 12208695,
+        "version": "Easy"
+      },
+      {
+        "artist": "Hanasaka Yui(CV: M.A.O)",
+        "beatmap_id": 1201505,
+        "keys": 4,
+        "ln_ratio": 0.0,
+        "mods": "",
+        "pp": {
+          "bancho": 3.394,
+          "codexxy": 0.012,
+          "reimagined": 0.012,
+          "sunny": 0.013
+        },
+        "score_id": 453890235,
+        "spread": 394.3662,
+        "title": "Harumachi Clover",
+        "uid": 12208695,
+        "version": "Easy"
+      },
+      {
+        "artist": "Kirsten Price",
+        "beatmap_id": 1230041,
+        "keys": 4,
+        "ln_ratio": 0.0,
+        "mods": "",
+        "pp": {
+          "bancho": 4.743,
+          "codexxy": 0.015,
+          "reimagined": 0.021,
+          "sunny": 0.019
+        },
+        "score_id": 453890386,
+        "spread": 394.1605,
+        "title": "We Will Be Heroes",
+        "uid": 12208695,
+        "version": "Forest's Normal"
+      },
+      {
+        "artist": "Dan Salvato",
+        "beatmap_id": 1506886,
+        "keys": 4,
+        "ln_ratio": 0.0,
+        "mods": "",
+        "pp": {
+          "bancho": 1.808,
+          "codexxy": 0.008,
+          "reimagined": 0.009,
+          "sunny": 0.008
+        },
+        "score_id": 451461972,
+        "spread": 393.0597,
+        "title": "Your Reality",
+        "uid": 24544012,
+        "version": "Just Shurelia's Easy"
+      },
+      {
+        "artist": "Silver Forest",
+        "beatmap_id": 34527,
+        "keys": 4,
+        "ln_ratio": 0.0,
+        "mods": "",
+        "pp": {
+          "bancho": 2.863,
+          "codexxy": 0.014,
+          "reimagined": 0.014,
+          "sunny": 0.014
+        },
+        "score_id": 396136294,
+        "spread": 392.2785,
+        "title": "Marisa Spark",
+        "uid": 12208695,
+        "version": "Easy"
+      },
+      {
+        "artist": "Subplaid",
+        "beatmap_id": 146224,
+        "keys": 4,
+        "ln_ratio": 0.0,
+        "mods": "",
+        "pp": {
+          "bancho": 2.554,
+          "codexxy": 0.013,
+          "reimagined": 0.012,
+          "sunny": 0.014
+        },
+        "score_id": 493137904,
+        "spread": 392.1226,
+        "title": "If you went out with friends in a way",
+        "uid": 12208695,
+        "version": "Easy"
+      },
+      {
+        "artist": "Silver Forest",
+        "beatmap_id": 34529,
+        "keys": 4,
+        "ln_ratio": 0.0,
+        "mods": "",
+        "pp": {
+          "bancho": 13.718,
+          "codexxy": 0.071,
+          "reimagined": 0.073,
+          "sunny": 0.075
+        },
+        "score_id": 386147150,
+        "spread": 391.6847,
+        "title": "Marisa Spark",
+        "uid": 12208695,
+        "version": "Normal"
+      },
+      {
+        "artist": "Dendei",
+        "beatmap_id": 951401,
+        "keys": 4,
+        "ln_ratio": 0.0,
+        "mods": "",
+        "pp": {
+          "bancho": 1.759,
+          "codexxy": 0.013,
+          "reimagined": 0.012,
+          "sunny": 0.014
+        },
+        "score_id": 272217410,
+        "spread": 388.657,
+        "title": "gabe power",
+        "uid": 12208695,
+        "version": "Cheesecake's Easy"
+      },
+      {
+        "artist": "Dendei",
+        "beatmap_id": 942001,
+        "keys": 4,
+        "ln_ratio": 0.0,
+        "mods": "",
+        "pp": {
+          "bancho": 5.303,
+          "codexxy": 0.043,
+          "reimagined": 0.037,
+          "sunny": 0.043
+        },
+        "score_id": 400009081,
+        "spread": 388.2604,
+        "title": "gabe power",
+        "uid": 12208695,
+        "version": "Arphimigon's Normal"
+      },
+      {
+        "artist": "Gekidan Hitotose",
+        "beatmap_id": 1415659,
+        "keys": 4,
+        "ln_ratio": 0.0,
+        "mods": "",
+        "pp": {
+          "bancho": 5.425,
+          "codexxy": 0.053,
+          "reimagined": 0.044,
+          "sunny": 0.053
+        },
+        "score_id": 5913047131,
+        "spread": 386.112,
+        "title": "a e i u e o ao!!",
+        "uid": 35315620,
+        "version": "Collab Easy"
+      },
+      {
+        "artist": "TK from Ling tosite sigure",
+        "beatmap_id": 556179,
+        "keys": 4,
+        "ln_ratio": 0.0,
+        "mods": "",
+        "pp": {
+          "bancho": 4.55,
+          "codexxy": 0.042,
+          "reimagined": 0.046,
+          "sunny": 0.045
+        },
+        "score_id": 6243817599,
+        "spread": 384.9474,
+        "title": "unravel (TV edit)",
+        "uid": 33018882,
+        "version": "Easy"
+      },
+      {
+        "artist": "cYsmix",
+        "beatmap_id": 1661046,
+        "keys": 4,
+        "ln_ratio": 0.0,
+        "mods": "",
+        "pp": {
+          "bancho": 5.025,
+          "codexxy": 0.054,
+          "reimagined": 0.045,
+          "sunny": 0.054
+        },
+        "score_id": 5912850929,
+        "spread": 384.6739,
+        "title": "Little Knight",
+        "uid": 35315620,
+        "version": "Easy"
+      },
+      {
+        "artist": "ClariS",
+        "beatmap_id": 1290480,
+        "keys": 4,
+        "ln_ratio": 0.0,
+        "mods": "",
+        "pp": {
+          "bancho": 3.611,
+          "codexxy": 0.037,
+          "reimagined": 0.041,
+          "sunny": 0.041
+        },
+        "score_id": 555179643,
+        "spread": 383.3431,
+        "title": "Hitorigoto -TV MIX-",
+        "uid": 13662966,
+        "version": "RsAk's Easy"
+      },
+      {
+        "artist": "fripSide",
+        "beatmap_id": 186676,
+        "keys": 4,
+        "ln_ratio": 0.0,
+        "mods": "",
+        "pp": {
+          "bancho": 5.401,
+          "codexxy": 0.075,
+          "reimagined": 0.064,
+          "sunny": 0.076
+        },
+        "score_id": 6795490270,
+        "spread": 380.1508,
+        "title": "only my railgun (TV size)",
+        "uid": 39376969,
+        "version": "-kevincela-'s Easy"
+      },
+      {
+        "artist": "ClariS",
+        "beatmap_id": 1262271,
+        "keys": 4,
+        "ln_ratio": 0.0,
+        "mods": "",
+        "pp": {
+          "bancho": 2.893,
+          "codexxy": 0.037,
+          "reimagined": 0.044,
+          "sunny": 0.041
+        },
+        "score_id": 285432309,
+        "spread": 378.951,
+        "title": "Hitorigoto -TV MIX-",
+        "uid": 12208695,
+        "version": "Little's Easy"
+      },
+      {
+        "artist": "Hanasaka Yui(CV: M.A.O)",
+        "beatmap_id": 1180150,
+        "keys": 4,
+        "ln_ratio": 0.0,
+        "mods": "",
+        "pp": {
+          "bancho": 3.903,
+          "codexxy": 0.056,
+          "reimagined": 0.06,
+          "sunny": 0.059
+        },
+        "score_id": 555179733,
+        "spread": 377.3863,
+        "title": "Harumachi Clover",
+        "uid": 13662966,
+        "version": "Normal"
+      },
+      {
+        "artist": "Drop",
+        "beatmap_id": 1059410,
+        "keys": 4,
+        "ln_ratio": 0.0,
+        "mods": "",
+        "pp": {
+          "bancho": 4.915,
+          "codexxy": 0.082,
+          "reimagined": 0.073,
+          "sunny": 0.083
+        },
+        "score_id": 396136154,
+        "spread": 375.8618,
+        "title": "Granat",
+        "uid": 12208695,
+        "version": "Normal"
+      },
+      {
+        "artist": "Brad Breeck",
+        "beatmap_id": 1119784,
+        "keys": 4,
+        "ln_ratio": 0.0,
+        "mods": "NC+PF",
+        "pp": {
+          "bancho": 7.286,
+          "codexxy": 0.125,
+          "reimagined": 0.109,
+          "sunny": 0.125
+        },
+        "score_id": 503418451,
+        "spread": 375.5134,
+        "title": "Gravity Falls Theme Song",
+        "uid": 23298104,
+        "version": "Easy"
+      },
+      {
+        "artist": "Hanasaka Yui(CV: M.A.O)",
+        "beatmap_id": 1180311,
+        "keys": 4,
+        "ln_ratio": 0.0,
+        "mods": "",
+        "pp": {
+          "bancho": 6.026,
+          "codexxy": 0.107,
+          "reimagined": 0.093,
+          "sunny": 0.108
+        },
+        "score_id": 396136481,
+        "spread": 374.6292,
+        "title": "Harumachi Clover",
+        "uid": 12208695,
+        "version": "Normal"
+      },
+      {
+        "artist": "Awake",
+        "beatmap_id": 135133,
+        "keys": 4,
+        "ln_ratio": 0.0,
+        "mods": "",
+        "pp": {
+          "bancho": 7.248,
+          "codexxy": 0.136,
+          "reimagined": 0.13,
+          "sunny": 0.138
+        },
+        "score_id": 7426677980,
+        "spread": 372.0797,
+        "title": "Supernova",
+        "uid": 13662966,
+        "version": "Easy"
+      },
+      {
+        "artist": "Will Stetson",
+        "beatmap_id": 1801936,
+        "keys": 4,
+        "ln_ratio": 0.0,
+        "mods": "",
+        "pp": {
+          "bancho": 4.011,
+          "codexxy": 0.073,
+          "reimagined": 0.098,
+          "sunny": 0.092
+        },
+        "score_id": 413443239,
+        "spread": 368.6327,
+        "title": "Harumachi Clover (Swing Arrangement)",
+        "uid": 12208695,
+        "version": "Yuri's Normal"
+      },
+      {
+        "artist": "Neon Genesis Evangelion",
+        "beatmap_id": 12787,
+        "keys": 4,
+        "ln_ratio": 0.0,
+        "mods": "",
+        "pp": {
+          "bancho": 0.288,
+          "codexxy": 0.005,
+          "reimagined": 0.008,
+          "sunny": 0.007
+        },
+        "score_id": 6022551364,
+        "spread": 367.2859,
+        "title": "Cruel Angel's Thesis",
+        "uid": 38827749,
+        "version": "Rei (Easy)"
+      },
+      {
+        "artist": "Turbo",
+        "beatmap_id": 2231839,
+        "keys": 4,
+        "ln_ratio": 0.0,
+        "mods": "",
+        "pp": {
+          "bancho": 4.425,
+          "codexxy": 0.108,
+          "reimagined": 0.091,
+          "sunny": 0.109
+        },
+        "score_id": 7430717885,
+        "spread": 366.21,
+        "title": "PADORU / PADORU",
+        "uid": 13662966,
+        "version": "Haruki's Easy"
+      },
+      {
+        "artist": "Turbo",
+        "beatmap_id": 2231839,
+        "keys": 4,
+        "ln_ratio": 0.0,
+        "mods": "",
+        "pp": {
+          "bancho": 3.966,
+          "codexxy": 0.099,
+          "reimagined": 0.087,
+          "sunny": 0.101
+        },
+        "score_id": 393083764,
+        "spread": 364.8538,
+        "title": "PADORU / PADORU",
+        "uid": 12208695,
+        "version": "Haruki's Easy"
+      },
+      {
+        "artist": "Coda",
+        "beatmap_id": 1804847,
+        "keys": 4,
+        "ln_ratio": 0.0,
+        "mods": "",
+        "pp": {
+          "bancho": 3.092,
+          "codexxy": 0.072,
+          "reimagined": 0.087,
+          "sunny": 0.081
+        },
+        "score_id": 6478736823,
+        "spread": 362.5304,
+        "title": "Fighting Gold (TV Size)",
+        "uid": 39474433,
+        "version": "Shiinoha's Easy"
+      },
+      {
+        "artist": "Ben Briggs",
+        "beatmap_id": 1951847,
+        "keys": 4,
+        "ln_ratio": 0.0,
+        "mods": "",
+        "pp": {
+          "bancho": 5.739,
+          "codexxy": 0.163,
+          "reimagined": 0.138,
+          "sunny": 0.164
+        },
+        "score_id": 4264453071,
+        "spread": 361.1267,
+        "title": "New Game Plus",
+        "uid": 35315620,
+        "version": "Easy"
+      },
+      {
+        "artist": "One Direction",
+        "beatmap_id": 194480,
+        "keys": 4,
+        "ln_ratio": 0.0,
+        "mods": "",
+        "pp": {
+          "bancho": 0.345,
+          "codexxy": 0.008,
+          "reimagined": 0.012,
+          "sunny": 0.011
+        },
+        "score_id": 6478790778,
+        "spread": 358.278,
+        "title": "What Makes You Beautiful",
+        "uid": 39474433,
+        "version": "Easy"
+      },
+      {
+        "artist": "cYsmix",
+        "beatmap_id": 1148432,
+        "keys": 4,
+        "ln_ratio": 0.0,
+        "mods": "",
+        "pp": {
+          "bancho": 5.701,
+          "codexxy": 0.167,
+          "reimagined": 0.162,
+          "sunny": 0.171
+        },
+        "score_id": 614576878,
+        "spread": 357.3241,
+        "title": "Moonlight Sonata",
+        "uid": 13662966,
+        "version": "Easy"
+      },
+      {
+        "artist": "cYsmix",
+        "beatmap_id": 1036654,
+        "keys": 4,
+        "ln_ratio": 0.0,
+        "mods": "",
+        "pp": {
+          "bancho": 4.428,
+          "codexxy": 0.127,
+          "reimagined": 0.143,
+          "sunny": 0.14
+        },
+        "score_id": 270934624,
+        "spread": 355.556,
+        "title": "Fright March",
+        "uid": 12208695,
+        "version": "Easy"
+      },
+      {
+        "artist": "beatMARIO",
+        "beatmap_id": 830081,
+        "keys": 4,
+        "ln_ratio": 0.0,
+        "mods": "",
+        "pp": {
+          "bancho": 6.157,
+          "codexxy": 0.186,
+          "reimagined": 0.191,
+          "sunny": 0.195
+        },
+        "score_id": 614247599,
+        "spread": 354.9937,
+        "title": "Night of Knights",
+        "uid": 13662966,
+        "version": "Easy"
+      },
+      {
+        "artist": "cYsmix",
+        "beatmap_id": 1036654,
+        "keys": 4,
+        "ln_ratio": 0.0,
+        "mods": "",
+        "pp": {
+          "bancho": 5.315,
+          "codexxy": 0.166,
+          "reimagined": 0.17,
+          "sunny": 0.173
+        },
+        "score_id": 574328235,
+        "spread": 353.6745,
+        "title": "Fright March",
+        "uid": 13662966,
+        "version": "Easy"
+      },
+      {
+        "artist": "cYsmix",
+        "beatmap_id": 3783210,
+        "keys": 4,
+        "ln_ratio": 0.0,
+        "mods": "",
+        "pp": {
+          "bancho": 8.578,
+          "codexxy": 0.298,
+          "reimagined": 0.25,
+          "sunny": 0.299
+        },
+        "score_id": 5311908787,
+        "spread": 353.4546,
+        "title": "triangles",
+        "uid": 35315620,
+        "version": "Easy"
+      },
+      {
+        "artist": "ZAQ",
+        "beatmap_id": 1122617,
+        "keys": 4,
+        "ln_ratio": 0.0,
+        "mods": "4K",
+        "pp": {
+          "bancho": 9.101,
+          "codexxy": 0.327,
+          "reimagined": 0.259,
+          "sunny": 0.329
+        },
+        "score_id": 6796256646,
+        "spread": 353.0855,
+        "title": "Serendipity",
+        "uid": 39376969,
+        "version": "Easy"
+      },
+      {
+        "artist": "samfree",
+        "beatmap_id": 1267493,
+        "keys": 4,
+        "ln_ratio": 0.0,
+        "mods": "HD",
+        "pp": {
+          "bancho": 2.84,
+          "codexxy": 0.111,
+          "reimagined": 0.124,
+          "sunny": 0.12
+        },
+        "score_id": 386960328,
+        "spread": 341.7033,
+        "title": "Chicken's Theme",
+        "uid": 12208695,
+        "version": "UC's Easy"
+      },
+      {
+        "artist": "Hanasaka Yui (CV: M.A.O) feat. Koalazy",
+        "beatmap_id": 1639740,
+        "keys": 4,
+        "ln_ratio": 0.0,
+        "mods": "",
+        "pp": {
+          "bancho": 5.688,
+          "codexxy": 0.253,
+          "reimagined": 0.283,
+          "sunny": 0.273
+        },
+        "score_id": 400008684,
+        "spread": 334.6504,
+        "title": "Harumachi Clover (TV Size)",
+        "uid": 12208695,
+        "version": "Laura's Normal"
+      },
+      {
+        "artist": "TWICE",
+        "beatmap_id": 988328,
+        "keys": 4,
+        "ln_ratio": 0.0,
+        "mods": "",
+        "pp": {
+          "bancho": 28.558,
+          "codexxy": 1.34,
+          "reimagined": 1.349,
+          "sunny": 1.384
+        },
+        "score_id": 532892207,
+        "spread": 333.6507,
+        "title": "CHEER UP",
+        "uid": 30278649,
+        "version": "Normal"
+      },
+      {
+        "artist": "Phonetic",
+        "beatmap_id": 1670492,
+        "keys": 4,
+        "ln_ratio": 0.0,
+        "mods": "",
+        "pp": {
+          "bancho": 7.068,
+          "codexxy": 0.376,
+          "reimagined": 0.314,
+          "sunny": 0.377
+        },
+        "score_id": 5912826733,
+        "spread": 332.0619,
+        "title": "Journey",
+        "uid": 35315620,
+        "version": "Kibb's Easy"
+      },
+      {
+        "artist": "James Landino",
+        "beatmap_id": 4091820,
+        "keys": 4,
+        "ln_ratio": 0.0,
+        "mods": "",
+        "pp": {
+          "bancho": 8.047,
+          "codexxy": 0.431,
+          "reimagined": 0.362,
+          "sunny": 0.434
+        },
+        "score_id": 6759476306,
+        "spread": 331.469,
+        "title": "Aresene's Bazaar",
+        "uid": 39376969,
+        "version": "Easy"
+      },
+      {
+        "artist": "Lexurus",
+        "beatmap_id": 1656878,
+        "keys": 4,
+        "ln_ratio": 0.0,
+        "mods": "DT+PF",
+        "pp": {
+          "bancho": 5.982,
+          "codexxy": 0.326,
+          "reimagined": 0.291,
+          "sunny": 0.33
+        },
+        "score_id": 503417895,
+        "spread": 328.5661,
+        "title": "Gravity",
+        "uid": 23298104,
+        "version": "Easy"
+      },
+      {
+        "artist": "Hyper Potions",
+        "beatmap_id": 1399951,
+        "keys": 4,
+        "ln_ratio": 0.0,
+        "mods": "",
+        "pp": {
+          "bancho": 14.215,
+          "codexxy": 0.764,
+          "reimagined": 0.799,
+          "sunny": 0.805
+        },
+        "score_id": 534988892,
+        "spread": 324.4414,
+        "title": "Friends",
+        "uid": 23298104,
+        "version": "Normal"
+      },
+      {
+        "artist": "Rostik",
+        "beatmap_id": 315550,
+        "keys": 4,
+        "ln_ratio": 0.0,
+        "mods": "",
+        "pp": {
+          "bancho": 2.745,
+          "codexxy": 0.148,
+          "reimagined": 0.157,
+          "sunny": 0.157
+        },
+        "score_id": 585590501,
+        "spread": 324.0037,
+        "title": "Liquid (Paul Rosenthal Remix)",
+        "uid": 13662966,
+        "version": "Easy"
+      },
+      {
+        "artist": "HyuN",
+        "beatmap_id": 1863293,
+        "keys": 4,
+        "ln_ratio": 0.0,
+        "mods": "",
+        "pp": {
+          "bancho": 5.26,
+          "codexxy": 0.297,
+          "reimagined": 0.344,
+          "sunny": 0.329
+        },
+        "score_id": 651438194,
+        "spread": 318.7074,
+        "title": "Illusion of Inflict",
+        "uid": 39184910,
+        "version": "Easy"
+      },
+      {
+        "artist": "HyuN feat. LyuU",
+        "beatmap_id": 1863223,
+        "keys": 4,
+        "ln_ratio": 0.0,
+        "mods": "",
+        "pp": {
+          "bancho": 11.713,
+          "codexxy": 0.772,
+          "reimagined": 0.645,
+          "sunny": 0.772
+        },
+        "score_id": 5311957769,
+        "spread": 318.4665,
+        "title": "Cross Over",
+        "uid": 35315620,
+        "version": "Easy"
+      },
+      {
+        "artist": "Ryo to Kirin(Satou Rina to Oogame Asuka)",
+        "beatmap_id": 659679,
+        "keys": 4,
+        "ln_ratio": 0.0,
+        "mods": "",
+        "pp": {
+          "bancho": 2.366,
+          "codexxy": 0.136,
+          "reimagined": 0.155,
+          "sunny": 0.149
+        },
+        "score_id": 396136390,
+        "spread": 317.9366,
+        "title": "Shiawase Graffiti",
+        "uid": 12208695,
+        "version": "Lunch"
+      },
+      {
+        "artist": "S3RL",
+        "beatmap_id": 832801,
+        "keys": 4,
+        "ln_ratio": 0.0,
+        "mods": "",
+        "pp": {
+          "bancho": 4.796,
+          "codexxy": 0.297,
+          "reimagined": 0.348,
+          "sunny": 0.333
+        },
+        "score_id": 5596825616,
+        "spread": 311.7565,
+        "title": "Bass Slut (Original Mix)",
+        "uid": 38590791,
+        "version": "Rizen's Easy"
+      },
+      {
+        "artist": "Hanasaka Yui(CV: M.A.O)",
+        "beatmap_id": 1180150,
+        "keys": 4,
+        "ln_ratio": 0.0,
+        "mods": "DT",
+        "pp": {
+          "bancho": 7.788,
+          "codexxy": 0.544,
+          "reimagined": 0.519,
+          "sunny": 0.548
+        },
+        "score_id": 549682764,
+        "spread": 309.3312,
+        "title": "Harumachi Clover",
+        "uid": 12208695,
+        "version": "Normal"
+      },
+      {
+        "artist": "Koto Spirit",
+        "beatmap_id": 5238578,
+        "keys": 4,
+        "ln_ratio": 0.0,
+        "mods": "",
+        "pp": {
+          "bancho": 12.041,
+          "codexxy": 0.926,
+          "reimagined": 0.791,
+          "sunny": 0.932
+        },
+        "score_id": 6435831143,
+        "spread": 306.3391,
+        "title": "Locus of Hexagram",
+        "uid": 39376969,
+        "version": "Easy"
+      },
+      {
+        "artist": "Koto Spirit",
+        "beatmap_id": 5238578,
+        "keys": 4,
+        "ln_ratio": 0.0,
+        "mods": "HD",
+        "pp": {
+          "bancho": 9.815,
+          "codexxy": 0.71,
+          "reimagined": 0.702,
+          "sunny": 0.733
+        },
+        "score_id": 7433077707,
+        "spread": 304.7916,
+        "title": "Locus of Hexagram",
+        "uid": 13662966,
+        "version": "Easy"
+      },
+      {
+        "artist": "tieff",
+        "beatmap_id": 1976049,
+        "keys": 4,
+        "ln_ratio": 0.0,
+        "mods": "",
+        "pp": {
+          "bancho": 8.739,
+          "codexxy": 0.696,
+          "reimagined": 0.582,
+          "sunny": 0.695
+        },
+        "score_id": 5913634564,
+        "spread": 304.6367,
+        "title": "Take Your Swimsuit",
+        "uid": 35315620,
+        "version": "Hinsvar's Easy"
+      },
+      {
+        "artist": "Dan Salvato",
+        "beatmap_id": 1506885,
+        "keys": 5,
+        "ln_ratio": 0.0,
+        "mods": "",
+        "pp": {
+          "bancho": 0.768,
+          "codexxy": 0.052,
+          "reimagined": 0.071,
+          "sunny": 0.065
+        },
+        "score_id": 459666035,
+        "spread": 299.544,
+        "title": "Your Reality",
+        "uid": 24544012,
+        "version": "Just Pachi's Normal"
+      },
+      {
+        "artist": "Unknown Artist",
+        "beatmap_id": 1492015,
+        "keys": 4,
+        "ln_ratio": 0.0,
+        "mods": "DT",
+        "pp": {
+          "bancho": 5.128,
+          "codexxy": 0.391,
+          "reimagined": 0.411,
+          "sunny": 0.41
+        },
+        "score_id": 403019885,
+        "spread": 298.9023,
+        "title": "Miniministop Hitoyasumi no Uta[Mokuyoubi]Gakusei no Uta",
+        "uid": 12208695,
+        "version": "Chromstrata's Normal"
+      },
+      {
+        "artist": "xi",
+        "beatmap_id": 680919,
+        "keys": 4,
+        "ln_ratio": 0.0,
+        "mods": "",
+        "pp": {
+          "bancho": 3.199,
+          "codexxy": 0.25,
+          "reimagined": 0.284,
+          "sunny": 0.274
+        },
+        "score_id": 555180061,
+        "spread": 294.4313,
+        "title": "Blue Zenith",
+        "uid": 13662966,
+        "version": "Easy"
+      },
+      {
+        "artist": "R3 Music Box",
+        "beatmap_id": 1285690,
+        "keys": 4,
+        "ln_ratio": 0.0,
+        "mods": "",
+        "pp": {
+          "bancho": 3.023,
+          "codexxy": 0.246,
+          "reimagined": 0.256,
+          "sunny": 0.256
+        },
+        "score_id": 459667221,
+        "spread": 293.7693,
+        "title": "Aozora no Rhapsody",
+        "uid": 24544012,
+        "version": "Normal"
+      },
+      {
+        "artist": "Hyper Potions",
+        "beatmap_id": 2463266,
+        "keys": 4,
+        "ln_ratio": 0.0,
+        "mods": "",
+        "pp": {
+          "bancho": 10.233,
+          "codexxy": 0.842,
+          "reimagined": 0.859,
+          "sunny": 0.871
+        },
+        "score_id": 6450338392,
+        "spread": 293.3705,
+        "title": "Jungle Cruise",
+        "uid": 24544012,
+        "version": "Easy"
+      },
+      {
+        "artist": "cYsmix",
+        "beatmap_id": 3783212,
+        "keys": 5,
+        "ln_ratio": 0.0,
+        "mods": "",
+        "pp": {
+          "bancho": 16.273,
+          "codexxy": 1.341,
+          "reimagined": 1.586,
+          "sunny": 1.522
+        },
+        "score_id": 2936265297,
+        "spread": 288.2221,
+        "title": "triangles",
+        "uid": 35315620,
+        "version": "Tt's Normal"
+      },
+      {
+        "artist": "takehirotei",
+        "beatmap_id": 5271667,
+        "keys": 4,
+        "ln_ratio": 0.0,
+        "mods": "",
+        "pp": {
+          "bancho": 9.742,
+          "codexxy": 0.942,
+          "reimagined": 0.804,
+          "sunny": 0.942
+        },
+        "score_id": 6436373375,
+        "spread": 287.6176,
+        "title": "Haiboku no Altra Vita",
+        "uid": 39376969,
+        "version": "Easy"
+      },
+      {
+        "artist": "Raphlesia & BilliumMoto",
+        "beatmap_id": 2868384,
+        "keys": 4,
+        "ln_ratio": 0.0,
+        "mods": "",
+        "pp": {
+          "bancho": 9.984,
+          "codexxy": 0.966,
+          "reimagined": 0.835,
+          "sunny": 0.973
+        },
+        "score_id": 5274516325,
+        "spread": 286.8543,
+        "title": "My Love",
+        "uid": 35315620,
+        "version": "Easy"
+      },
+      {
+        "artist": "Thaehan",
+        "beatmap_id": 2699283,
+        "keys": 4,
+        "ln_ratio": 0.0,
+        "mods": "",
+        "pp": {
+          "bancho": 11.693,
+          "codexxy": 1.194,
+          "reimagined": 1.023,
+          "sunny": 1.199
+        },
+        "score_id": 6436400794,
+        "spread": 282.5165,
+        "title": "Never Give Up",
+        "uid": 39376969,
+        "version": "Easy"
+      }
+    ]
+  },
   "algorithms": [
     {
       "description": "osu!lazer mania pp: one fused strain rating, mapped to PP with an accuracy term and a length bonus",
@@ -27,42 +1719,16 @@
     "spec_version": "v1.14",
     "version": "0.1.0"
   },
-  "generated_at": "2026-09-13T11:09:15Z",
+  "generated_at": "2026-09-14T05:27:54Z",
   "schema_version": 3,
-  "score_count": 1900,
+  "score_count": 32516,
   "users": [
-    {
-      "file": "players/21207706.json",
-      "fixture": "bp-lists",
-      "scores": 100,
-      "total_pp": {
-        "bancho": 14923.947,
-        "codexxy": 15021.095,
-        "reimagined": 14486.368,
-        "sunny": 14961.185
-      },
-      "uid": 21207706,
-      "username": "Shirasu-Azusa"
-    },
-    {
-      "file": "players/7233338.json",
-      "fixture": "bp-lists",
-      "scores": 100,
-      "total_pp": {
-        "bancho": 6618.359,
-        "codexxy": 6154.786,
-        "reimagined": 6529.897,
-        "sunny": 6414.516
-      },
-      "uid": 7233338,
-      "username": "Cyfer"
-    },
     {
       "file": "players/10024264.json",
       "fixture": "bp-lists",
       "scores": 100,
       "total_pp": {
-        "bancho": 10873.296,
+        "bancho": 9274.126,
         "codexxy": 10313.424,
         "reimagined": 10062.763,
         "sunny": 10229.006
@@ -75,7 +1741,7 @@
       "fixture": "bp-lists",
       "scores": 100,
       "total_pp": {
-        "bancho": 8711.177,
+        "bancho": 7299.868,
         "codexxy": 8367.572,
         "reimagined": 8568.9,
         "sunny": 8505.263
@@ -88,7 +1754,7 @@
       "fixture": "bp-lists",
       "scores": 100,
       "total_pp": {
-        "bancho": 7387.685,
+        "bancho": 5985.717,
         "codexxy": 6756.813,
         "reimagined": 6706.201,
         "sunny": 6802.289
@@ -97,128 +1763,11 @@
       "username": "Sorc"
     },
     {
-      "file": "players/106269.json",
-      "fixture": "bp-lists",
-      "scores": 100,
-      "total_pp": {
-        "bancho": 7663.866,
-        "codexxy": 7300.713,
-        "reimagined": 7541.035,
-        "sunny": 7450.795
-      },
-      "uid": 106269,
-      "username": "Elysion"
-    },
-    {
-      "file": "players/10792537.json",
-      "fixture": "bp-lists",
-      "scores": 100,
-      "total_pp": {
-        "bancho": 9783.742,
-        "codexxy": 8965.642,
-        "reimagined": 9461.997,
-        "sunny": 9057.222
-      },
-      "uid": 10792537,
-      "username": "lut"
-    },
-    {
-      "file": "players/11187151.json",
-      "fixture": "bp-lists",
-      "scores": 100,
-      "total_pp": {
-        "bancho": 8408.676,
-        "codexxy": 8277.255,
-        "reimagined": 8009.879,
-        "sunny": 8234.691
-      },
-      "uid": 11187151,
-      "username": "giraray"
-    },
-    {
-      "file": "players/12102633.json",
-      "fixture": "bp-lists",
-      "scores": 100,
-      "total_pp": {
-        "bancho": 6597.018,
-        "codexxy": 6342.439,
-        "reimagined": 6311.643,
-        "sunny": 6403.417
-      },
-      "uid": 12102633,
-      "username": "M1A300"
-    },
-    {
-      "file": "players/12249034.json",
-      "fixture": "bp-lists",
-      "scores": 100,
-      "total_pp": {
-        "bancho": 6959.742,
-        "codexxy": 6678.167,
-        "reimagined": 6658.256,
-        "sunny": 6748.514
-      },
-      "uid": 12249034,
-      "username": "yazer_osu"
-    },
-    {
-      "file": "players/13656583.json",
-      "fixture": "bp-lists",
-      "scores": 100,
-      "total_pp": {
-        "bancho": 7712.975,
-        "codexxy": 7408.152,
-        "reimagined": 7446.747,
-        "sunny": 7479.828
-      },
-      "uid": 13656583,
-      "username": "jesmoxd"
-    },
-    {
-      "file": "players/30885120.json",
-      "fixture": "bp-lists",
-      "scores": 100,
-      "total_pp": {
-        "bancho": 19590.563,
-        "codexxy": 17678.523,
-        "reimagined": 20593.488,
-        "sunny": 18113.163
-      },
-      "uid": 30885120,
-      "username": "Firefly Neko"
-    },
-    {
-      "file": "players/8273098.json",
-      "fixture": "bp-lists",
-      "scores": 100,
-      "total_pp": {
-        "bancho": 23596.451,
-        "codexxy": 22484.307,
-        "reimagined": 25112.784,
-        "sunny": 22557.878
-      },
-      "uid": 8273098,
-      "username": "My Angel Koishi"
-    },
-    {
-      "file": "players/8479894.json",
-      "fixture": "bp-lists",
-      "scores": 100,
-      "total_pp": {
-        "bancho": 11811.996,
-        "codexxy": 10208.682,
-        "reimagined": 12336.858,
-        "sunny": 10775.921
-      },
-      "uid": 8479894,
-      "username": "Mars_"
-    },
-    {
       "file": "players/10083439.json",
       "fixture": "bp-lists",
       "scores": 100,
       "total_pp": {
-        "bancho": 25786.651,
+        "bancho": 27053.173,
         "codexxy": 24364.792,
         "reimagined": 26803.213,
         "sunny": 24325.822
@@ -231,7 +1780,7 @@
       "fixture": "bp-lists",
       "scores": 100,
       "total_pp": {
-        "bancho": 20583.556,
+        "bancho": 19347.649,
         "codexxy": 19207.872,
         "reimagined": 21707.03,
         "sunny": 19451.364
@@ -240,11 +1789,50 @@
       "username": "jihak0210"
     },
     {
+      "file": "players/10352243.json",
+      "fixture": "bp-lists",
+      "scores": 100,
+      "total_pp": {
+        "bancho": 5282.177,
+        "codexxy": 6288.434,
+        "reimagined": 6016.99,
+        "sunny": 6267.678
+      },
+      "uid": 10352243,
+      "username": "RichStar"
+    },
+    {
+      "file": "players/10622472.json",
+      "fixture": "bp-lists",
+      "scores": 100,
+      "total_pp": {
+        "bancho": 23837.182,
+        "codexxy": 21374.059,
+        "reimagined": 24364.056,
+        "sunny": 21726.404
+      },
+      "uid": 10622472,
+      "username": "Sprrumnk Lokii"
+    },
+    {
+      "file": "players/106269.json",
+      "fixture": "bp-lists",
+      "scores": 100,
+      "total_pp": {
+        "bancho": 6470.848,
+        "codexxy": 7300.713,
+        "reimagined": 7541.035,
+        "sunny": 7450.795
+      },
+      "uid": 106269,
+      "username": "Elysion"
+    },
+    {
       "file": "players/10790649.json",
       "fixture": "bp-lists",
       "scores": 100,
       "total_pp": {
-        "bancho": 27672.903,
+        "bancho": 29827.814,
         "codexxy": 26329.597,
         "reimagined": 29016.457,
         "sunny": 26338.919
@@ -253,11 +1841,167 @@
       "username": "Kalkai"
     },
     {
+      "file": "players/10792537.json",
+      "fixture": "bp-lists",
+      "scores": 100,
+      "total_pp": {
+        "bancho": 8283.485,
+        "codexxy": 8965.642,
+        "reimagined": 9461.997,
+        "sunny": 9057.222
+      },
+      "uid": 10792537,
+      "username": "lut"
+    },
+    {
+      "file": "players/11187151.json",
+      "fixture": "bp-lists",
+      "scores": 100,
+      "total_pp": {
+        "bancho": 7266.158,
+        "codexxy": 8277.255,
+        "reimagined": 8009.879,
+        "sunny": 8234.691
+      },
+      "uid": 11187151,
+      "username": "giraray"
+    },
+    {
+      "file": "players/11247298.json",
+      "fixture": "bp-lists",
+      "scores": 100,
+      "total_pp": {
+        "bancho": 12881.15,
+        "codexxy": 12947.673,
+        "reimagined": 15080.047,
+        "sunny": 13350.233
+      },
+      "uid": 11247298,
+      "username": "-Willow-"
+    },
+    {
+      "file": "players/11297621.json",
+      "fixture": "bp-lists",
+      "scores": 100,
+      "total_pp": {
+        "bancho": 1879.96,
+        "codexxy": 2688.076,
+        "reimagined": 2700.309,
+        "sunny": 2797.749
+      },
+      "uid": 11297621,
+      "username": "Naveboy34"
+    },
+    {
+      "file": "players/11686857.json",
+      "fixture": "bp-lists",
+      "scores": 100,
+      "total_pp": {
+        "bancho": 14791.6,
+        "codexxy": 14444.68,
+        "reimagined": 17579.637,
+        "sunny": 15189.957
+      },
+      "uid": 11686857,
+      "username": "aiueore"
+    },
+    {
+      "file": "players/12102633.json",
+      "fixture": "bp-lists",
+      "scores": 100,
+      "total_pp": {
+        "bancho": 5529.236,
+        "codexxy": 6342.439,
+        "reimagined": 6311.643,
+        "sunny": 6403.417
+      },
+      "uid": 12102633,
+      "username": "M1A300"
+    },
+    {
+      "file": "players/12208695.json",
+      "fixture": "bp-lists",
+      "scores": 100,
+      "total_pp": {
+        "bancho": 1347.89,
+        "codexxy": 1721.025,
+        "reimagined": 1734.448,
+        "sunny": 1775.958
+      },
+      "uid": 12208695,
+      "username": "the creature"
+    },
+    {
+      "file": "players/12249034.json",
+      "fixture": "bp-lists",
+      "scores": 100,
+      "total_pp": {
+        "bancho": 5196.191,
+        "codexxy": 6678.167,
+        "reimagined": 6658.256,
+        "sunny": 6748.514
+      },
+      "uid": 12249034,
+      "username": "yazer_osu"
+    },
+    {
+      "file": "players/12249126.json",
+      "fixture": "bp-lists",
+      "scores": 100,
+      "total_pp": {
+        "bancho": 6970.687,
+        "codexxy": 7636.219,
+        "reimagined": 7552.979,
+        "sunny": 7651.391
+      },
+      "uid": 12249126,
+      "username": "SlowOS U"
+    },
+    {
+      "file": "players/12634757.json",
+      "fixture": "bp-lists",
+      "scores": 100,
+      "total_pp": {
+        "bancho": 24510.55,
+        "codexxy": 21537.318,
+        "reimagined": 24590.726,
+        "sunny": 21910.719
+      },
+      "uid": 12634757,
+      "username": "YunJeong_U"
+    },
+    {
+      "file": "players/13026904.json",
+      "fixture": "bp-lists",
+      "scores": 100,
+      "total_pp": {
+        "bancho": 26129.762,
+        "codexxy": 24038.629,
+        "reimagined": 26315.039,
+        "sunny": 24019.289
+      },
+      "uid": 13026904,
+      "username": "tyrcs"
+    },
+    {
+      "file": "players/13045719.json",
+      "fixture": "bp-lists",
+      "scores": 100,
+      "total_pp": {
+        "bancho": 18064.909,
+        "codexxy": 16936.364,
+        "reimagined": 19929.919,
+        "sunny": 17552.104
+      },
+      "uid": 13045719,
+      "username": "THIS A PERSON"
+    },
+    {
       "file": "players/13313526.json",
       "fixture": "bp-lists",
       "scores": 100,
       "total_pp": {
-        "bancho": 17100.482,
+        "bancho": 16518.677,
         "codexxy": 15400.624,
         "reimagined": 18048.465,
         "sunny": 15741.15
@@ -266,17 +2010,4177 @@
       "username": "Ox Q"
     },
     {
+      "file": "players/13332650.json",
+      "fixture": "bp-lists",
+      "scores": 5,
+      "total_pp": {
+        "bancho": 0.0,
+        "codexxy": 0.0,
+        "reimagined": 0.0,
+        "sunny": 0.0
+      },
+      "uid": 13332650,
+      "username": "Lena shippor"
+    },
+    {
       "file": "players/13656264.json",
       "fixture": "bp-lists",
       "scores": 100,
       "total_pp": {
-        "bancho": 18312.809,
+        "bancho": 17295.226,
         "codexxy": 16179.473,
         "reimagined": 19232.591,
         "sunny": 16621.886
       },
       "uid": 13656264,
       "username": "palmEuEi"
+    },
+    {
+      "file": "players/13656583.json",
+      "fixture": "bp-lists",
+      "scores": 100,
+      "total_pp": {
+        "bancho": 6886.899,
+        "codexxy": 7408.152,
+        "reimagined": 7446.747,
+        "sunny": 7479.828
+      },
+      "uid": 13656583,
+      "username": "jesmoxd"
+    },
+    {
+      "file": "players/13662966.json",
+      "fixture": "bp-lists",
+      "scores": 26,
+      "total_pp": {
+        "bancho": 101.816,
+        "codexxy": 153.046,
+        "reimagined": 155.264,
+        "sunny": 168.417
+      },
+      "uid": 13662966,
+      "username": "maxx1921"
+    },
+    {
+      "file": "players/13880550.json",
+      "fixture": "bp-lists",
+      "scores": 100,
+      "total_pp": {
+        "bancho": 1032.67,
+        "codexxy": 1424.165,
+        "reimagined": 1524.027,
+        "sunny": 1534.204
+      },
+      "uid": 13880550,
+      "username": "Jack11O7"
+    },
+    {
+      "file": "players/14245127.json",
+      "fixture": "bp-lists",
+      "scores": 100,
+      "total_pp": {
+        "bancho": 19722.856,
+        "codexxy": 19723.501,
+        "reimagined": 22535.064,
+        "sunny": 19963.168
+      },
+      "uid": 14245127,
+      "username": "osagechan"
+    },
+    {
+      "file": "players/14449330.json",
+      "fixture": "bp-lists",
+      "scores": 100,
+      "total_pp": {
+        "bancho": 2082.112,
+        "codexxy": 2215.904,
+        "reimagined": 2494.424,
+        "sunny": 2446.428
+      },
+      "uid": 14449330,
+      "username": "Calum325"
+    },
+    {
+      "file": "players/14456183.json",
+      "fixture": "bp-lists",
+      "scores": 100,
+      "total_pp": {
+        "bancho": 5872.227,
+        "codexxy": 5962.603,
+        "reimagined": 6198.183,
+        "sunny": 6143.246
+      },
+      "uid": 14456183,
+      "username": "00mund"
+    },
+    {
+      "file": "players/14479545.json",
+      "fixture": "bp-lists",
+      "scores": 100,
+      "total_pp": {
+        "bancho": 6418.637,
+        "codexxy": 6983.551,
+        "reimagined": 6935.532,
+        "sunny": 7033.151
+      },
+      "uid": 14479545,
+      "username": "[Yomi yori]"
+    },
+    {
+      "file": "players/14595432.json",
+      "fixture": "bp-lists",
+      "scores": 100,
+      "total_pp": {
+        "bancho": 6219.576,
+        "codexxy": 6801.397,
+        "reimagined": 6964.342,
+        "sunny": 6922.258
+      },
+      "uid": 14595432,
+      "username": "leevite"
+    },
+    {
+      "file": "players/15314355.json",
+      "fixture": "bp-lists",
+      "scores": 100,
+      "total_pp": {
+        "bancho": 17951.317,
+        "codexxy": 18713.237,
+        "reimagined": 21363.665,
+        "sunny": 18904.235
+      },
+      "uid": 15314355,
+      "username": "UmmmMrMoo"
+    },
+    {
+      "file": "players/15438131.json",
+      "fixture": "bp-lists",
+      "scores": 100,
+      "total_pp": {
+        "bancho": 13082.761,
+        "codexxy": 15853.654,
+        "reimagined": 18061.324,
+        "sunny": 16321.216
+      },
+      "uid": 15438131,
+      "username": "yamatti"
+    },
+    {
+      "file": "players/15499620.json",
+      "fixture": "bp-lists",
+      "scores": 100,
+      "total_pp": {
+        "bancho": 2449.336,
+        "codexxy": 2601.951,
+        "reimagined": 2665.495,
+        "sunny": 2690.782
+      },
+      "uid": 15499620,
+      "username": "-arc"
+    },
+    {
+      "file": "players/15656551.json",
+      "fixture": "bp-lists",
+      "scores": 100,
+      "total_pp": {
+        "bancho": 18661.981,
+        "codexxy": 17490.776,
+        "reimagined": 20433.058,
+        "sunny": 17982.032
+      },
+      "uid": 15656551,
+      "username": "TWIL2GHT"
+    },
+    {
+      "file": "players/16117931.json",
+      "fixture": "bp-lists",
+      "scores": 100,
+      "total_pp": {
+        "bancho": 9465.536,
+        "codexxy": 10548.219,
+        "reimagined": 10845.126,
+        "sunny": 10500.683
+      },
+      "uid": 16117931,
+      "username": "Litho"
+    },
+    {
+      "file": "players/16145090.json",
+      "fixture": "bp-lists",
+      "scores": 100,
+      "total_pp": {
+        "bancho": 12026.966,
+        "codexxy": 11962.277,
+        "reimagined": 11815.554,
+        "sunny": 12006.089
+      },
+      "uid": 16145090,
+      "username": "[515] Kitosha"
+    },
+    {
+      "file": "players/16318630.json",
+      "fixture": "bp-lists",
+      "scores": 100,
+      "total_pp": {
+        "bancho": 12198.247,
+        "codexxy": 13291.485,
+        "reimagined": 15813.363,
+        "sunny": 13882.078
+      },
+      "uid": 16318630,
+      "username": "YuukiFanGirl"
+    },
+    {
+      "file": "players/16342574.json",
+      "fixture": "bp-lists",
+      "scores": 100,
+      "total_pp": {
+        "bancho": 1632.396,
+        "codexxy": 2182.054,
+        "reimagined": 2255.625,
+        "sunny": 2321.36
+      },
+      "uid": 16342574,
+      "username": "linode"
+    },
+    {
+      "file": "players/16423756.json",
+      "fixture": "bp-lists",
+      "scores": 100,
+      "total_pp": {
+        "bancho": 16919.038,
+        "codexxy": 14726.367,
+        "reimagined": 17718.119,
+        "sunny": 15369.635
+      },
+      "uid": 16423756,
+      "username": "desgracaosu"
+    },
+    {
+      "file": "players/16678425.json",
+      "fixture": "bp-lists",
+      "scores": 100,
+      "total_pp": {
+        "bancho": 12023.11,
+        "codexxy": 11997.457,
+        "reimagined": 11802.666,
+        "sunny": 12016.421
+      },
+      "uid": 16678425,
+      "username": "dankerschon"
+    },
+    {
+      "file": "players/16734203.json",
+      "fixture": "bp-lists",
+      "scores": 100,
+      "total_pp": {
+        "bancho": 22927.824,
+        "codexxy": 21148.266,
+        "reimagined": 22864.747,
+        "sunny": 21312.019
+      },
+      "uid": 16734203,
+      "username": "instal"
+    },
+    {
+      "file": "players/16889434.json",
+      "fixture": "bp-lists",
+      "scores": 100,
+      "total_pp": {
+        "bancho": 16805.64,
+        "codexxy": 14692.507,
+        "reimagined": 17644.954,
+        "sunny": 15443.739
+      },
+      "uid": 16889434,
+      "username": "Cranberry"
+    },
+    {
+      "file": "players/17137414.json",
+      "fixture": "bp-lists",
+      "scores": 100,
+      "total_pp": {
+        "bancho": 21038.053,
+        "codexxy": 17979.053,
+        "reimagined": 21085.6,
+        "sunny": 18657.98
+      },
+      "uid": 17137414,
+      "username": "Andrewiscool"
+    },
+    {
+      "file": "players/17184474.json",
+      "fixture": "bp-lists",
+      "scores": 100,
+      "total_pp": {
+        "bancho": 14565.076,
+        "codexxy": 15997.882,
+        "reimagined": 15687.558,
+        "sunny": 15851.666
+      },
+      "uid": 17184474,
+      "username": "imagoodguy100"
+    },
+    {
+      "file": "players/17481234.json",
+      "fixture": "bp-lists",
+      "scores": 100,
+      "total_pp": {
+        "bancho": 12881.203,
+        "codexxy": 12653.445,
+        "reimagined": 12561.918,
+        "sunny": 12746.433
+      },
+      "uid": 17481234,
+      "username": "duna_"
+    },
+    {
+      "file": "players/17721427.json",
+      "fixture": "bp-lists",
+      "scores": 100,
+      "total_pp": {
+        "bancho": 17518.626,
+        "codexxy": 16735.802,
+        "reimagined": 17813.447,
+        "sunny": 16705.847
+      },
+      "uid": 17721427,
+      "username": "Wang Jian"
+    },
+    {
+      "file": "players/17753835.json",
+      "fixture": "bp-lists",
+      "scores": 100,
+      "total_pp": {
+        "bancho": 18859.87,
+        "codexxy": 18321.729,
+        "reimagined": 21444.382,
+        "sunny": 18678.711
+      },
+      "uid": 17753835,
+      "username": "Hoshimegu Mio"
+    },
+    {
+      "file": "players/18338179.json",
+      "fixture": "bp-lists",
+      "scores": 100,
+      "total_pp": {
+        "bancho": 23422.301,
+        "codexxy": 21501.497,
+        "reimagined": 23937.197,
+        "sunny": 21583.857
+      },
+      "uid": 18338179,
+      "username": "bagjettka"
+    },
+    {
+      "file": "players/18766595.json",
+      "fixture": "bp-lists",
+      "scores": 100,
+      "total_pp": {
+        "bancho": 21518.065,
+        "codexxy": 18736.288,
+        "reimagined": 21669.832,
+        "sunny": 19260.273
+      },
+      "uid": 18766595,
+      "username": "Kyuui"
+    },
+    {
+      "file": "players/18797723.json",
+      "fixture": "bp-lists",
+      "scores": 100,
+      "total_pp": {
+        "bancho": 14127.65,
+        "codexxy": 14485.283,
+        "reimagined": 17407.397,
+        "sunny": 15143.686
+      },
+      "uid": 18797723,
+      "username": "Nya Nyaa"
+    },
+    {
+      "file": "players/19018307.json",
+      "fixture": "bp-lists",
+      "scores": 100,
+      "total_pp": {
+        "bancho": 1478.774,
+        "codexxy": 2013.208,
+        "reimagined": 2073.372,
+        "sunny": 2103.585
+      },
+      "uid": 19018307,
+      "username": "krefo"
+    },
+    {
+      "file": "players/19069184.json",
+      "fixture": "bp-lists",
+      "scores": 100,
+      "total_pp": {
+        "bancho": 6265.611,
+        "codexxy": 6799.405,
+        "reimagined": 6924.806,
+        "sunny": 6941.733
+      },
+      "uid": 19069184,
+      "username": "Lohi"
+    },
+    {
+      "file": "players/19234344.json",
+      "fixture": "bp-lists",
+      "scores": 100,
+      "total_pp": {
+        "bancho": 7110.076,
+        "codexxy": 7495.618,
+        "reimagined": 7637.098,
+        "sunny": 7625.279
+      },
+      "uid": 19234344,
+      "username": "kraljica"
+    },
+    {
+      "file": "players/19525500.json",
+      "fixture": "bp-lists",
+      "scores": 4,
+      "total_pp": {
+        "bancho": 0.027,
+        "codexxy": 0.003,
+        "reimagined": 0.006,
+        "sunny": 0.004
+      },
+      "uid": 19525500,
+      "username": "Wavzylol"
+    },
+    {
+      "file": "players/19613925.json",
+      "fixture": "bp-lists",
+      "scores": 100,
+      "total_pp": {
+        "bancho": 5263.709,
+        "codexxy": 6475.92,
+        "reimagined": 6323.286,
+        "sunny": 6492.29
+      },
+      "uid": 19613925,
+      "username": "pyramd"
+    },
+    {
+      "file": "players/19833820.json",
+      "fixture": "bp-lists",
+      "scores": 100,
+      "total_pp": {
+        "bancho": 10561.319,
+        "codexxy": 11008.599,
+        "reimagined": 11011.534,
+        "sunny": 11121.647
+      },
+      "uid": 19833820,
+      "username": "thevirtual"
+    },
+    {
+      "file": "players/20021208.json",
+      "fixture": "bp-lists",
+      "scores": 100,
+      "total_pp": {
+        "bancho": 17116.879,
+        "codexxy": 16532.109,
+        "reimagined": 19340.059,
+        "sunny": 16945.85
+      },
+      "uid": 20021208,
+      "username": "Goshujin Sama"
+    },
+    {
+      "file": "players/20202332.json",
+      "fixture": "bp-lists",
+      "scores": 100,
+      "total_pp": {
+        "bancho": 6774.809,
+        "codexxy": 7259.644,
+        "reimagined": 7250.449,
+        "sunny": 7336.47
+      },
+      "uid": 20202332,
+      "username": "HAIBOKUU"
+    },
+    {
+      "file": "players/20205897.json",
+      "fixture": "bp-lists",
+      "scores": 100,
+      "total_pp": {
+        "bancho": 18423.718,
+        "codexxy": 18391.565,
+        "reimagined": 21071.406,
+        "sunny": 18775.737
+      },
+      "uid": 20205897,
+      "username": "entelecheia"
+    },
+    {
+      "file": "players/20653500.json",
+      "fixture": "bp-lists",
+      "scores": 100,
+      "total_pp": {
+        "bancho": 11614.531,
+        "codexxy": 11604.247,
+        "reimagined": 11376.759,
+        "sunny": 11609.921
+      },
+      "uid": 20653500,
+      "username": "nizaxaX"
+    },
+    {
+      "file": "players/21207706.json",
+      "fixture": "bp-lists",
+      "scores": 100,
+      "total_pp": {
+        "bancho": 14704.238,
+        "codexxy": 15021.095,
+        "reimagined": 14486.368,
+        "sunny": 14961.185
+      },
+      "uid": 21207706,
+      "username": "Shirasu-Azusa"
+    },
+    {
+      "file": "players/21446926.json",
+      "fixture": "bp-lists",
+      "scores": 100,
+      "total_pp": {
+        "bancho": 15775.342,
+        "codexxy": 17446.666,
+        "reimagined": 16449.801,
+        "sunny": 17170.811
+      },
+      "uid": 21446926,
+      "username": "Fier"
+    },
+    {
+      "file": "players/21596483.json",
+      "fixture": "bp-lists",
+      "scores": 100,
+      "total_pp": {
+        "bancho": 10411.934,
+        "codexxy": 10214.809,
+        "reimagined": 10246.689,
+        "sunny": 10337.702
+      },
+      "uid": 21596483,
+      "username": "kekus"
+    },
+    {
+      "file": "players/21707228.json",
+      "fixture": "bp-lists",
+      "scores": 100,
+      "total_pp": {
+        "bancho": 17822.549,
+        "codexxy": 17051.691,
+        "reimagined": 20082.237,
+        "sunny": 17489.399
+      },
+      "uid": 21707228,
+      "username": "Eserack"
+    },
+    {
+      "file": "players/21906254.json",
+      "fixture": "bp-lists",
+      "scores": 100,
+      "total_pp": {
+        "bancho": 16955.777,
+        "codexxy": 18260.003,
+        "reimagined": 17561.721,
+        "sunny": 18037.695
+      },
+      "uid": 21906254,
+      "username": "AbriI"
+    },
+    {
+      "file": "players/2281719.json",
+      "fixture": "bp-lists",
+      "scores": 100,
+      "total_pp": {
+        "bancho": 8887.273,
+        "codexxy": 11222.96,
+        "reimagined": 13410.399,
+        "sunny": 11599.908
+      },
+      "uid": 2281719,
+      "username": "minuie"
+    },
+    {
+      "file": "players/23000704.json",
+      "fixture": "bp-lists",
+      "scores": 100,
+      "total_pp": {
+        "bancho": 9040.554,
+        "codexxy": 8897.349,
+        "reimagined": 8968.61,
+        "sunny": 9028.944
+      },
+      "uid": 23000704,
+      "username": "max1000rush"
+    },
+    {
+      "file": "players/23298104.json",
+      "fixture": "bp-lists",
+      "scores": 100,
+      "total_pp": {
+        "bancho": 1270.214,
+        "codexxy": 1653.562,
+        "reimagined": 1839.973,
+        "sunny": 1829.138
+      },
+      "uid": 23298104,
+      "username": "Soy_Loscar"
+    },
+    {
+      "file": "players/23387588.json",
+      "fixture": "bp-lists",
+      "scores": 100,
+      "total_pp": {
+        "bancho": 15956.182,
+        "codexxy": 19110.535,
+        "reimagined": 19161.258,
+        "sunny": 18715.683
+      },
+      "uid": 23387588,
+      "username": "cheems"
+    },
+    {
+      "file": "players/23913628.json",
+      "fixture": "bp-lists",
+      "scores": 100,
+      "total_pp": {
+        "bancho": 9481.994,
+        "codexxy": 10658.254,
+        "reimagined": 10406.701,
+        "sunny": 10632.226
+      },
+      "uid": 23913628,
+      "username": "Ckskiller"
+    },
+    {
+      "file": "players/24295990.json",
+      "fixture": "bp-lists",
+      "scores": 100,
+      "total_pp": {
+        "bancho": 11387.617,
+        "codexxy": 11660.862,
+        "reimagined": 11411.923,
+        "sunny": 11652.6
+      },
+      "uid": 24295990,
+      "username": "Maybekkj"
+    },
+    {
+      "file": "players/24449559.json",
+      "fixture": "bp-lists",
+      "scores": 100,
+      "total_pp": {
+        "bancho": 6293.297,
+        "codexxy": 6767.901,
+        "reimagined": 6967.282,
+        "sunny": 6928.864
+      },
+      "uid": 24449559,
+      "username": "Zzuu1000"
+    },
+    {
+      "file": "players/24544012.json",
+      "fixture": "bp-lists",
+      "scores": 69,
+      "total_pp": {
+        "bancho": 1348.365,
+        "codexxy": 1722.496,
+        "reimagined": 1805.656,
+        "sunny": 1830.672
+      },
+      "uid": 24544012,
+      "username": "dark_blade9533"
+    },
+    {
+      "file": "players/24795344.json",
+      "fixture": "bp-lists",
+      "scores": 100,
+      "total_pp": {
+        "bancho": 21173.854,
+        "codexxy": 19184.24,
+        "reimagined": 22204.374,
+        "sunny": 19671.545
+      },
+      "uid": 24795344,
+      "username": "Loudd"
+    },
+    {
+      "file": "players/25510638.json",
+      "fixture": "bp-lists",
+      "scores": 100,
+      "total_pp": {
+        "bancho": 1756.404,
+        "codexxy": 2335.405,
+        "reimagined": 2527.089,
+        "sunny": 2503.886
+      },
+      "uid": 25510638,
+      "username": "camipro23"
+    },
+    {
+      "file": "players/25586931.json",
+      "fixture": "bp-lists",
+      "scores": 100,
+      "total_pp": {
+        "bancho": 16659.544,
+        "codexxy": 17834.213,
+        "reimagined": 16941.358,
+        "sunny": 17640.205
+      },
+      "uid": 25586931,
+      "username": "yran"
+    },
+    {
+      "file": "players/2570019.json",
+      "fixture": "bp-lists",
+      "scores": 100,
+      "total_pp": {
+        "bancho": 19084.599,
+        "codexxy": 17484.861,
+        "reimagined": 20749.774,
+        "sunny": 18068.056
+      },
+      "uid": 2570019,
+      "username": "PhobosX"
+    },
+    {
+      "file": "players/25768687.json",
+      "fixture": "bp-lists",
+      "scores": 38,
+      "total_pp": {
+        "bancho": 1219.967,
+        "codexxy": 1717.444,
+        "reimagined": 1813.849,
+        "sunny": 1840.176
+      },
+      "uid": 25768687,
+      "username": "trxt0n"
+    },
+    {
+      "file": "players/26086660.json",
+      "fixture": "bp-lists",
+      "scores": 100,
+      "total_pp": {
+        "bancho": 17204.849,
+        "codexxy": 15587.137,
+        "reimagined": 17716.012,
+        "sunny": 15857.238
+      },
+      "uid": 26086660,
+      "username": "Selcaan"
+    },
+    {
+      "file": "players/26271847.json",
+      "fixture": "bp-lists",
+      "scores": 100,
+      "total_pp": {
+        "bancho": 10313.799,
+        "codexxy": 10082.595,
+        "reimagined": 10154.058,
+        "sunny": 10234.526
+      },
+      "uid": 26271847,
+      "username": "HOOlil"
+    },
+    {
+      "file": "players/26688450.json",
+      "fixture": "bp-lists",
+      "scores": 100,
+      "total_pp": {
+        "bancho": 25106.338,
+        "codexxy": 22582.761,
+        "reimagined": 25439.886,
+        "sunny": 22775.501
+      },
+      "uid": 26688450,
+      "username": "Luqas"
+    },
+    {
+      "file": "players/26872327.json",
+      "fixture": "bp-lists",
+      "scores": 100,
+      "total_pp": {
+        "bancho": 14734.177,
+        "codexxy": 15515.734,
+        "reimagined": 14921.938,
+        "sunny": 15346.932
+      },
+      "uid": 26872327,
+      "username": "TeneBryste"
+    },
+    {
+      "file": "players/2790454.json",
+      "fixture": "bp-lists",
+      "scores": 100,
+      "total_pp": {
+        "bancho": 4942.625,
+        "codexxy": 4819.638,
+        "reimagined": 5241.198,
+        "sunny": 4993.466
+      },
+      "uid": 2790454,
+      "username": "folence"
+    },
+    {
+      "file": "players/2820075.json",
+      "fixture": "bp-lists",
+      "scores": 100,
+      "total_pp": {
+        "bancho": 16043.428,
+        "codexxy": 15763.393,
+        "reimagined": 18250.38,
+        "sunny": 16073.677
+      },
+      "uid": 2820075,
+      "username": "gosy777"
+    },
+    {
+      "file": "players/28601578.json",
+      "fixture": "bp-lists",
+      "scores": 100,
+      "total_pp": {
+        "bancho": 6678.5,
+        "codexxy": 7852.564,
+        "reimagined": 7896.878,
+        "sunny": 7938.842
+      },
+      "uid": 28601578,
+      "username": "wootingly"
+    },
+    {
+      "file": "players/28686998.json",
+      "fixture": "bp-lists",
+      "scores": 100,
+      "total_pp": {
+        "bancho": 24265.587,
+        "codexxy": 22707.781,
+        "reimagined": 25477.759,
+        "sunny": 22900.195
+      },
+      "uid": 28686998,
+      "username": "NXLLIFICATION"
+    },
+    {
+      "file": "players/29084979.json",
+      "fixture": "bp-lists",
+      "scores": 100,
+      "total_pp": {
+        "bancho": 6112.375,
+        "codexxy": 6739.344,
+        "reimagined": 7023.208,
+        "sunny": 6948.601
+      },
+      "uid": 29084979,
+      "username": "balter bite"
+    },
+    {
+      "file": "players/29215315.json",
+      "fixture": "bp-lists",
+      "scores": 80,
+      "total_pp": {
+        "bancho": 2233.244,
+        "codexxy": 2666.313,
+        "reimagined": 2937.792,
+        "sunny": 2812.611
+      },
+      "uid": 29215315,
+      "username": "cisar v2"
+    },
+    {
+      "file": "players/29332615.json",
+      "fixture": "bp-lists",
+      "scores": 100,
+      "total_pp": {
+        "bancho": 10345.417,
+        "codexxy": 10464.838,
+        "reimagined": 10206.32,
+        "sunny": 10425.05
+      },
+      "uid": 29332615,
+      "username": "bobek131"
+    },
+    {
+      "file": "players/29721533.json",
+      "fixture": "bp-lists",
+      "scores": 100,
+      "total_pp": {
+        "bancho": 17328.46,
+        "codexxy": 16901.668,
+        "reimagined": 19840.486,
+        "sunny": 17320.143
+      },
+      "uid": 29721533,
+      "username": "ICDYO"
+    },
+    {
+      "file": "players/29982924.json",
+      "fixture": "bp-lists",
+      "scores": 100,
+      "total_pp": {
+        "bancho": 18952.426,
+        "codexxy": 17631.132,
+        "reimagined": 20933.605,
+        "sunny": 18206.581
+      },
+      "uid": 29982924,
+      "username": "Sykodonk"
+    },
+    {
+      "file": "players/30193070.json",
+      "fixture": "bp-lists",
+      "scores": 100,
+      "total_pp": {
+        "bancho": 15946.153,
+        "codexxy": 15324.317,
+        "reimagined": 18227.589,
+        "sunny": 15846.112
+      },
+      "uid": 30193070,
+      "username": "-ShiRoTsz_Dx"
+    },
+    {
+      "file": "players/30278649.json",
+      "fixture": "bp-lists",
+      "scores": 100,
+      "total_pp": {
+        "bancho": 1124.3,
+        "codexxy": 1532.62,
+        "reimagined": 1590.737,
+        "sunny": 1637.449
+      },
+      "uid": 30278649,
+      "username": "skoi fish"
+    },
+    {
+      "file": "players/30467254.json",
+      "fixture": "bp-lists",
+      "scores": 100,
+      "total_pp": {
+        "bancho": 11134.667,
+        "codexxy": 11426.424,
+        "reimagined": 11218.145,
+        "sunny": 11392.851
+      },
+      "uid": 30467254,
+      "username": "Kenyuri"
+    },
+    {
+      "file": "players/30870258.json",
+      "fixture": "bp-lists",
+      "scores": 100,
+      "total_pp": {
+        "bancho": 16248.51,
+        "codexxy": 17653.209,
+        "reimagined": 16275.826,
+        "sunny": 17299.595
+      },
+      "uid": 30870258,
+      "username": "Anthony2308"
+    },
+    {
+      "file": "players/31679332.json",
+      "fixture": "bp-lists",
+      "scores": 100,
+      "total_pp": {
+        "bancho": 14904.851,
+        "codexxy": 15312.375,
+        "reimagined": 14826.734,
+        "sunny": 15099.094
+      },
+      "uid": 31679332,
+      "username": "[AT] Funnies"
+    },
+    {
+      "file": "players/32108709.json",
+      "fixture": "bp-lists",
+      "scores": 100,
+      "total_pp": {
+        "bancho": 14554.89,
+        "codexxy": 15481.872,
+        "reimagined": 15063.421,
+        "sunny": 15208.998
+      },
+      "uid": 32108709,
+      "username": "Simiri"
+    },
+    {
+      "file": "players/3215366.json",
+      "fixture": "bp-lists",
+      "scores": 100,
+      "total_pp": {
+        "bancho": 13176.532,
+        "codexxy": 16097.915,
+        "reimagined": 18425.113,
+        "sunny": 16460.492
+      },
+      "uid": 3215366,
+      "username": "Matiias"
+    },
+    {
+      "file": "players/32339039.json",
+      "fixture": "bp-lists",
+      "scores": 100,
+      "total_pp": {
+        "bancho": 10843.964,
+        "codexxy": 11189.716,
+        "reimagined": 13863.04,
+        "sunny": 11884.731
+      },
+      "uid": 32339039,
+      "username": "UU9"
+    },
+    {
+      "file": "players/32700666.json",
+      "fixture": "bp-lists",
+      "scores": 32,
+      "total_pp": {
+        "bancho": 1274.614,
+        "codexxy": 1690.157,
+        "reimagined": 1783.461,
+        "sunny": 1789.067
+      },
+      "uid": 32700666,
+      "username": "vivsitoo"
+    },
+    {
+      "file": "players/32745213.json",
+      "fixture": "bp-lists",
+      "scores": 100,
+      "total_pp": {
+        "bancho": 12546.919,
+        "codexxy": 12476.893,
+        "reimagined": 12381.759,
+        "sunny": 12548.407
+      },
+      "uid": 32745213,
+      "username": "Dominus1539"
+    },
+    {
+      "file": "players/32884227.json",
+      "fixture": "bp-lists",
+      "scores": 100,
+      "total_pp": {
+        "bancho": 2132.083,
+        "codexxy": 2831.982,
+        "reimagined": 2894.611,
+        "sunny": 2953.128
+      },
+      "uid": 32884227,
+      "username": "somnus_"
+    },
+    {
+      "file": "players/33018882.json",
+      "fixture": "bp-lists",
+      "scores": 9,
+      "total_pp": {
+        "bancho": 11.643,
+        "codexxy": 41.252,
+        "reimagined": 41.992,
+        "sunny": 47.608
+      },
+      "uid": 33018882,
+      "username": "01Frizks"
+    },
+    {
+      "file": "players/33366048.json",
+      "fixture": "bp-lists",
+      "scores": 100,
+      "total_pp": {
+        "bancho": 15970.272,
+        "codexxy": 15256.39,
+        "reimagined": 18272.695,
+        "sunny": 15752.218
+      },
+      "uid": 33366048,
+      "username": "StarFrostbite01"
+    },
+    {
+      "file": "players/33497515.json",
+      "fixture": "bp-lists",
+      "scores": 100,
+      "total_pp": {
+        "bancho": 9552.554,
+        "codexxy": 8812.797,
+        "reimagined": 8813.426,
+        "sunny": 8899.098
+      },
+      "uid": 33497515,
+      "username": "karvl"
+    },
+    {
+      "file": "players/33717035.json",
+      "fixture": "bp-lists",
+      "scores": 92,
+      "total_pp": {
+        "bancho": 1038.229,
+        "codexxy": 1550.855,
+        "reimagined": 1668.017,
+        "sunny": 1693.024
+      },
+      "uid": 33717035,
+      "username": "BBL321"
+    },
+    {
+      "file": "players/33992136.json",
+      "fixture": "bp-lists",
+      "scores": 100,
+      "total_pp": {
+        "bancho": 10579.766,
+        "codexxy": 11334.787,
+        "reimagined": 10813.254,
+        "sunny": 11228.343
+      },
+      "uid": 33992136,
+      "username": "Haarua"
+    },
+    {
+      "file": "players/34441262.json",
+      "fixture": "bp-lists",
+      "scores": 100,
+      "total_pp": {
+        "bancho": 17263.22,
+        "codexxy": 18383.537,
+        "reimagined": 17881.098,
+        "sunny": 18336.492
+      },
+      "uid": 34441262,
+      "username": "Eviternus"
+    },
+    {
+      "file": "players/34545394.json",
+      "fixture": "bp-lists",
+      "scores": 100,
+      "total_pp": {
+        "bancho": 14927.762,
+        "codexxy": 16341.046,
+        "reimagined": 15608.507,
+        "sunny": 16180.13
+      },
+      "uid": 34545394,
+      "username": "shenmeng"
+    },
+    {
+      "file": "players/34806795.json",
+      "fixture": "bp-lists",
+      "scores": 100,
+      "total_pp": {
+        "bancho": 11240.692,
+        "codexxy": 11027.83,
+        "reimagined": 10964.819,
+        "sunny": 11123.1
+      },
+      "uid": 34806795,
+      "username": "samuelgiraffe"
+    },
+    {
+      "file": "players/34814765.json",
+      "fixture": "bp-lists",
+      "scores": 1,
+      "total_pp": {
+        "bancho": 0.0,
+        "codexxy": 0.0,
+        "reimagined": 0.0,
+        "sunny": 0.0
+      },
+      "uid": 34814765,
+      "username": "Shetecit"
+    },
+    {
+      "file": "players/34899307.json",
+      "fixture": "bp-lists",
+      "scores": 1,
+      "total_pp": {
+        "bancho": 0.0,
+        "codexxy": 0.0,
+        "reimagined": 0.0,
+        "sunny": 0.0
+      },
+      "uid": 34899307,
+      "username": "itf1k"
+    },
+    {
+      "file": "players/35315620.json",
+      "fixture": "bp-lists",
+      "scores": 74,
+      "total_pp": {
+        "bancho": 1684.882,
+        "codexxy": 2322.946,
+        "reimagined": 2364.86,
+        "sunny": 2407.481
+      },
+      "uid": 35315620,
+      "username": "sa100te"
+    },
+    {
+      "file": "players/35442039.json",
+      "fixture": "bp-lists",
+      "scores": 100,
+      "total_pp": {
+        "bancho": 13916.993,
+        "codexxy": 15118.313,
+        "reimagined": 18065.277,
+        "sunny": 15626.592
+      },
+      "uid": 35442039,
+      "username": "HotDaddys"
+    },
+    {
+      "file": "players/35517769.json",
+      "fixture": "bp-lists",
+      "scores": 100,
+      "total_pp": {
+        "bancho": 11850.977,
+        "codexxy": 11729.988,
+        "reimagined": 11836.364,
+        "sunny": 11942.905
+      },
+      "uid": 35517769,
+      "username": "nublo"
+    },
+    {
+      "file": "players/35679551.json",
+      "fixture": "bp-lists",
+      "scores": 100,
+      "total_pp": {
+        "bancho": 7939.597,
+        "codexxy": 9313.565,
+        "reimagined": 9275.489,
+        "sunny": 9324.664
+      },
+      "uid": 35679551,
+      "username": "coolidooot"
+    },
+    {
+      "file": "players/36030574.json",
+      "fixture": "bp-lists",
+      "scores": 100,
+      "total_pp": {
+        "bancho": 12687.271,
+        "codexxy": 12678.463,
+        "reimagined": 12510.137,
+        "sunny": 12713.056
+      },
+      "uid": 36030574,
+      "username": "Yoshi_Yo"
+    },
+    {
+      "file": "players/36108015.json",
+      "fixture": "bp-lists",
+      "scores": 100,
+      "total_pp": {
+        "bancho": 15674.306,
+        "codexxy": 14359.215,
+        "reimagined": 17305.812,
+        "sunny": 15042.528
+      },
+      "uid": 36108015,
+      "username": "thx_peace"
+    },
+    {
+      "file": "players/36143964.json",
+      "fixture": "bp-lists",
+      "scores": 100,
+      "total_pp": {
+        "bancho": 947.065,
+        "codexxy": 1450.256,
+        "reimagined": 1449.62,
+        "sunny": 1524.684
+      },
+      "uid": 36143964,
+      "username": "scorpyon"
+    },
+    {
+      "file": "players/36151411.json",
+      "fixture": "bp-lists",
+      "scores": 3,
+      "total_pp": {
+        "bancho": 0.0,
+        "codexxy": 0.0,
+        "reimagined": 0.0,
+        "sunny": 0.0
+      },
+      "uid": 36151411,
+      "username": "LS09X"
+    },
+    {
+      "file": "players/3628783.json",
+      "fixture": "bp-lists",
+      "scores": 100,
+      "total_pp": {
+        "bancho": 17489.025,
+        "codexxy": 17291.682,
+        "reimagined": 20155.368,
+        "sunny": 17624.096
+      },
+      "uid": 3628783,
+      "username": "Vygatron"
+    },
+    {
+      "file": "players/36316744.json",
+      "fixture": "bp-lists",
+      "scores": 100,
+      "total_pp": {
+        "bancho": 6933.302,
+        "codexxy": 6812.798,
+        "reimagined": 6849.557,
+        "sunny": 6929.367
+      },
+      "uid": 36316744,
+      "username": "BitPan"
+    },
+    {
+      "file": "players/36774512.json",
+      "fixture": "bp-lists",
+      "scores": 62,
+      "total_pp": {
+        "bancho": 2996.495,
+        "codexxy": 3920.08,
+        "reimagined": 3795.215,
+        "sunny": 3996.083
+      },
+      "uid": 36774512,
+      "username": "niicolas"
+    },
+    {
+      "file": "players/36878075.json",
+      "fixture": "bp-lists",
+      "scores": 100,
+      "total_pp": {
+        "bancho": 10670.021,
+        "codexxy": 13725.078,
+        "reimagined": 13734.951,
+        "sunny": 13481.163
+      },
+      "uid": 36878075,
+      "username": "Crisiker1"
+    },
+    {
+      "file": "players/37043482.json",
+      "fixture": "bp-lists",
+      "scores": 100,
+      "total_pp": {
+        "bancho": 17134.476,
+        "codexxy": 18204.844,
+        "reimagined": 17148.038,
+        "sunny": 17927.213
+      },
+      "uid": 37043482,
+      "username": "betcover-"
+    },
+    {
+      "file": "players/37459045.json",
+      "fixture": "bp-lists",
+      "scores": 21,
+      "total_pp": {
+        "bancho": 1446.375,
+        "codexxy": 1878.161,
+        "reimagined": 1995.809,
+        "sunny": 2007.627
+      },
+      "uid": 37459045,
+      "username": "QWERTY9487"
+    },
+    {
+      "file": "players/37995746.json",
+      "fixture": "bp-lists",
+      "scores": 60,
+      "total_pp": {
+        "bancho": 600.757,
+        "codexxy": 978.058,
+        "reimagined": 956.57,
+        "sunny": 1025.112
+      },
+      "uid": 37995746,
+      "username": "OoflandianLord"
+    },
+    {
+      "file": "players/38246190.json",
+      "fixture": "bp-lists",
+      "scores": 100,
+      "total_pp": {
+        "bancho": 2493.894,
+        "codexxy": 3403.295,
+        "reimagined": 3461.239,
+        "sunny": 3510.949
+      },
+      "uid": 38246190,
+      "username": "Flandrekawaii39"
+    },
+    {
+      "file": "players/38368498.json",
+      "fixture": "bp-lists",
+      "scores": 100,
+      "total_pp": {
+        "bancho": 6181.563,
+        "codexxy": 6087.273,
+        "reimagined": 6286.995,
+        "sunny": 6278.649
+      },
+      "uid": 38368498,
+      "username": "ilonaaaa"
+    },
+    {
+      "file": "players/38482000.json",
+      "fixture": "bp-lists",
+      "scores": 3,
+      "total_pp": {
+        "bancho": 0.0,
+        "codexxy": 0.0,
+        "reimagined": 0.0,
+        "sunny": 0.0
+      },
+      "uid": 38482000,
+      "username": "ELFINOGOD"
+    },
+    {
+      "file": "players/38517867.json",
+      "fixture": "bp-lists",
+      "scores": 100,
+      "total_pp": {
+        "bancho": 7331.065,
+        "codexxy": 8370.777,
+        "reimagined": 8386.04,
+        "sunny": 8472.029
+      },
+      "uid": 38517867,
+      "username": "CeilingRev"
+    },
+    {
+      "file": "players/38573837.json",
+      "fixture": "bp-lists",
+      "scores": 100,
+      "total_pp": {
+        "bancho": 1408.945,
+        "codexxy": 1466.899,
+        "reimagined": 1524.906,
+        "sunny": 1543.063
+      },
+      "uid": 38573837,
+      "username": "myonlychance_"
+    },
+    {
+      "file": "players/38588400.json",
+      "fixture": "bp-lists",
+      "scores": 2,
+      "total_pp": {
+        "bancho": 3.138,
+        "codexxy": 0.633,
+        "reimagined": 0.753,
+        "sunny": 0.73
+      },
+      "uid": 38588400,
+      "username": "dverzxc"
+    },
+    {
+      "file": "players/38590791.json",
+      "fixture": "bp-lists",
+      "scores": 9,
+      "total_pp": {
+        "bancho": 10.527,
+        "codexxy": 9.457,
+        "reimagined": 11.345,
+        "sunny": 11.717
+      },
+      "uid": 38590791,
+      "username": "Cenco"
+    },
+    {
+      "file": "players/38618938.json",
+      "fixture": "bp-lists",
+      "scores": 65,
+      "total_pp": {
+        "bancho": 2869.023,
+        "codexxy": 3286.103,
+        "reimagined": 3452.654,
+        "sunny": 3450.177
+      },
+      "uid": 38618938,
+      "username": "Al1ce_er"
+    },
+    {
+      "file": "players/38827749.json",
+      "fixture": "bp-lists",
+      "scores": 1,
+      "total_pp": {
+        "bancho": 0.288,
+        "codexxy": 0.005,
+        "reimagined": 0.008,
+        "sunny": 0.007
+      },
+      "uid": 38827749,
+      "username": "furryzinjp"
+    },
+    {
+      "file": "players/39035134.json",
+      "fixture": "bp-lists",
+      "scores": 100,
+      "total_pp": {
+        "bancho": 2147.27,
+        "codexxy": 2877.899,
+        "reimagined": 3056.506,
+        "sunny": 3067.854
+      },
+      "uid": 39035134,
+      "username": "Dramiaze"
+    },
+    {
+      "file": "players/39184910.json",
+      "fixture": "bp-lists",
+      "scores": 7,
+      "total_pp": {
+        "bancho": 7.304,
+        "codexxy": 1.747,
+        "reimagined": 2.203,
+        "sunny": 2.017
+      },
+      "uid": 39184910,
+      "username": "Intto"
+    },
+    {
+      "file": "players/39376969.json",
+      "fixture": "bp-lists",
+      "scores": 91,
+      "total_pp": {
+        "bancho": 323.988,
+        "codexxy": 770.669,
+        "reimagined": 715.285,
+        "sunny": 806.932
+      },
+      "uid": 39376969,
+      "username": "caeldori"
+    },
+    {
+      "file": "players/39474433.json",
+      "fixture": "bp-lists",
+      "scores": 3,
+      "total_pp": {
+        "bancho": 6.925,
+        "codexxy": 0.491,
+        "reimagined": 0.638,
+        "sunny": 0.599
+      },
+      "uid": 39474433,
+      "username": "flameate"
+    },
+    {
+      "file": "players/39676845.json",
+      "fixture": "bp-lists",
+      "scores": 62,
+      "total_pp": {
+        "bancho": 9394.757,
+        "codexxy": 9742.457,
+        "reimagined": 10006.525,
+        "sunny": 10005.668
+      },
+      "uid": 39676845,
+      "username": "droolhehe"
+    },
+    {
+      "file": "players/39744900.json",
+      "fixture": "bp-lists",
+      "scores": 100,
+      "total_pp": {
+        "bancho": 5462.835,
+        "codexxy": 6407.924,
+        "reimagined": 6495.585,
+        "sunny": 6513.191
+      },
+      "uid": 39744900,
+      "username": "huyaaal"
+    },
+    {
+      "file": "players/39855970.json",
+      "fixture": "bp-lists",
+      "scores": 100,
+      "total_pp": {
+        "bancho": 14706.957,
+        "codexxy": 15091.283,
+        "reimagined": 14809.256,
+        "sunny": 15134.308
+      },
+      "uid": 39855970,
+      "username": "Rurikon Fangirl"
+    },
+    {
+      "file": "players/4270732.json",
+      "fixture": "bp-lists",
+      "scores": 100,
+      "total_pp": {
+        "bancho": 22096.969,
+        "codexxy": 19716.103,
+        "reimagined": 22624.737,
+        "sunny": 20015.588
+      },
+      "uid": 4270732,
+      "username": "rlarkgus"
+    },
+    {
+      "file": "players/4295434.json",
+      "fixture": "bp-lists",
+      "scores": 100,
+      "total_pp": {
+        "bancho": 14263.666,
+        "codexxy": 12619.678,
+        "reimagined": 15468.3,
+        "sunny": 13304.309
+      },
+      "uid": 4295434,
+      "username": "Elvendir"
+    },
+    {
+      "file": "players/4641791.json",
+      "fixture": "bp-lists",
+      "scores": 100,
+      "total_pp": {
+        "bancho": 6714.473,
+        "codexxy": 7753.615,
+        "reimagined": 7696.604,
+        "sunny": 7795.357
+      },
+      "uid": 4641791,
+      "username": "zami"
+    },
+    {
+      "file": "players/4760676.json",
+      "fixture": "bp-lists",
+      "scores": 100,
+      "total_pp": {
+        "bancho": 14742.339,
+        "codexxy": 15710.158,
+        "reimagined": 18516.886,
+        "sunny": 16214.097
+      },
+      "uid": 4760676,
+      "username": "Lyuna"
+    },
+    {
+      "file": "players/4773855.json",
+      "fixture": "bp-lists",
+      "scores": 100,
+      "total_pp": {
+        "bancho": 18401.638,
+        "codexxy": 16972.764,
+        "reimagined": 19841.89,
+        "sunny": 17495.219
+      },
+      "uid": 4773855,
+      "username": "Maffe"
+    },
+    {
+      "file": "players/485007.json",
+      "fixture": "bp-lists",
+      "scores": 100,
+      "total_pp": {
+        "bancho": 23876.911,
+        "codexxy": 21453.283,
+        "reimagined": 24222.973,
+        "sunny": 21743.693
+      },
+      "uid": 485007,
+      "username": "rainlily"
+    },
+    {
+      "file": "players/5124401.json",
+      "fixture": "bp-lists",
+      "scores": 100,
+      "total_pp": {
+        "bancho": 6837.549,
+        "codexxy": 8196.235,
+        "reimagined": 8439.434,
+        "sunny": 8358.836
+      },
+      "uid": 5124401,
+      "username": "ponysaidxd"
+    },
+    {
+      "file": "players/6042315.json",
+      "fixture": "bp-lists",
+      "scores": 100,
+      "total_pp": {
+        "bancho": 1537.935,
+        "codexxy": 3073.625,
+        "reimagined": 2240.268,
+        "sunny": 2705.645
+      },
+      "uid": 6042315,
+      "username": "Guilherme Eiji"
+    },
+    {
+      "file": "players/6066359.json",
+      "fixture": "bp-lists",
+      "scores": 100,
+      "total_pp": {
+        "bancho": 22610.525,
+        "codexxy": 20503.598,
+        "reimagined": 23545.804,
+        "sunny": 20871.814
+      },
+      "uid": 6066359,
+      "username": "_Yiiiii"
+    },
+    {
+      "file": "players/6378800.json",
+      "fixture": "bp-lists",
+      "scores": 100,
+      "total_pp": {
+        "bancho": 20661.352,
+        "codexxy": 18046.021,
+        "reimagined": 21118.731,
+        "sunny": 18534.32
+      },
+      "uid": 6378800,
+      "username": "my angel zhla"
+    },
+    {
+      "file": "players/6556530.json",
+      "fixture": "bp-lists",
+      "scores": 100,
+      "total_pp": {
+        "bancho": 21567.916,
+        "codexxy": 19290.177,
+        "reimagined": 22331.764,
+        "sunny": 19668.587
+      },
+      "uid": 6556530,
+      "username": "9eater"
+    },
+    {
+      "file": "players/6952272.json",
+      "fixture": "bp-lists",
+      "scores": 100,
+      "total_pp": {
+        "bancho": 5097.486,
+        "codexxy": 5552.307,
+        "reimagined": 5863.638,
+        "sunny": 5759.1
+      },
+      "uid": 6952272,
+      "username": "Brostein"
+    },
+    {
+      "file": "players/7014697.json",
+      "fixture": "bp-lists",
+      "scores": 100,
+      "total_pp": {
+        "bancho": 21527.029,
+        "codexxy": 21393.493,
+        "reimagined": 23784.999,
+        "sunny": 21416.287
+      },
+      "uid": 7014697,
+      "username": "Estonians"
+    },
+    {
+      "file": "players/7233338.json",
+      "fixture": "bp-lists",
+      "scores": 100,
+      "total_pp": {
+        "bancho": 5547.584,
+        "codexxy": 6154.786,
+        "reimagined": 6529.897,
+        "sunny": 6414.516
+      },
+      "uid": 7233338,
+      "username": "Cyfer"
+    },
+    {
+      "file": "players/7289832.json",
+      "fixture": "bp-lists",
+      "scores": 100,
+      "total_pp": {
+        "bancho": 6369.671,
+        "codexxy": 6952.175,
+        "reimagined": 7158.007,
+        "sunny": 7111.876
+      },
+      "uid": 7289832,
+      "username": "-Akemi"
+    },
+    {
+      "file": "players/758406.json",
+      "fixture": "bp-lists",
+      "scores": 100,
+      "total_pp": {
+        "bancho": 28648.026,
+        "codexxy": 26565.772,
+        "reimagined": 29248.732,
+        "sunny": 26574.071
+      },
+      "uid": 758406,
+      "username": "dressurf"
+    },
+    {
+      "file": "players/7590894.json",
+      "fixture": "bp-lists",
+      "scores": 100,
+      "total_pp": {
+        "bancho": 16885.525,
+        "codexxy": 17644.278,
+        "reimagined": 20418.925,
+        "sunny": 17943.895
+      },
+      "uid": 7590894,
+      "username": "ExNeko"
+    },
+    {
+      "file": "players/8021339.json",
+      "fixture": "bp-lists",
+      "scores": 100,
+      "total_pp": {
+        "bancho": 15231.047,
+        "codexxy": 16356.828,
+        "reimagined": 19229.769,
+        "sunny": 16787.422
+      },
+      "uid": 8021339,
+      "username": "Mi-a"
+    },
+    {
+      "file": "players/8273098.json",
+      "fixture": "bp-lists",
+      "scores": 100,
+      "total_pp": {
+        "bancho": 24739.549,
+        "codexxy": 22484.307,
+        "reimagined": 25112.784,
+        "sunny": 22557.878
+      },
+      "uid": 8273098,
+      "username": "My Angel Koishi"
+    },
+    {
+      "file": "players/8479894.json",
+      "fixture": "bp-lists",
+      "scores": 100,
+      "total_pp": {
+        "bancho": 9617.726,
+        "codexxy": 10208.682,
+        "reimagined": 12336.858,
+        "sunny": 10775.921
+      },
+      "uid": 8479894,
+      "username": "Mars_"
+    },
+    {
+      "file": "players/8862836.json",
+      "fixture": "bp-lists",
+      "scores": 100,
+      "total_pp": {
+        "bancho": 18336.319,
+        "codexxy": 18870.457,
+        "reimagined": 21611.999,
+        "sunny": 19217.696
+      },
+      "uid": 8862836,
+      "username": "qquark"
+    },
+    {
+      "file": "players/8947480.json",
+      "fixture": "bp-lists",
+      "scores": 100,
+      "total_pp": {
+        "bancho": 6690.322,
+        "codexxy": 7645.262,
+        "reimagined": 7600.194,
+        "sunny": 7694.158
+      },
+      "uid": 8947480,
+      "username": "EmK530"
+    },
+    {
+      "file": "players/9409456.json",
+      "fixture": "bp-lists",
+      "scores": 100,
+      "total_pp": {
+        "bancho": 9077.844,
+        "codexxy": 10358.174,
+        "reimagined": 10142.616,
+        "sunny": 10270.456
+      },
+      "uid": 9409456,
+      "username": "Niko_Plays"
+    },
+    {
+      "file": "players/89545.json",
+      "fixture": "bp-lists",
+      "scores": 100,
+      "total_pp": {
+        "bancho": 23728.934,
+        "codexxy": 21943.221,
+        "reimagined": 24651.656,
+        "sunny": 22038.054
+      },
+      "uid": 89545,
+      "username": "VanWilder"
+    },
+    {
+      "file": "players/137227.json",
+      "fixture": "bp-lists",
+      "scores": 100,
+      "total_pp": {
+        "bancho": 20643.396,
+        "codexxy": 21997.839,
+        "reimagined": 24327.41,
+        "sunny": 22071.23
+      },
+      "uid": 137227,
+      "username": "ideu-"
+    },
+    {
+      "file": "players/766374.json",
+      "fixture": "bp-lists",
+      "scores": 100,
+      "total_pp": {
+        "bancho": 26406.507,
+        "codexxy": 24268.144,
+        "reimagined": 26784.857,
+        "sunny": 24258.177
+      },
+      "uid": 766374,
+      "username": "LostCool"
+    },
+    {
+      "file": "players/877011.json",
+      "fixture": "bp-lists",
+      "scores": 100,
+      "total_pp": {
+        "bancho": 20734.378,
+        "codexxy": 22443.822,
+        "reimagined": 24513.937,
+        "sunny": 22286.424
+      },
+      "uid": 877011,
+      "username": "Berrii"
+    },
+    {
+      "file": "players/1020304.json",
+      "fixture": "bp-lists",
+      "scores": 100,
+      "total_pp": {
+        "bancho": 19081.897,
+        "codexxy": 19624.169,
+        "reimagined": 22331.559,
+        "sunny": 19981.115
+      },
+      "uid": 1020304,
+      "username": "NKZoyDkKalBoJun"
+    },
+    {
+      "file": "players/1433586.json",
+      "fixture": "bp-lists",
+      "scores": 100,
+      "total_pp": {
+        "bancho": 28502.689,
+        "codexxy": 25605.708,
+        "reimagined": 28602.903,
+        "sunny": 25722.006
+      },
+      "uid": 1433586,
+      "username": "butanic"
+    },
+    {
+      "file": "players/2039089.json",
+      "fixture": "bp-lists",
+      "scores": 100,
+      "total_pp": {
+        "bancho": 20651.669,
+        "codexxy": 20221.653,
+        "reimagined": 23025.253,
+        "sunny": 20437.447
+      },
+      "uid": 2039089,
+      "username": "arcwinolivirus"
+    },
+    {
+      "file": "players/2071008.json",
+      "fixture": "bp-lists",
+      "scores": 100,
+      "total_pp": {
+        "bancho": 22191.849,
+        "codexxy": 24976.941,
+        "reimagined": 26814.465,
+        "sunny": 24854.053
+      },
+      "uid": 2071008,
+      "username": "yz1155"
+    },
+    {
+      "file": "players/2288363.json",
+      "fixture": "bp-lists",
+      "scores": 100,
+      "total_pp": {
+        "bancho": 20539.072,
+        "codexxy": 20090.47,
+        "reimagined": 22729.34,
+        "sunny": 20359.371
+      },
+      "uid": 2288363,
+      "username": "SillyFangirl"
+    },
+    {
+      "file": "players/2402586.json",
+      "fixture": "bp-lists",
+      "scores": 100,
+      "total_pp": {
+        "bancho": 25957.325,
+        "codexxy": 24767.412,
+        "reimagined": 27063.019,
+        "sunny": 24674.612
+      },
+      "uid": 2402586,
+      "username": "HanJaeHun"
+    },
+    {
+      "file": "players/2722489.json",
+      "fixture": "bp-lists",
+      "scores": 100,
+      "total_pp": {
+        "bancho": 19307.694,
+        "codexxy": 20484.611,
+        "reimagined": 23160.232,
+        "sunny": 20602.2
+      },
+      "uid": 2722489,
+      "username": "Cielo Day"
+    },
+    {
+      "file": "players/3036686.json",
+      "fixture": "bp-lists",
+      "scores": 100,
+      "total_pp": {
+        "bancho": 21804.568,
+        "codexxy": 21267.369,
+        "reimagined": 23809.122,
+        "sunny": 21359.496
+      },
+      "uid": 3036686,
+      "username": "Istaroth-"
+    },
+    {
+      "file": "players/3110452.json",
+      "fixture": "bp-lists",
+      "scores": 100,
+      "total_pp": {
+        "bancho": 21078.721,
+        "codexxy": 18943.574,
+        "reimagined": 21870.972,
+        "sunny": 19338.027
+      },
+      "uid": 3110452,
+      "username": "markzical"
+    },
+    {
+      "file": "players/3154852.json",
+      "fixture": "bp-lists",
+      "scores": 100,
+      "total_pp": {
+        "bancho": 20209.173,
+        "codexxy": 21149.599,
+        "reimagined": 23614.74,
+        "sunny": 21256.242
+      },
+      "uid": 3154852,
+      "username": "aitor98"
+    },
+    {
+      "file": "players/3155787.json",
+      "fixture": "bp-lists",
+      "scores": 100,
+      "total_pp": {
+        "bancho": 22256.269,
+        "codexxy": 21652.587,
+        "reimagined": 24569.157,
+        "sunny": 21864.018
+      },
+      "uid": 3155787,
+      "username": "MoTeSolo"
+    },
+    {
+      "file": "players/3375226.json",
+      "fixture": "bp-lists",
+      "scores": 100,
+      "total_pp": {
+        "bancho": 23736.395,
+        "codexxy": 20991.089,
+        "reimagined": 23892.248,
+        "sunny": 21253.989
+      },
+      "uid": 3375226,
+      "username": "hero_jeff"
+    },
+    {
+      "file": "players/3874031.json",
+      "fixture": "bp-lists",
+      "scores": 100,
+      "total_pp": {
+        "bancho": 21848.901,
+        "codexxy": 19421.618,
+        "reimagined": 22269.068,
+        "sunny": 19730.06
+      },
+      "uid": 3874031,
+      "username": "ComfyKroomy"
+    },
+    {
+      "file": "players/3885626.json",
+      "fixture": "bp-lists",
+      "scores": 100,
+      "total_pp": {
+        "bancho": 19943.678,
+        "codexxy": 20140.608,
+        "reimagined": 23018.189,
+        "sunny": 20376.91
+      },
+      "uid": 3885626,
+      "username": "Motion"
+    },
+    {
+      "file": "players/4477497.json",
+      "fixture": "bp-lists",
+      "scores": 100,
+      "total_pp": {
+        "bancho": 27130.752,
+        "codexxy": 25150.612,
+        "reimagined": 26978.303,
+        "sunny": 24964.383
+      },
+      "uid": 4477497,
+      "username": "cheewee10"
+    },
+    {
+      "file": "players/5332153.json",
+      "fixture": "bp-lists",
+      "scores": 100,
+      "total_pp": {
+        "bancho": 23346.6,
+        "codexxy": 21319.627,
+        "reimagined": 24085.04,
+        "sunny": 21468.941
+      },
+      "uid": 5332153,
+      "username": "cr1sp"
+    },
+    {
+      "file": "players/5402803.json",
+      "fixture": "bp-lists",
+      "scores": 100,
+      "total_pp": {
+        "bancho": 23037.555,
+        "codexxy": 20736.546,
+        "reimagined": 23536.989,
+        "sunny": 21009.577
+      },
+      "uid": 5402803,
+      "username": "OutLast"
+    },
+    {
+      "file": "players/5527957.json",
+      "fixture": "bp-lists",
+      "scores": 100,
+      "total_pp": {
+        "bancho": 22107.088,
+        "codexxy": 19736.163,
+        "reimagined": 22666.476,
+        "sunny": 20066.49
+      },
+      "uid": 5527957,
+      "username": "Meiju"
+    },
+    {
+      "file": "players/5604329.json",
+      "fixture": "bp-lists",
+      "scores": 100,
+      "total_pp": {
+        "bancho": 18951.066,
+        "codexxy": 17255.697,
+        "reimagined": 20012.969,
+        "sunny": 17792.31
+      },
+      "uid": 5604329,
+      "username": "Rio1-"
+    },
+    {
+      "file": "players/6117525.json",
+      "fixture": "bp-lists",
+      "scores": 100,
+      "total_pp": {
+        "bancho": 26644.696,
+        "codexxy": 23230.123,
+        "reimagined": 25971.24,
+        "sunny": 23400.03
+      },
+      "uid": 6117525,
+      "username": "ruka"
+    },
+    {
+      "file": "players/6132697.json",
+      "fixture": "bp-lists",
+      "scores": 100,
+      "total_pp": {
+        "bancho": 24920.683,
+        "codexxy": 23439.427,
+        "reimagined": 26203.925,
+        "sunny": 23547.973
+      },
+      "uid": 6132697,
+      "username": "Suzuha_l"
+    },
+    {
+      "file": "players/6283029.json",
+      "fixture": "bp-lists",
+      "scores": 100,
+      "total_pp": {
+        "bancho": 19141.962,
+        "codexxy": 17649.047,
+        "reimagined": 20632.755,
+        "sunny": 18115.962
+      },
+      "uid": 6283029,
+      "username": "Legend27"
+    },
+    {
+      "file": "players/6336721.json",
+      "fixture": "bp-lists",
+      "scores": 100,
+      "total_pp": {
+        "bancho": 20651.685,
+        "codexxy": 18156.734,
+        "reimagined": 21181.063,
+        "sunny": 18725.758
+      },
+      "uid": 6336721,
+      "username": "[Paw]FIood"
+    },
+    {
+      "file": "players/6452862.json",
+      "fixture": "bp-lists",
+      "scores": 100,
+      "total_pp": {
+        "bancho": 19522.64,
+        "codexxy": 17607.27,
+        "reimagined": 20800.304,
+        "sunny": 18195.297
+      },
+      "uid": 6452862,
+      "username": "Afro_ilshio"
+    },
+    {
+      "file": "players/6556546.json",
+      "fixture": "bp-lists",
+      "scores": 100,
+      "total_pp": {
+        "bancho": 19194.947,
+        "codexxy": 17258.575,
+        "reimagined": 20523.211,
+        "sunny": 17954.35
+      },
+      "uid": 6556546,
+      "username": "Moo99999999"
+    },
+    {
+      "file": "players/6857841.json",
+      "fixture": "bp-lists",
+      "scores": 100,
+      "total_pp": {
+        "bancho": 22587.497,
+        "codexxy": 20380.557,
+        "reimagined": 23452.132,
+        "sunny": 20723.227
+      },
+      "uid": 6857841,
+      "username": "timebuka"
+    },
+    {
+      "file": "players/6968857.json",
+      "fixture": "bp-lists",
+      "scores": 100,
+      "total_pp": {
+        "bancho": 22623.113,
+        "codexxy": 19721.284,
+        "reimagined": 22747.487,
+        "sunny": 20168.875
+      },
+      "uid": 6968857,
+      "username": "[NaNachi]"
+    },
+    {
+      "file": "players/7156634.json",
+      "fixture": "bp-lists",
+      "scores": 100,
+      "total_pp": {
+        "bancho": 20547.757,
+        "codexxy": 19035.641,
+        "reimagined": 21812.051,
+        "sunny": 19373.217
+      },
+      "uid": 7156634,
+      "username": "bms"
+    },
+    {
+      "file": "players/7195415.json",
+      "fixture": "bp-lists",
+      "scores": 100,
+      "total_pp": {
+        "bancho": 19459.09,
+        "codexxy": 20538.078,
+        "reimagined": 23101.118,
+        "sunny": 20739.321
+      },
+      "uid": 7195415,
+      "username": "wy_"
+    },
+    {
+      "file": "players/7304158.json",
+      "fixture": "bp-lists",
+      "scores": 100,
+      "total_pp": {
+        "bancho": 23368.177,
+        "codexxy": 21686.146,
+        "reimagined": 24453.289,
+        "sunny": 21834.947
+      },
+      "uid": 7304158,
+      "username": "Crusher"
+    },
+    {
+      "file": "players/7381289.json",
+      "fixture": "bp-lists",
+      "scores": 100,
+      "total_pp": {
+        "bancho": 23592.319,
+        "codexxy": 20803.536,
+        "reimagined": 23873.359,
+        "sunny": 21164.494
+      },
+      "uid": 7381289,
+      "username": "Stink God"
+    },
+    {
+      "file": "players/7516567.json",
+      "fixture": "bp-lists",
+      "scores": 100,
+      "total_pp": {
+        "bancho": 19960.354,
+        "codexxy": 18620.585,
+        "reimagined": 21480.486,
+        "sunny": 19061.685
+      },
+      "uid": 7516567,
+      "username": "Jesuren"
+    },
+    {
+      "file": "players/7589503.json",
+      "fixture": "bp-lists",
+      "scores": 100,
+      "total_pp": {
+        "bancho": 22665.587,
+        "codexxy": 22024.151,
+        "reimagined": 24763.043,
+        "sunny": 22130.832
+      },
+      "uid": 7589503,
+      "username": "RaffCo"
+    },
+    {
+      "file": "players/7727987.json",
+      "fixture": "bp-lists",
+      "scores": 100,
+      "total_pp": {
+        "bancho": 20923.449,
+        "codexxy": 21831.799,
+        "reimagined": 24556.441,
+        "sunny": 21919.317
+      },
+      "uid": 7727987,
+      "username": "Neokje"
+    },
+    {
+      "file": "players/7851086.json",
+      "fixture": "bp-lists",
+      "scores": 100,
+      "total_pp": {
+        "bancho": 21373.783,
+        "codexxy": 21522.917,
+        "reimagined": 24558.532,
+        "sunny": 21783.847
+      },
+      "uid": 7851086,
+      "username": "kiaod"
+    },
+    {
+      "file": "players/7860283.json",
+      "fixture": "bp-lists",
+      "scores": 100,
+      "total_pp": {
+        "bancho": 21980.049,
+        "codexxy": 19558.837,
+        "reimagined": 22426.946,
+        "sunny": 19885.129
+      },
+      "uid": 7860283,
+      "username": "Summit_"
+    },
+    {
+      "file": "players/8035811.json",
+      "fixture": "bp-lists",
+      "scores": 100,
+      "total_pp": {
+        "bancho": 19974.627,
+        "codexxy": 19699.314,
+        "reimagined": 22659.924,
+        "sunny": 19909.191
+      },
+      "uid": 8035811,
+      "username": "Nara_S2"
+    },
+    {
+      "file": "players/8046839.json",
+      "fixture": "bp-lists",
+      "scores": 100,
+      "total_pp": {
+        "bancho": 20643.663,
+        "codexxy": 21216.976,
+        "reimagined": 23871.263,
+        "sunny": 21392.831
+      },
+      "uid": 8046839,
+      "username": "Alchemy"
+    },
+    {
+      "file": "players/8474029.json",
+      "fixture": "bp-lists",
+      "scores": 100,
+      "total_pp": {
+        "bancho": 20470.412,
+        "codexxy": 22214.656,
+        "reimagined": 24428.84,
+        "sunny": 22335.027
+      },
+      "uid": 8474029,
+      "username": "wonder5193"
+    },
+    {
+      "file": "players/8534840.json",
+      "fixture": "bp-lists",
+      "scores": 100,
+      "total_pp": {
+        "bancho": 19652.515,
+        "codexxy": 19201.598,
+        "reimagined": 21762.596,
+        "sunny": 19372.168
+      },
+      "uid": 8534840,
+      "username": "DawnX"
+    },
+    {
+      "file": "players/8677684.json",
+      "fixture": "bp-lists",
+      "scores": 100,
+      "total_pp": {
+        "bancho": 23185.868,
+        "codexxy": 21417.293,
+        "reimagined": 24042.071,
+        "sunny": 21491.558
+      },
+      "uid": 8677684,
+      "username": "Onta_Bekasi"
+    },
+    {
+      "file": "players/8716749.json",
+      "fixture": "bp-lists",
+      "scores": 100,
+      "total_pp": {
+        "bancho": 24948.302,
+        "codexxy": 22714.815,
+        "reimagined": 25644.471,
+        "sunny": 22885.963
+      },
+      "uid": 8716749,
+      "username": "Dety"
+    },
+    {
+      "file": "players/8748664.json",
+      "fixture": "bp-lists",
+      "scores": 100,
+      "total_pp": {
+        "bancho": 20461.801,
+        "codexxy": 21135.919,
+        "reimagined": 23802.082,
+        "sunny": 21357.27
+      },
+      "uid": 8748664,
+      "username": "Arona"
+    },
+    {
+      "file": "players/9428989.json",
+      "fixture": "bp-lists",
+      "scores": 100,
+      "total_pp": {
+        "bancho": 23624.899,
+        "codexxy": 21978.512,
+        "reimagined": 24853.695,
+        "sunny": 22185.695
+      },
+      "uid": 9428989,
+      "username": "4044"
+    },
+    {
+      "file": "players/9880422.json",
+      "fixture": "bp-lists",
+      "scores": 100,
+      "total_pp": {
+        "bancho": 24730.627,
+        "codexxy": 21990.494,
+        "reimagined": 24816.356,
+        "sunny": 22257.652
+      },
+      "uid": 9880422,
+      "username": "rubyy"
+    },
+    {
+      "file": "players/10011429.json",
+      "fixture": "bp-lists",
+      "scores": 100,
+      "total_pp": {
+        "bancho": 22726.021,
+        "codexxy": 20365.342,
+        "reimagined": 23560.332,
+        "sunny": 20766.04
+      },
+      "uid": 10011429,
+      "username": "[ misa ]"
+    },
+    {
+      "file": "players/10072733.json",
+      "fixture": "bp-lists",
+      "scores": 100,
+      "total_pp": {
+        "bancho": 19854.444,
+        "codexxy": 22800.553,
+        "reimagined": 22431.089,
+        "sunny": 22508.05
+      },
+      "uid": 10072733,
+      "username": "myucchii"
+    },
+    {
+      "file": "players/10079171.json",
+      "fixture": "bp-lists",
+      "scores": 100,
+      "total_pp": {
+        "bancho": 20442.102,
+        "codexxy": 20190.352,
+        "reimagined": 22782.736,
+        "sunny": 20395.34
+      },
+      "uid": 10079171,
+      "username": "Epi75"
+    },
+    {
+      "file": "players/10132430.json",
+      "fixture": "bp-lists",
+      "scores": 100,
+      "total_pp": {
+        "bancho": 25661.257,
+        "codexxy": 23545.091,
+        "reimagined": 25985.682,
+        "sunny": 23517.745
+      },
+      "uid": 10132430,
+      "username": "NKEYBOARD"
+    },
+    {
+      "file": "players/10303887.json",
+      "fixture": "bp-lists",
+      "scores": 100,
+      "total_pp": {
+        "bancho": 26618.656,
+        "codexxy": 23382.171,
+        "reimagined": 26039.654,
+        "sunny": 23544.411
+      },
+      "uid": 10303887,
+      "username": "oct4"
+    },
+    {
+      "file": "players/10351684.json",
+      "fixture": "bp-lists",
+      "scores": 100,
+      "total_pp": {
+        "bancho": 19088.718,
+        "codexxy": 18002.236,
+        "reimagined": 21076.233,
+        "sunny": 18406.795
+      },
+      "uid": 10351684,
+      "username": "AWMRone"
+    },
+    {
+      "file": "players/10374991.json",
+      "fixture": "bp-lists",
+      "scores": 100,
+      "total_pp": {
+        "bancho": 21931.965,
+        "codexxy": 19465.884,
+        "reimagined": 22398.534,
+        "sunny": 19894.765
+      },
+      "uid": 10374991,
+      "username": "Sirelia"
+    },
+    {
+      "file": "players/10512663.json",
+      "fixture": "bp-lists",
+      "scores": 100,
+      "total_pp": {
+        "bancho": 24638.729,
+        "codexxy": 22022.595,
+        "reimagined": 24837.522,
+        "sunny": 22244.894
+      },
+      "uid": 10512663,
+      "username": "af-"
+    },
+    {
+      "file": "players/10553101.json",
+      "fixture": "bp-lists",
+      "scores": 100,
+      "total_pp": {
+        "bancho": 22632.617,
+        "codexxy": 20660.315,
+        "reimagined": 23747.465,
+        "sunny": 21118.473
+      },
+      "uid": 10553101,
+      "username": "Wintering"
+    },
+    {
+      "file": "players/10569738.json",
+      "fixture": "bp-lists",
+      "scores": 100,
+      "total_pp": {
+        "bancho": 23868.763,
+        "codexxy": 22034.722,
+        "reimagined": 24610.193,
+        "sunny": 22176.867
+      },
+      "uid": 10569738,
+      "username": "QingJiDing"
+    },
+    {
+      "file": "players/10878878.json",
+      "fixture": "bp-lists",
+      "scores": 100,
+      "total_pp": {
+        "bancho": 20501.416,
+        "codexxy": 20314.792,
+        "reimagined": 23326.248,
+        "sunny": 20678.367
+      },
+      "uid": 10878878,
+      "username": "chumpup"
+    },
+    {
+      "file": "players/10887359.json",
+      "fixture": "bp-lists",
+      "scores": 100,
+      "total_pp": {
+        "bancho": 20777.519,
+        "codexxy": 18601.235,
+        "reimagined": 21694.982,
+        "sunny": 19042.298
+      },
+      "uid": 10887359,
+      "username": "Bozbro555"
+    },
+    {
+      "file": "players/10888689.json",
+      "fixture": "bp-lists",
+      "scores": 100,
+      "total_pp": {
+        "bancho": 19793.26,
+        "codexxy": 17338.718,
+        "reimagined": 20379.29,
+        "sunny": 18005.821
+      },
+      "uid": 10888689,
+      "username": "[LS]Gavin"
+    },
+    {
+      "file": "players/10910337.json",
+      "fixture": "bp-lists",
+      "scores": 100,
+      "total_pp": {
+        "bancho": 25172.405,
+        "codexxy": 23080.359,
+        "reimagined": 25645.517,
+        "sunny": 23174.591
+      },
+      "uid": 10910337,
+      "username": "human"
+    },
+    {
+      "file": "players/11290311.json",
+      "fixture": "bp-lists",
+      "scores": 100,
+      "total_pp": {
+        "bancho": 21447.398,
+        "codexxy": 19397.485,
+        "reimagined": 22675.572,
+        "sunny": 19902.741
+      },
+      "uid": 11290311,
+      "username": "Tyronix"
+    },
+    {
+      "file": "players/11420405.json",
+      "fixture": "bp-lists",
+      "scores": 100,
+      "total_pp": {
+        "bancho": 24546.342,
+        "codexxy": 25223.905,
+        "reimagined": 27545.475,
+        "sunny": 25095.358
+      },
+      "uid": 11420405,
+      "username": "Ojisan-"
+    },
+    {
+      "file": "players/11429144.json",
+      "fixture": "bp-lists",
+      "scores": 100,
+      "total_pp": {
+        "bancho": 19816.463,
+        "codexxy": 19831.485,
+        "reimagined": 22811.193,
+        "sunny": 20190.338
+      },
+      "uid": 11429144,
+      "username": "LeongKat"
+    },
+    {
+      "file": "players/11557167.json",
+      "fixture": "bp-lists",
+      "scores": 100,
+      "total_pp": {
+        "bancho": 19609.4,
+        "codexxy": 18427.941,
+        "reimagined": 21484.161,
+        "sunny": 18662.423
+      },
+      "uid": 11557167,
+      "username": "Akala Kai"
+    },
+    {
+      "file": "players/11566799.json",
+      "fixture": "bp-lists",
+      "scores": 100,
+      "total_pp": {
+        "bancho": 21266.667,
+        "codexxy": 18935.999,
+        "reimagined": 22029.568,
+        "sunny": 19389.465
+      },
+      "uid": 11566799,
+      "username": "Shepped"
+    },
+    {
+      "file": "players/11658296.json",
+      "fixture": "bp-lists",
+      "scores": 100,
+      "total_pp": {
+        "bancho": 19970.399,
+        "codexxy": 19053.625,
+        "reimagined": 21953.209,
+        "sunny": 19390.252
+      },
+      "uid": 11658296,
+      "username": "[hgamea]"
+    },
+    {
+      "file": "players/11659956.json",
+      "fixture": "bp-lists",
+      "scores": 100,
+      "total_pp": {
+        "bancho": 19076.799,
+        "codexxy": 18919.209,
+        "reimagined": 21671.815,
+        "sunny": 19279.218
+      },
+      "uid": 11659956,
+      "username": "gary061014"
+    },
+    {
+      "file": "players/11799958.json",
+      "fixture": "bp-lists",
+      "scores": 100,
+      "total_pp": {
+        "bancho": 22550.701,
+        "codexxy": 19405.241,
+        "reimagined": 22343.968,
+        "sunny": 19821.555
+      },
+      "uid": 11799958,
+      "username": "buenoo"
+    },
+    {
+      "file": "players/11956607.json",
+      "fixture": "bp-lists",
+      "scores": 100,
+      "total_pp": {
+        "bancho": 21696.432,
+        "codexxy": 20090.841,
+        "reimagined": 23138.862,
+        "sunny": 20553.652
+      },
+      "uid": 11956607,
+      "username": "Adogg145"
+    },
+    {
+      "file": "players/11976455.json",
+      "fixture": "bp-lists",
+      "scores": 100,
+      "total_pp": {
+        "bancho": 20184.464,
+        "codexxy": 19194.244,
+        "reimagined": 22132.864,
+        "sunny": 19458.288
+      },
+      "uid": 11976455,
+      "username": "Enie"
+    },
+    {
+      "file": "players/12017594.json",
+      "fixture": "bp-lists",
+      "scores": 100,
+      "total_pp": {
+        "bancho": 22927.639,
+        "codexxy": 20666.752,
+        "reimagined": 23660.447,
+        "sunny": 20939.504
+      },
+      "uid": 12017594,
+      "username": "Leototo"
+    },
+    {
+      "file": "players/12040572.json",
+      "fixture": "bp-lists",
+      "scores": 100,
+      "total_pp": {
+        "bancho": 24711.194,
+        "codexxy": 22870.522,
+        "reimagined": 25790.889,
+        "sunny": 23036.676
+      },
+      "uid": 12040572,
+      "username": "hamina"
+    },
+    {
+      "file": "players/12055954.json",
+      "fixture": "bp-lists",
+      "scores": 100,
+      "total_pp": {
+        "bancho": 21088.527,
+        "codexxy": 19304.518,
+        "reimagined": 22183.281,
+        "sunny": 19650.108
+      },
+      "uid": 12055954,
+      "username": "sir aelay"
+    },
+    {
+      "file": "players/12101157.json",
+      "fixture": "bp-lists",
+      "scores": 100,
+      "total_pp": {
+        "bancho": 20383.091,
+        "codexxy": 19259.639,
+        "reimagined": 22271.356,
+        "sunny": 19514.971
+      },
+      "uid": 12101157,
+      "username": "nickulott"
+    },
+    {
+      "file": "players/12572401.json",
+      "fixture": "bp-lists",
+      "scores": 100,
+      "total_pp": {
+        "bancho": 25579.898,
+        "codexxy": 22395.12,
+        "reimagined": 25147.994,
+        "sunny": 22583.392
+      },
+      "uid": 12572401,
+      "username": "mpreg"
+    },
+    {
+      "file": "players/12598261.json",
+      "fixture": "bp-lists",
+      "scores": 100,
+      "total_pp": {
+        "bancho": 25310.936,
+        "codexxy": 22804.639,
+        "reimagined": 25462.105,
+        "sunny": 22896.008
+      },
+      "uid": 12598261,
+      "username": "MayanoTopGun"
+    },
+    {
+      "file": "players/12830719.json",
+      "fixture": "bp-lists",
+      "scores": 100,
+      "total_pp": {
+        "bancho": 20415.762,
+        "codexxy": 17796.519,
+        "reimagined": 20881.819,
+        "sunny": 18419.839
+      },
+      "uid": 12830719,
+      "username": "jangwook"
+    },
+    {
+      "file": "players/13018117.json",
+      "fixture": "bp-lists",
+      "scores": 100,
+      "total_pp": {
+        "bancho": 24800.742,
+        "codexxy": 22072.05,
+        "reimagined": 24771.461,
+        "sunny": 22265.529
+      },
+      "uid": 13018117,
+      "username": "josiaxarg"
+    },
+    {
+      "file": "players/13359872.json",
+      "fixture": "bp-lists",
+      "scores": 100,
+      "total_pp": {
+        "bancho": 19036.516,
+        "codexxy": 17418.008,
+        "reimagined": 20375.357,
+        "sunny": 17906.146
+      },
+      "uid": 13359872,
+      "username": "[MY] Ril"
+    },
+    {
+      "file": "players/13408635.json",
+      "fixture": "bp-lists",
+      "scores": 100,
+      "total_pp": {
+        "bancho": 20771.954,
+        "codexxy": 18350.436,
+        "reimagined": 21445.593,
+        "sunny": 18825.104
+      },
+      "uid": 13408635,
+      "username": "[LynX]"
+    },
+    {
+      "file": "players/13431947.json",
+      "fixture": "bp-lists",
+      "scores": 100,
+      "total_pp": {
+        "bancho": 19078.96,
+        "codexxy": 17401.521,
+        "reimagined": 20366.739,
+        "sunny": 17834.082
+      },
+      "uid": 13431947,
+      "username": "Jerem[Monkey]"
+    },
+    {
+      "file": "players/13465246.json",
+      "fixture": "bp-lists",
+      "scores": 100,
+      "total_pp": {
+        "bancho": 25381.816,
+        "codexxy": 22299.28,
+        "reimagined": 25075.631,
+        "sunny": 22553.962
+      },
+      "uid": 13465246,
+      "username": "TheSnowie"
+    },
+    {
+      "file": "players/13847712.json",
+      "fixture": "bp-lists",
+      "scores": 100,
+      "total_pp": {
+        "bancho": 23702.742,
+        "codexxy": 20596.572,
+        "reimagined": 23881.454,
+        "sunny": 21089.949
+      },
+      "uid": 13847712,
+      "username": "DannyXLee"
+    },
+    {
+      "file": "players/13847951.json",
+      "fixture": "bp-lists",
+      "scores": 100,
+      "total_pp": {
+        "bancho": 20314.166,
+        "codexxy": 18832.905,
+        "reimagined": 21629.553,
+        "sunny": 19194.041
+      },
+      "uid": 13847951,
+      "username": "Dale940"
+    },
+    {
+      "file": "players/14160917.json",
+      "fixture": "bp-lists",
+      "scores": 100,
+      "total_pp": {
+        "bancho": 20274.751,
+        "codexxy": 18685.442,
+        "reimagined": 21514.085,
+        "sunny": 19139.722
+      },
+      "uid": 14160917,
+      "username": "CurrenChan"
+    },
+    {
+      "file": "players/14281898.json",
+      "fixture": "bp-lists",
+      "scores": 100,
+      "total_pp": {
+        "bancho": 24263.956,
+        "codexxy": 21270.103,
+        "reimagined": 24246.878,
+        "sunny": 21558.325
+      },
+      "uid": 14281898,
+      "username": "GuGuGaGa"
+    },
+    {
+      "file": "players/14318312.json",
+      "fixture": "bp-lists",
+      "scores": 100,
+      "total_pp": {
+        "bancho": 24547.047,
+        "codexxy": 21867.284,
+        "reimagined": 24630.358,
+        "sunny": 22096.193
+      },
+      "uid": 14318312,
+      "username": "[Crz]Reimu"
+    },
+    {
+      "file": "players/14526718.json",
+      "fixture": "bp-lists",
+      "scores": 100,
+      "total_pp": {
+        "bancho": 19752.155,
+        "codexxy": 17833.76,
+        "reimagined": 20886.563,
+        "sunny": 18403.262
+      },
+      "uid": 14526718,
+      "username": "Zengzengyyds"
+    },
+    {
+      "file": "players/14588134.json",
+      "fixture": "bp-lists",
+      "scores": 100,
+      "total_pp": {
+        "bancho": 20191.451,
+        "codexxy": 18619.987,
+        "reimagined": 21794.313,
+        "sunny": 19074.163
+      },
+      "uid": 14588134,
+      "username": "Endorfinn-"
+    },
+    {
+      "file": "players/14626174.json",
+      "fixture": "bp-lists",
+      "scores": 100,
+      "total_pp": {
+        "bancho": 20156.46,
+        "codexxy": 18186.568,
+        "reimagined": 21396.696,
+        "sunny": 18648.567
+      },
+      "uid": 14626174,
+      "username": "badu704"
+    },
+    {
+      "file": "players/14631339.json",
+      "fixture": "bp-lists",
+      "scores": 100,
+      "total_pp": {
+        "bancho": 20729.026,
+        "codexxy": 18789.434,
+        "reimagined": 21747.366,
+        "sunny": 19140.818
+      },
+      "uid": 14631339,
+      "username": "lnote_"
+    },
+    {
+      "file": "players/14880391.json",
+      "fixture": "bp-lists",
+      "scores": 100,
+      "total_pp": {
+        "bancho": 23301.135,
+        "codexxy": 22401.922,
+        "reimagined": 24948.896,
+        "sunny": 22561.218
+      },
+      "uid": 14880391,
+      "username": "BanDalGom1"
+    },
+    {
+      "file": "players/15514768.json",
+      "fixture": "bp-lists",
+      "scores": 100,
+      "total_pp": {
+        "bancho": 20126.82,
+        "codexxy": 17951.427,
+        "reimagined": 21190.43,
+        "sunny": 18513.328
+      },
+      "uid": 15514768,
+      "username": "Kristina-"
+    },
+    {
+      "file": "players/15690480.json",
+      "fixture": "bp-lists",
+      "scores": 100,
+      "total_pp": {
+        "bancho": 22908.215,
+        "codexxy": 19591.963,
+        "reimagined": 22895.461,
+        "sunny": 20136.263
+      },
+      "uid": 15690480,
+      "username": "do you fart"
+    },
+    {
+      "file": "players/15903870.json",
+      "fixture": "bp-lists",
+      "scores": 100,
+      "total_pp": {
+        "bancho": 20520.256,
+        "codexxy": 18203.599,
+        "reimagined": 21240.776,
+        "sunny": 18753.372
+      },
+      "uid": 15903870,
+      "username": "pulip"
+    },
+    {
+      "file": "players/15927535.json",
+      "fixture": "bp-lists",
+      "scores": 100,
+      "total_pp": {
+        "bancho": 25952.294,
+        "codexxy": 23246.334,
+        "reimagined": 25841.741,
+        "sunny": 23359.612
+      },
+      "uid": 15927535,
+      "username": "venyez"
+    },
+    {
+      "file": "players/16012377.json",
+      "fixture": "bp-lists",
+      "scores": 100,
+      "total_pp": {
+        "bancho": 22830.412,
+        "codexxy": 21120.847,
+        "reimagined": 23996.067,
+        "sunny": 21351.171
+      },
+      "uid": 16012377,
+      "username": "[-Tricked-]"
+    },
+    {
+      "file": "players/16092277.json",
+      "fixture": "bp-lists",
+      "scores": 100,
+      "total_pp": {
+        "bancho": 19211.162,
+        "codexxy": 17821.232,
+        "reimagined": 20786.986,
+        "sunny": 18361.173
+      },
+      "uid": 16092277,
+      "username": "LED_oraja"
+    },
+    {
+      "file": "players/16162078.json",
+      "fixture": "bp-lists",
+      "scores": 100,
+      "total_pp": {
+        "bancho": 19023.944,
+        "codexxy": 18524.901,
+        "reimagined": 21573.068,
+        "sunny": 19006.981
+      },
+      "uid": 16162078,
+      "username": "Usie"
+    },
+    {
+      "file": "players/16270273.json",
+      "fixture": "bp-lists",
+      "scores": 100,
+      "total_pp": {
+        "bancho": 19359.441,
+        "codexxy": 19753.427,
+        "reimagined": 22302.165,
+        "sunny": 19934.753
+      },
+      "uid": 16270273,
+      "username": "[UTGY]"
+    },
+    {
+      "file": "players/16297375.json",
+      "fixture": "bp-lists",
+      "scores": 100,
+      "total_pp": {
+        "bancho": 19533.556,
+        "codexxy": 17561.834,
+        "reimagined": 20611.452,
+        "sunny": 18082.098
+      },
+      "uid": 16297375,
+      "username": "fish cakiee"
+    },
+    {
+      "file": "players/16415677.json",
+      "fixture": "bp-lists",
+      "scores": 100,
+      "total_pp": {
+        "bancho": 20725.854,
+        "codexxy": 19472.785,
+        "reimagined": 22386.49,
+        "sunny": 19800.315
+      },
+      "uid": 16415677,
+      "username": "uni3924"
+    },
+    {
+      "file": "players/16566148.json",
+      "fixture": "bp-lists",
+      "scores": 100,
+      "total_pp": {
+        "bancho": 23556.097,
+        "codexxy": 21648.982,
+        "reimagined": 24510.09,
+        "sunny": 21901.136
+      },
+      "uid": 16566148,
+      "username": "M2UFanboy"
+    },
+    {
+      "file": "players/17303433.json",
+      "fixture": "bp-lists",
+      "scores": 100,
+      "total_pp": {
+        "bancho": 23344.185,
+        "codexxy": 20770.422,
+        "reimagined": 23827.788,
+        "sunny": 21115.374
+      },
+      "uid": 17303433,
+      "username": "pboo2424"
+    },
+    {
+      "file": "players/17557759.json",
+      "fixture": "bp-lists",
+      "scores": 100,
+      "total_pp": {
+        "bancho": 24637.84,
+        "codexxy": 21658.318,
+        "reimagined": 24652.408,
+        "sunny": 22030.795
+      },
+      "uid": 17557759,
+      "username": "Lynxaar"
+    },
+    {
+      "file": "players/17651703.json",
+      "fixture": "bp-lists",
+      "scores": 100,
+      "total_pp": {
+        "bancho": 22775.081,
+        "codexxy": 20844.209,
+        "reimagined": 23612.93,
+        "sunny": 21095.05
+      },
+      "uid": 17651703,
+      "username": "Leni"
+    },
+    {
+      "file": "players/17753122.json",
+      "fixture": "bp-lists",
+      "scores": 100,
+      "total_pp": {
+        "bancho": 19223.116,
+        "codexxy": 21153.445,
+        "reimagined": 20621.423,
+        "sunny": 21055.37
+      },
+      "uid": 17753122,
+      "username": "invadey"
+    },
+    {
+      "file": "players/17932840.json",
+      "fixture": "bp-lists",
+      "scores": 100,
+      "total_pp": {
+        "bancho": 21353.774,
+        "codexxy": 20270.073,
+        "reimagined": 23043.185,
+        "sunny": 20521.285
+      },
+      "uid": 17932840,
+      "username": "Modern"
+    },
+    {
+      "file": "players/18043326.json",
+      "fixture": "bp-lists",
+      "scores": 100,
+      "total_pp": {
+        "bancho": 22921.095,
+        "codexxy": 20264.722,
+        "reimagined": 23205.172,
+        "sunny": 20668.231
+      },
+      "uid": 18043326,
+      "username": "Joki_"
+    },
+    {
+      "file": "players/18142679.json",
+      "fixture": "bp-lists",
+      "scores": 100,
+      "total_pp": {
+        "bancho": 20225.625,
+        "codexxy": 18117.973,
+        "reimagined": 21117.597,
+        "sunny": 18635.888
+      },
+      "uid": 18142679,
+      "username": "U a"
+    },
+    {
+      "file": "players/18236316.json",
+      "fixture": "bp-lists",
+      "scores": 100,
+      "total_pp": {
+        "bancho": 19158.372,
+        "codexxy": 18134.327,
+        "reimagined": 20561.379,
+        "sunny": 18428.745
+      },
+      "uid": 18236316,
+      "username": "Sawdust Inhaler"
+    },
+    {
+      "file": "players/18271627.json",
+      "fixture": "bp-lists",
+      "scores": 100,
+      "total_pp": {
+        "bancho": 21635.72,
+        "codexxy": 20117.638,
+        "reimagined": 22897.91,
+        "sunny": 20457.999
+      },
+      "uid": 18271627,
+      "username": "grillroasted"
+    },
+    {
+      "file": "players/18282863.json",
+      "fixture": "bp-lists",
+      "scores": 100,
+      "total_pp": {
+        "bancho": 21458.92,
+        "codexxy": 21365.537,
+        "reimagined": 24199.724,
+        "sunny": 21602.095
+      },
+      "uid": 18282863,
+      "username": "HxcQ777"
+    },
+    {
+      "file": "players/18664411.json",
+      "fixture": "bp-lists",
+      "scores": 100,
+      "total_pp": {
+        "bancho": 22061.375,
+        "codexxy": 19845.145,
+        "reimagined": 22759.865,
+        "sunny": 20288.429
+      },
+      "uid": 18664411,
+      "username": "Potaterr"
+    },
+    {
+      "file": "players/19367321.json",
+      "fixture": "bp-lists",
+      "scores": 100,
+      "total_pp": {
+        "bancho": 21967.923,
+        "codexxy": 18632.329,
+        "reimagined": 21846.668,
+        "sunny": 19226.233
+      },
+      "uid": 19367321,
+      "username": "xinhun"
+    },
+    {
+      "file": "players/19446399.json",
+      "fixture": "bp-lists",
+      "scores": 100,
+      "total_pp": {
+        "bancho": 24383.762,
+        "codexxy": 20683.885,
+        "reimagined": 23884.277,
+        "sunny": 21140.222
+      },
+      "uid": 19446399,
+      "username": "Robeats"
+    },
+    {
+      "file": "players/19780970.json",
+      "fixture": "bp-lists",
+      "scores": 100,
+      "total_pp": {
+        "bancho": 19293.351,
+        "codexxy": 16563.584,
+        "reimagined": 19378.821,
+        "sunny": 17146.076
+      },
+      "uid": 19780970,
+      "username": "haydedanny"
+    },
+    {
+      "file": "players/19791211.json",
+      "fixture": "bp-lists",
+      "scores": 100,
+      "total_pp": {
+        "bancho": 25656.537,
+        "codexxy": 23853.988,
+        "reimagined": 26197.246,
+        "sunny": 23782.214
+      },
+      "uid": 19791211,
+      "username": "DellyK"
+    },
+    {
+      "file": "players/19965357.json",
+      "fixture": "bp-lists",
+      "scores": 100,
+      "total_pp": {
+        "bancho": 25814.137,
+        "codexxy": 23281.274,
+        "reimagined": 25877.283,
+        "sunny": 23358.472
+      },
+      "uid": 19965357,
+      "username": "NLWasTaken"
+    },
+    {
+      "file": "players/19970192.json",
+      "fixture": "bp-lists",
+      "scores": 100,
+      "total_pp": {
+        "bancho": 20665.563,
+        "codexxy": 24272.831,
+        "reimagined": 24087.763,
+        "sunny": 23765.515
+      },
+      "uid": 19970192,
+      "username": "saragi"
+    },
+    {
+      "file": "players/20360332.json",
+      "fixture": "bp-lists",
+      "scores": 100,
+      "total_pp": {
+        "bancho": 20057.147,
+        "codexxy": 19105.783,
+        "reimagined": 21422.509,
+        "sunny": 19283.455
+      },
+      "uid": 20360332,
+      "username": "bambi fnf"
+    },
+    {
+      "file": "players/20600375.json",
+      "fixture": "bp-lists",
+      "scores": 100,
+      "total_pp": {
+        "bancho": 18906.295,
+        "codexxy": 16414.457,
+        "reimagined": 19287.657,
+        "sunny": 17025.077
+      },
+      "uid": 20600375,
+      "username": "PatrickPatStar"
+    },
+    {
+      "file": "players/20809032.json",
+      "fixture": "bp-lists",
+      "scores": 100,
+      "total_pp": {
+        "bancho": 23142.448,
+        "codexxy": 20755.672,
+        "reimagined": 23531.204,
+        "sunny": 20927.494
+      },
+      "uid": 20809032,
+      "username": "zec"
+    },
+    {
+      "file": "players/20834055.json",
+      "fixture": "bp-lists",
+      "scores": 100,
+      "total_pp": {
+        "bancho": 23795.173,
+        "codexxy": 21660.331,
+        "reimagined": 24327.797,
+        "sunny": 21923.424
+      },
+      "uid": 20834055,
+      "username": "_yea"
+    },
+    {
+      "file": "players/21846136.json",
+      "fixture": "bp-lists",
+      "scores": 100,
+      "total_pp": {
+        "bancho": 20829.339,
+        "codexxy": 18525.709,
+        "reimagined": 21624.567,
+        "sunny": 18924.689
+      },
+      "uid": 21846136,
+      "username": "StupidSnake"
+    },
+    {
+      "file": "players/22157047.json",
+      "fixture": "bp-lists",
+      "scores": 100,
+      "total_pp": {
+        "bancho": 20088.904,
+        "codexxy": 18828.521,
+        "reimagined": 21779.332,
+        "sunny": 19221.126
+      },
+      "uid": 22157047,
+      "username": "-Z_Z-"
+    },
+    {
+      "file": "players/22668430.json",
+      "fixture": "bp-lists",
+      "scores": 100,
+      "total_pp": {
+        "bancho": 19086.036,
+        "codexxy": 16581.866,
+        "reimagined": 19749.558,
+        "sunny": 17315.206
+      },
+      "uid": 22668430,
+      "username": "c_latte"
+    },
+    {
+      "file": "players/22791301.json",
+      "fixture": "bp-lists",
+      "scores": 100,
+      "total_pp": {
+        "bancho": 23243.569,
+        "codexxy": 21891.497,
+        "reimagined": 24345.097,
+        "sunny": 21978.959
+      },
+      "uid": 22791301,
+      "username": "_93"
+    },
+    {
+      "file": "players/23244116.json",
+      "fixture": "bp-lists",
+      "scores": 100,
+      "total_pp": {
+        "bancho": 19005.359,
+        "codexxy": 17559.195,
+        "reimagined": 20546.66,
+        "sunny": 18069.075
+      },
+      "uid": 23244116,
+      "username": "Manolo_"
+    },
+    {
+      "file": "players/23674122.json",
+      "fixture": "bp-lists",
+      "scores": 100,
+      "total_pp": {
+        "bancho": 20839.921,
+        "codexxy": 18119.262,
+        "reimagined": 21170.996,
+        "sunny": 18629.637
+      },
+      "uid": 23674122,
+      "username": "Lammy"
+    },
+    {
+      "file": "players/23779738.json",
+      "fixture": "bp-lists",
+      "scores": 100,
+      "total_pp": {
+        "bancho": 23861.468,
+        "codexxy": 20777.968,
+        "reimagined": 23970.23,
+        "sunny": 21138.833
+      },
+      "uid": 23779738,
+      "username": "NamelessFanatic"
+    },
+    {
+      "file": "players/24075447.json",
+      "fixture": "bp-lists",
+      "scores": 100,
+      "total_pp": {
+        "bancho": 19648.93,
+        "codexxy": 17935.537,
+        "reimagined": 19846.567,
+        "sunny": 18055.442
+      },
+      "uid": 24075447,
+      "username": "Rei_Insana300"
+    },
+    {
+      "file": "players/24140109.json",
+      "fixture": "bp-lists",
+      "scores": 100,
+      "total_pp": {
+        "bancho": 19660.001,
+        "codexxy": 18845.513,
+        "reimagined": 21719.392,
+        "sunny": 19211.462
+      },
+      "uid": 24140109,
+      "username": "- Kopi -"
+    },
+    {
+      "file": "players/24144271.json",
+      "fixture": "bp-lists",
+      "scores": 100,
+      "total_pp": {
+        "bancho": 20396.77,
+        "codexxy": 21978.829,
+        "reimagined": 21660.246,
+        "sunny": 22045.589
+      },
+      "uid": 24144271,
+      "username": "eiEn_"
+    },
+    {
+      "file": "players/24675802.json",
+      "fixture": "bp-lists",
+      "scores": 100,
+      "total_pp": {
+        "bancho": 26626.499,
+        "codexxy": 23514.828,
+        "reimagined": 26181.743,
+        "sunny": 23607.959
+      },
+      "uid": 24675802,
+      "username": "logann"
+    },
+    {
+      "file": "players/24849011.json",
+      "fixture": "bp-lists",
+      "scores": 100,
+      "total_pp": {
+        "bancho": 24527.351,
+        "codexxy": 22137.833,
+        "reimagined": 24689.255,
+        "sunny": 22253.076
+      },
+      "uid": 24849011,
+      "username": "INightPlay"
+    },
+    {
+      "file": "players/25426411.json",
+      "fixture": "bp-lists",
+      "scores": 100,
+      "total_pp": {
+        "bancho": 20142.773,
+        "codexxy": 17236.106,
+        "reimagined": 20372.9,
+        "sunny": 17885.833
+      },
+      "uid": 25426411,
+      "username": "Focoo"
+    },
+    {
+      "file": "players/25750653.json",
+      "fixture": "bp-lists",
+      "scores": 100,
+      "total_pp": {
+        "bancho": 20598.936,
+        "codexxy": 18359.37,
+        "reimagined": 21219.147,
+        "sunny": 18713.832
+      },
+      "uid": 25750653,
+      "username": "WandrYondr"
+    },
+    {
+      "file": "players/25826291.json",
+      "fixture": "bp-lists",
+      "scores": 100,
+      "total_pp": {
+        "bancho": 23176.664,
+        "codexxy": 20325.3,
+        "reimagined": 23235.889,
+        "sunny": 20678.743
+      },
+      "uid": 25826291,
+      "username": "RinFall"
+    },
+    {
+      "file": "players/25938507.json",
+      "fixture": "bp-lists",
+      "scores": 100,
+      "total_pp": {
+        "bancho": 25000.257,
+        "codexxy": 22902.726,
+        "reimagined": 25655.162,
+        "sunny": 23057.9
+      },
+      "uid": 25938507,
+      "username": "L5645453"
+    },
+    {
+      "file": "players/26228192.json",
+      "fixture": "bp-lists",
+      "scores": 100,
+      "total_pp": {
+        "bancho": 21138.569,
+        "codexxy": 19318.653,
+        "reimagined": 21922.269,
+        "sunny": 19696.845
+      },
+      "uid": 26228192,
+      "username": "SUNec4_"
+    },
+    {
+      "file": "players/26236177.json",
+      "fixture": "bp-lists",
+      "scores": 100,
+      "total_pp": {
+        "bancho": 19740.626,
+        "codexxy": 18157.42,
+        "reimagined": 21092.252,
+        "sunny": 18545.016
+      },
+      "uid": 26236177,
+      "username": "doggythatsucks"
+    },
+    {
+      "file": "players/26473894.json",
+      "fixture": "bp-lists",
+      "scores": 100,
+      "total_pp": {
+        "bancho": 19502.084,
+        "codexxy": 21759.411,
+        "reimagined": 20972.716,
+        "sunny": 21599.019
+      },
+      "uid": 26473894,
+      "username": "imyeeyee"
+    },
+    {
+      "file": "players/26646233.json",
+      "fixture": "bp-lists",
+      "scores": 100,
+      "total_pp": {
+        "bancho": 20127.277,
+        "codexxy": 17786.276,
+        "reimagined": 20813.32,
+        "sunny": 18296.556
+      },
+      "uid": 26646233,
+      "username": "- SzymeQ -"
+    },
+    {
+      "file": "players/28299216.json",
+      "fixture": "bp-lists",
+      "scores": 100,
+      "total_pp": {
+        "bancho": 20229.553,
+        "codexxy": 17425.043,
+        "reimagined": 20827.793,
+        "sunny": 18237.642
+      },
+      "uid": 28299216,
+      "username": "SENSAMA"
+    },
+    {
+      "file": "players/28917056.json",
+      "fixture": "bp-lists",
+      "scores": 100,
+      "total_pp": {
+        "bancho": 23625.054,
+        "codexxy": 20287.2,
+        "reimagined": 23414.098,
+        "sunny": 20742.176
+      },
+      "uid": 28917056,
+      "username": "ToukiM"
+    },
+    {
+      "file": "players/30220646.json",
+      "fixture": "bp-lists",
+      "scores": 100,
+      "total_pp": {
+        "bancho": 18990.437,
+        "codexxy": 17827.847,
+        "reimagined": 20599.646,
+        "sunny": 18327.087
+      },
+      "uid": 30220646,
+      "username": "vvvxx"
+    },
+    {
+      "file": "players/30254673.json",
+      "fixture": "bp-lists",
+      "scores": 100,
+      "total_pp": {
+        "bancho": 20096.157,
+        "codexxy": 17276.586,
+        "reimagined": 20032.951,
+        "sunny": 17775.522
+      },
+      "uid": 30254673,
+      "username": "Dualof4Kand7K"
+    },
+    {
+      "file": "players/30469374.json",
+      "fixture": "bp-lists",
+      "scores": 100,
+      "total_pp": {
+        "bancho": 18846.233,
+        "codexxy": 20408.08,
+        "reimagined": 20333.061,
+        "sunny": 20582.922
+      },
+      "uid": 30469374,
+      "username": "[TCD] shriimp"
+    },
+    {
+      "file": "players/30885120.json",
+      "fixture": "bp-lists",
+      "scores": 100,
+      "total_pp": {
+        "bancho": 19154.065,
+        "codexxy": 17678.523,
+        "reimagined": 20593.488,
+        "sunny": 18113.163
+      },
+      "uid": 30885120,
+      "username": "Firefly Neko"
+    },
+    {
+      "file": "players/31316743.json",
+      "fixture": "bp-lists",
+      "scores": 100,
+      "total_pp": {
+        "bancho": 19621.459,
+        "codexxy": 18193.291,
+        "reimagined": 20926.089,
+        "sunny": 18479.829
+      },
+      "uid": 31316743,
+      "username": "ueee-"
+    },
+    {
+      "file": "players/31323430.json",
+      "fixture": "bp-lists",
+      "scores": 100,
+      "total_pp": {
+        "bancho": 19839.704,
+        "codexxy": 20697.367,
+        "reimagined": 23492.888,
+        "sunny": 20825.788
+      },
+      "uid": 31323430,
+      "username": "seou_"
+    },
+    {
+      "file": "players/31491582.json",
+      "fixture": "bp-lists",
+      "scores": 100,
+      "total_pp": {
+        "bancho": 23576.684,
+        "codexxy": 20538.057,
+        "reimagined": 23795.217,
+        "sunny": 21014.623
+      },
+      "uid": 31491582,
+      "username": "Astrahv"
+    },
+    {
+      "file": "players/32175034.json",
+      "fixture": "bp-lists",
+      "scores": 100,
+      "total_pp": {
+        "bancho": 19700.146,
+        "codexxy": 18111.398,
+        "reimagined": 21048.546,
+        "sunny": 18522.637
+      },
+      "uid": 32175034,
+      "username": "gagasssss"
+    },
+    {
+      "file": "players/33192317.json",
+      "fixture": "bp-lists",
+      "scores": 100,
+      "total_pp": {
+        "bancho": 21739.288,
+        "codexxy": 19926.218,
+        "reimagined": 22786.589,
+        "sunny": 20285.459
+      },
+      "uid": 33192317,
+      "username": "-NESS-"
+    },
+    {
+      "file": "players/33740116.json",
+      "fixture": "bp-lists",
+      "scores": 100,
+      "total_pp": {
+        "bancho": 20966.668,
+        "codexxy": 18962.73,
+        "reimagined": 22256.42,
+        "sunny": 19461.4
+      },
+      "uid": 33740116,
+      "username": "SnowFlake7"
+    },
+    {
+      "file": "players/33946882.json",
+      "fixture": "bp-lists",
+      "scores": 100,
+      "total_pp": {
+        "bancho": 20240.614,
+        "codexxy": 18369.374,
+        "reimagined": 21270.002,
+        "sunny": 18805.105
+      },
+      "uid": 33946882,
+      "username": "assei"
+    },
+    {
+      "file": "players/33976283.json",
+      "fixture": "bp-lists",
+      "scores": 100,
+      "total_pp": {
+        "bancho": 21115.003,
+        "codexxy": 18873.462,
+        "reimagined": 22002.133,
+        "sunny": 19327.212
+      },
+      "uid": 33976283,
+      "username": "Khoak"
+    },
+    {
+      "file": "players/34170717.json",
+      "fixture": "bp-lists",
+      "scores": 100,
+      "total_pp": {
+        "bancho": 21089.254,
+        "codexxy": 18720.218,
+        "reimagined": 21689.797,
+        "sunny": 19272.949
+      },
+      "uid": 34170717,
+      "username": "Rubing"
+    },
+    {
+      "file": "players/34205111.json",
+      "fixture": "bp-lists",
+      "scores": 100,
+      "total_pp": {
+        "bancho": 20095.306,
+        "codexxy": 18852.839,
+        "reimagined": 21974.984,
+        "sunny": 19191.733
+      },
+      "uid": 34205111,
+      "username": "VitaLemonTeaON9"
+    },
+    {
+      "file": "players/34643106.json",
+      "fixture": "bp-lists",
+      "scores": 100,
+      "total_pp": {
+        "bancho": 21706.065,
+        "codexxy": 19682.611,
+        "reimagined": 22370.205,
+        "sunny": 19980.393
+      },
+      "uid": 34643106,
+      "username": "Wolfu__"
+    },
+    {
+      "file": "players/34677424.json",
+      "fixture": "bp-lists",
+      "scores": 100,
+      "total_pp": {
+        "bancho": 19403.597,
+        "codexxy": 18083.263,
+        "reimagined": 21123.329,
+        "sunny": 18478.515
+      },
+      "uid": 34677424,
+      "username": "sxrq"
+    },
+    {
+      "file": "players/34706557.json",
+      "fixture": "bp-lists",
+      "scores": 100,
+      "total_pp": {
+        "bancho": 21639.984,
+        "codexxy": 19755.386,
+        "reimagined": 22852.161,
+        "sunny": 20090.884
+      },
+      "uid": 34706557,
+      "username": "Kano46"
+    },
+    {
+      "file": "players/35751073.json",
+      "fixture": "bp-lists",
+      "scores": 100,
+      "total_pp": {
+        "bancho": 19770.721,
+        "codexxy": 18079.721,
+        "reimagined": 21025.232,
+        "sunny": 18459.601
+      },
+      "uid": 35751073,
+      "username": "kevoleener"
+    },
+    {
+      "file": "players/35789950.json",
+      "fixture": "bp-lists",
+      "scores": 100,
+      "total_pp": {
+        "bancho": 19495.853,
+        "codexxy": 18049.608,
+        "reimagined": 20890.435,
+        "sunny": 18535.947
+      },
+      "uid": 35789950,
+      "username": "Carrotdollars"
+    },
+    {
+      "file": "players/35809437.json",
+      "fixture": "bp-lists",
+      "scores": 100,
+      "total_pp": {
+        "bancho": 20009.226,
+        "codexxy": 17398.238,
+        "reimagined": 20376.146,
+        "sunny": 17862.062
+      },
+      "uid": 35809437,
+      "username": "RoxyMigurdia"
+    },
+    {
+      "file": "players/36370211.json",
+      "fixture": "bp-lists",
+      "scores": 100,
+      "total_pp": {
+        "bancho": 21911.255,
+        "codexxy": 19713.62,
+        "reimagined": 22636.647,
+        "sunny": 20073.063
+      },
+      "uid": 36370211,
+      "username": "LivCat"
+    },
+    {
+      "file": "players/37306889.json",
+      "fixture": "bp-lists",
+      "scores": 100,
+      "total_pp": {
+        "bancho": 20840.144,
+        "codexxy": 18638.232,
+        "reimagined": 21835.362,
+        "sunny": 19115.036
+      },
+      "uid": 37306889,
+      "username": "OhAram"
+    },
+    {
+      "file": "players/38639198.json",
+      "fixture": "bp-lists",
+      "scores": 100,
+      "total_pp": {
+        "bancho": 19922.91,
+        "codexxy": 16934.245,
+        "reimagined": 20209.609,
+        "sunny": 17613.331
+      },
+      "uid": 38639198,
+      "username": "gasirad"
+    },
+    {
+      "file": "players/39397249.json",
+      "fixture": "bp-lists",
+      "scores": 55,
+      "total_pp": {
+        "bancho": 20741.223,
+        "codexxy": 18672.078,
+        "reimagined": 21702.826,
+        "sunny": 19095.245
+      },
+      "uid": 39397249,
+      "username": "Sihowski"
+    },
+    {
+      "file": "players/39561438.json",
+      "fixture": "bp-lists",
+      "scores": 100,
+      "total_pp": {
+        "bancho": 21019.898,
+        "codexxy": 19402.699,
+        "reimagined": 22169.612,
+        "sunny": 19803.584
+      },
+      "uid": 39561438,
+      "username": "takanosu"
+    },
+    {
+      "file": "players/40488011.json",
+      "fixture": "bp-lists",
+      "scores": 41,
+      "total_pp": {
+        "bancho": 20334.183,
+        "codexxy": 17565.47,
+        "reimagined": 19920.63,
+        "sunny": 17851.705
+      },
+      "uid": 40488011,
+      "username": "boonyasak"
     }
   ],
   "warnings": []

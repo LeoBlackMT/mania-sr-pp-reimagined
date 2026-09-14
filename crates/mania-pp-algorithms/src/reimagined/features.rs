@@ -1,24 +1,14 @@
-//! Structural features of a map: chord (simultaneous press) statistics, column-aware
-//! coordination features and the map shape profile.
+//! Structural features of a map: chord (simultaneous press) statistics, column-aware coordination features and the map shape profile.
 //!
-//! Ported from `pp_formula.chord_stats` and `coord_features.{column_of,
-//! compute_column_features, map_shape_profile}`. All three are **diagnostic**: they do not
-//! enter the price directly, they explain it (and the chord statistics feed the key-count
-//! coupling of the accuracy channel through the typical chord of a key count).
+//! Ported from `pp_formula.chord_stats` and `coord_features.{column_of, compute_column_features, map_shape_profile}`. All three are **diagnostic**: they do not enter the price directly, they explain it (and the chord statistics feed the key-count coupling of the accuracy channel through the typical chord of a key count).
 //!
 //! # Column semantics
 //!
-//! The column of an object is lazer's `ColumnWidth = 512 / keys` layout:
-//! `column = clamp(floor(x * keys / 512), 0, keys - 1)`. The key count must be supplied by
-//! the caller (resolved with [`crate::reimagined::keys::effective_keys`]) — a std convert's `CircleSize`
-//! is a radius, not a column count.
+//! The column of an object is lazer's `ColumnWidth = 512 / keys` layout: `column = clamp(floor(x * keys / 512), 0, keys - 1)`. The key count must be supplied by the caller (resolved with [`crate::reimagined::keys::effective_keys`]) — a std convert's `CircleSize` is a radius, not a column count.
 //!
 //! # Rounding
 //!
-//! The reference rounds its diagnostic outputs with Python's `round(x, n)`, which is
-//! decimal rounding of the *exact* binary value with ties to even. `(x * 10^n).round() / 10^n`
-//! is **not** equivalent (it rounds ties away from zero and drifts), so [`round_dec`]
-//! reproduces the reference through the correctly-rounded decimal formatting of Rust.
+//! The reference rounds its diagnostic outputs with Python's `round(x, n)`, which is decimal rounding of the *exact* binary value with ties to even. `(x * 10^n).round() / 10^n` is **not** equivalent (it rounds ties away from zero and drifts), so [`round_dec`] reproduces the reference through the correctly-rounded decimal formatting of Rust.
 
 use std::collections::BTreeMap;
 
@@ -26,21 +16,16 @@ use mania_pp_spec::spec;
 
 use crate::reimagined::notes::Note;
 
-/// Fraction of the difficulty p90 above which a point counts as "plateau"
-/// (the map never lets go: an endurance shape).
+/// Fraction of the difficulty p90 above which a point counts as "plateau" (the map never lets go: an endurance shape).
 ///
-/// Not exported by the specification: it is a *diagnostic* threshold of the shape profile,
-/// like the rest/wall definitions below, and it never reaches the price.
+/// Not exported by the specification: it is a *diagnostic* threshold of the shape profile, like the rest/wall definitions below, and it never reaches the price.
 const PLATEAU_FRAC: f64 = 0.85;
 /// Fraction of the difficulty p90 below which a point counts as "rest".
 const REST_FRAC: f64 = 0.30;
 
 /// Python's `round(x, digits)` for floats.
 ///
-/// Rust's `format!` performs a correctly-rounded decimal conversion with ties to even, which
-/// is exactly what Python's round does on the exact binary value; parsing the text back gives
-/// the same double. This matters for quantities like `1/16` where a naive
-/// `(x * 1000).round() / 1000` would round the tie the other way.
+/// Rust's `format!` performs a correctly-rounded decimal conversion with ties to even, which is exactly what Python's round does on the exact binary value; parsing the text back gives the same double. This matters for quantities like `1/16` where a naive `(x * 1000).round() / 1000` would round the tie the other way.
 fn round_dec(x: f64, digits: usize) -> f64 {
     if !x.is_finite() {
         return x;
@@ -48,8 +33,7 @@ fn round_dec(x: f64, digits: usize) -> f64 {
     format!("{x:.digits$}").parse::<f64>().unwrap_or(x)
 }
 
-/// Upper median (`sorted(xs)[len // 2]`), the median convention of the research repository
-/// (`stats.median`), which differs from averaging the two middle values. NaN for empty input.
+/// Upper median (`sorted(xs)[len // 2]`), the median convention of the research repository (`stats.median`), which differs from averaging the two middle values. NaN for empty input.
 fn median(xs: &[f64]) -> f64 {
     if xs.is_empty() {
         return f64::NAN;
@@ -59,8 +43,7 @@ fn median(xs: &[f64]) -> f64 {
     s[s.len() / 2]
 }
 
-/// The reference's local `_med` of the column features: upper median, but **0.0** when the
-/// list is empty (the profile's own median returns NaN instead — the two differ on purpose).
+/// The reference's local `_med` of the column features: upper median, but **0.0** when the list is empty (the profile's own median returns NaN instead — the two differ on purpose).
 fn median_or_zero(xs: &[f64]) -> f64 {
     if xs.is_empty() {
         0.0
@@ -71,8 +54,7 @@ fn median_or_zero(xs: &[f64]) -> f64 {
 
 /// Column index of an object's `x` position, clamped to `0 .. keys - 1`.
 ///
-/// A non-positive key count yields column 0 (the reference's guard); negative `x` truncates
-/// towards zero before clamping, exactly like Python's `int()`.
+/// A non-positive key count yields column 0 (the reference's guard); negative `x` truncates towards zero before clamping, exactly like Python's `int()`.
 pub fn column_of(x: f64, keys: i32) -> i32 {
     if keys <= 0 {
         return 0;
@@ -90,9 +72,7 @@ pub struct ChordStats {
     pub notes: usize,
     /// Mean simultaneous press count = `notes / events`.
     ///
-    /// The denominator is **events, not notes**: a four-key chord is one event of size 4.
-    /// This is the convention the typical-chord calibration (`chord.reference` = 1.471 for
-    /// 4K) was measured with; changing the denominator invalidates it.
+    /// The denominator is **events, not notes**: a four-key chord is one event of size 4. This is the convention the typical-chord calibration (`chord.reference` = 1.471 for 4K) was measured with; changing the denominator invalidates it.
     pub mean_chord: f64,
     /// 95th percentile of the per-event sizes.
     pub p95_chord: usize,
@@ -111,19 +91,15 @@ pub struct ColumnFeatures {
     pub keys: i32,
     /// Number of holds in the map.
     pub n_holds: usize,
-    /// Presses in **other columns** while a hold is sustained, per second (mean over holds):
-    /// how much the remaining fingers have to do while one is held down.
+    /// Presses in **other columns** while a hold is sustained, per second (mean over holds): how much the remaining fingers have to do while one is held down.
     pub c_hold_busy: f64,
-    /// Share of holds during which a press happens in the **same column** (a physical
-    /// conflict: the finger must release before it can press again).
+    /// Share of holds during which a press happens in the **same column** (a physical conflict: the finger must release before it can press again).
     pub c_same_col_conflict: f64,
-    /// Median gap from a hold's release to the next press in a **different column** (ms):
-    /// the cross-column transfer speed, which sunny's own model cannot see.
+    /// Median gap from a hold's release to the next press in a **different column** (ms): the cross-column transfer speed, which sunny's own model cannot see.
     pub c_rel_gap_cross: f64,
     /// Median hold duration (ms): how long a finger stays occupied.
     ///
-    /// The reference's docstring once said "mean"; the implementation is a **median**, and
-    /// the port follows the implementation.
+    /// The reference's docstring once said "mean"; the implementation is a **median**, and the port follows the implementation.
     pub c_hold_col_span: f64,
 }
 
@@ -140,8 +116,7 @@ pub struct ShapeProfile {
     pub plateau: f64,
     /// Share of points with `D <= 0.30 * D_p90` -> high means explicit rests.
     pub rest: f64,
-    /// Share of seconds in which at least half of the columns are occupied by a hold
-    /// -> 1.0 is a full long-note wall.
+    /// Share of seconds in which at least half of the columns are occupied by a hold -> 1.0 is a full long-note wall.
     pub wall: f64,
     /// 90th percentile of the object density per second.
     pub dens_p90: i32,
@@ -149,10 +124,7 @@ pub struct ShapeProfile {
 
 /// Chord statistics of a note list (`None` for an empty list).
 ///
-/// Objects are clustered by **start time** with an anchor rule: a member must be within
-/// `chord.simultaneity_ms` of the cluster's **first** object, not of the previous one —
-/// otherwise an evenly spaced stream at 0.9 ms would collapse into a single "chord" of
-/// hundreds of notes.
+/// Objects are clustered by **start time** with an anchor rule: a member must be within `chord.simultaneity_ms` of the cluster's **first** object, not of the previous one — otherwise an evenly spaced stream at 0.9 ms would collapse into a single "chord" of hundreds of notes.
 pub fn chord_stats(notes: &[Note]) -> Option<ChordStats> {
     if notes.is_empty() {
         return None;
@@ -194,8 +166,7 @@ pub fn chord_stats(notes: &[Note]) -> Option<ChordStats> {
     })
 }
 
-/// Column-aware coordination features (`None` without notes, without holds, or without a
-/// valid key count — a pure rice map has no coordination content to describe).
+/// Column-aware coordination features (`None` without notes, without holds, or without a valid key count — a pure rice map has no coordination content to describe).
 ///
 /// Presses are circles and hold **heads** (a hold tail is a release, not a press).
 pub fn compute_column_features(notes: &[Note], keys: i32) -> Option<ColumnFeatures> {
@@ -207,9 +178,7 @@ pub fn compute_column_features(notes: &[Note], keys: i32) -> Option<ColumnFeatur
         return None;
     }
 
-    // Press events: circles plus hold heads, sorted by (time, column) like the reference's
-    // `list.sort()` on `(t, column)` tuples (the tie order is observable in the
-    // "next press in another column" scan below).
+    // Press events: circles plus hold heads, sorted by (time, column) like the reference's `list.sort()` on `(t, column)` tuples (the tie order is observable in the "next press in another column" scan below).
     let mut presses: Vec<(f64, i32)> = notes
         .iter()
         .filter(|n| !n.is_hold)
@@ -239,8 +208,7 @@ pub fn compute_column_features(notes: &[Note], keys: i32) -> Option<ColumnFeatur
         let span = (h.end - h.t).max(0.0);
         spans.push(span);
 
-        // Presses strictly inside (t, end]: merged count minus the same-column count, both
-        // excluding the hold's own head.
+        // Presses strictly inside (t, end]: merged count minus the same-column count, both excluding the hold's own head.
         let lo = times_all.partition_point(|&t| t <= h.t + eps);
         let hi = times_all.partition_point(|&t| t <= h.end + eps);
         let total_in = hi - lo;
@@ -283,8 +251,7 @@ pub fn compute_column_features(notes: &[Note], keys: i32) -> Option<ColumnFeatur
     })
 }
 
-/// Shape profile of a map (`None` without notes, without positive difficulty values, or
-/// without a valid key count).
+/// Shape profile of a map (`None` without notes, without positive difficulty values, or without a valid key count).
 ///
 /// * `d_values` are the per-note difficulty values of the map's difficulty graph (the NM
 ///   variant); non-positive and NaN entries are dropped, like the reference's `x > 0` filter.
@@ -324,8 +291,7 @@ pub fn map_shape_profile(notes: &[Note], keys: i32, d_values: &[f64]) -> Option<
         let from = (n.t / 1000.0).floor() as i64;
         let to = ((n.end / 1000.0).floor() as i64 + 1).min(dur_bins);
         for b in from..to {
-            // The reference wraps negative indices around the list (Python semantics); a
-            // negative timestamp cannot occur in a valid `.osu`, so such bins are skipped.
+            // The reference wraps negative indices around the list (Python semantics); a negative timestamp cannot occur in a valid `.osu`, so such bins are skipped.
             if let Some(slot) = occupied.get_mut(b as usize) {
                 *slot |= bit;
             }

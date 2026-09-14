@@ -44,10 +44,21 @@ jobs:
       - name: Build
         run: cargo build --release --workspace
 
-      # The algorithm crate must stay WebAssembly-ready: a future in-browser calculator depends on
-      # it, and the usual way to break it is to enable a dependency feature that pulls in a
-      # platform-specific crate (see docs/usage.md, FAQ).
+      # The site's calculator runs on WebAssembly, and the compiled module is committed under
+      # `docs/wasm/` because GitHub Pages only serves static files. These two steps keep that
+      # promise honest: the workspace must still build for wasm32, and the committed artefact must
+      # be exactly what the current source produces (see docs/usage.md).
       - name: Build for wasm32
         run: |
           rustup target add wasm32-unknown-unknown
-          cargo build --release --target wasm32-unknown-unknown -p mania-pp-algorithms
+          cargo build --release --target wasm32-unknown-unknown -p mania-pp-algorithms -p mania-pp-wasm
+
+      - name: Verify the committed WASM artefact is current
+        run: |
+          cargo install wasm-bindgen-cli --version 0.2.128 --locked
+          wasm-bindgen --target web --out-dir "$RUNNER_TEMP/wasm" --out-name mania_pp_wasm \
+            target/wasm32-unknown-unknown/release/mania_pp_wasm.wasm
+          if ! diff -r --brief docs/wasm "$RUNNER_TEMP/wasm"; then
+            echo "::error::docs/wasm is out of date. Rebuild it with the command in docs/usage.md and commit the result."
+            exit 1
+          fi

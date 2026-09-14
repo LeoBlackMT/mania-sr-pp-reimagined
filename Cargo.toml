@@ -1,6 +1,7 @@
 [workspace]
 resolver = "2"
 members = [
+    "crates/mania-pp-wasm",
     "crates/mania-pp-spec",
     "crates/mania-pp-algorithms",
     "crates/mania-pp-cli",
@@ -24,10 +25,21 @@ authors = ["Leo_Black"]
 # (`mania::sunny::calculate` and `mania::sunny::calculate_performance`), and the mod string parser is
 # implemented in this repository.
 rosu-pp = { git = "https://github.com/ppy-sb/rosu-pp", rev = "3530ba7236038650d739d11e7e21e6641fe17dd0" }
+# The untouched upstream crate, for the official osu!mania calculation only.
+#
+# The fork above does not compute the official star rating any more: its `mania::difficulty` fills
+# `ManiaDifficultyAttributes.stars` from the Community Sunny ("rebirth") parameter computation, so
+# feeding those attributes to the official pp formula yields "Sunny stars through the official pp
+# curve", not Bancho. Upstream rosu-pp at the version the fork is based on still has the real strain
+# skill, so the Bancho column is computed from that crate instead. Both crates coexist because they
+# are separate dependencies of this workspace, not two versions of one dependency.
+rosu-pp-official = { package = "rosu-pp", git = "https://github.com/MaxOhn/rosu-pp", rev = "27a67242cad155a2767f5a25a423ca4ec3e3c274" }
 serde = { version = "1", features = ["derive"] }
 serde_json = "1"
 anyhow = "1"
 
 [profile.release]
+# Strip symbols from every release artefact: the WASM module is served to browsers and the native binaries gain nothing from debug sections.
+strip = true
 lto = "thin"
 codegen-units = 1

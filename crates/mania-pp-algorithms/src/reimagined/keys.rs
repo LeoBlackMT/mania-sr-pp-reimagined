@@ -1,21 +1,15 @@
 //! Key-count resolution and the key-count side of the coordination weight.
 //!
-//! Ported from `pp_formula.effective_keys` / `w_m3_keys` / `coord_transfer_mod` /
-//! `STAR_KEY_BOOST`.
+//! Ported from `pp_formula.effective_keys` / `w_m3_keys` / `coord_transfer_mod` / `STAR_KEY_BOOST`.
 //!
 //! # Why key resolution takes six arguments
 //!
-//! The CS field of a **std -> mania convert** is the circle *radius*, not a column count, so
-//! a convert's key count has to be derived from the official conversion rule — which needs
-//! OD and the slider/spinner share as well. An audit of the research scripts found three
-//! call sites passing only the first three arguments, which misclassified 284 of 286
-//! converts as 6K. Hence: all six parameters are mandatory and none of them may be dropped.
+//! The CS field of a **std -> mania convert** is the circle *radius*, not a column count, so a convert's key count has to be derived from the official conversion rule — which needs OD and the slider/spinner share as well. An audit of the research scripts found three call sites passing only the first three arguments, which misclassified 284 of 286 converts as 6K. Hence: all six parameters are mandatory and none of them may be dropped.
 //!
 //! Priority, verified against the game's source:
 //!
 //! 1. **native mania (`Mode = 3`)** -> `clamp(round(CS), 1, 18)`; key mods are a no-op there
-//!    (`ManiaKeyMod.ApplyToBeatmapConverter` returns early when the map already is for the
-//!    current ruleset).
+//!    (`ManiaKeyMod.ApplyToBeatmapConverter` returns early when the map already is for the current ruleset).
 //! 2. **std convert** -> a key mod, if present, is authoritative.
 //! 3. **std convert** -> the official rule (`getColumnCount`): slider/spinner share plus OD,
 //!    with CS only entering the `roundedCircleSize >= 5` test.
@@ -67,19 +61,14 @@ fn ln_w_anchors() -> &'static [(i32, f64)] {
 /// * `total_objects` — number of hit objects. Pass `0` when unknown: that reproduces the
 ///   reference's fallback branch, which the Python `None` also reaches.
 /// * `end_time_objects` — number of objects **with an end time** (sliders and spinners on a
-///   std map, i.e. lazer's `EndTimeObjectCount`). This is a real count, not an optional:
-///   `0` (a map with plain notes only) is a meaningful input that sends the official rule to
-///   the 7-column branch.
+///   std map, i.e. lazer's `EndTimeObjectCount`). This is a real count, not an optional: `0` (a map with plain notes only) is a meaningful input that sends the official rule to the 7-column branch.
 ///
 /// # Historical traps
 ///
 /// * The `Math.Round(OD)` of the convert rule is C#'s **half-to-even** rounding, and the
-///   threshold is `> 4`: OD 4.5 rounds to 4 and therefore lands on the `+1` fallback rather
-///   than the next branch. `round_ties_even()` is used here for exactly that reason.
+///   threshold is `> 4`: OD 4.5 rounds to 4 and therefore lands on the `+1` fallback rather than the next branch. `round_ties_even()` is used here for exactly that reason.
 /// * Key-mod detection is substring based on the upper-cased mod string in the reference.
-///   It is expressed here as membership in the parsed [`ModSet`], which is equivalent for
-///   every acronym of the mod table. `10K` must not be matched as `1K`: the acronyms are
-///   looked up by ascending key count, and `"1K"` is not a substring of `"10K"` anyway.
+///   It is expressed here as membership in the parsed [`ModSet`], which is equivalent for every acronym of the mod table. `10K` must not be matched as `1K`: the acronyms are looked up by ascending key count, and `"1K"` is not a substring of `"10K"` anyway.
 pub fn effective_keys(
     mode: i32,
     cs: f64,
@@ -99,8 +88,7 @@ pub fn effective_keys(
         return k.clamp(keys.min, keys.max);
     }
 
-    // ---- 2. std convert: an explicit key mod wins ----
-    // Ascending key count mirrors the reference's `KEY_MODS` dict order.
+    // ---- 2. std convert: an explicit key mod wins ---- Ascending key count mirrors the reference's `KEY_MODS` dict order.
     let mut key_mods: Vec<(&String, i32)> = keys.key_mods.iter().map(|(k, v)| (k, *v)).collect();
     key_mods.sort_by_key(|(_, v)| *v);
     for (acronym, columns) in key_mods {
@@ -111,9 +99,7 @@ pub fn effective_keys(
 
     // ---- 3. std convert: the official rule ----
     let rounded_od = od.round_ties_even();
-    // `max(4, min(round(od) + 1, 7))`, used both by the last branch and as the fallback for
-    // maps whose object counts are unknown. `saturating_add` keeps an absurd OD finite where
-    // Python would compute with a bignum (the result is 7 either way).
+    // `max(4, min(round(od) + 1, 7))`, used both by the last branch and as the fallback for maps whose object counts are unknown. `saturating_add` keeps an absurd OD finite where Python would compute with a bignum (the result is 7 either way).
     let fallback = CONVERT_FALLBACK_MIN_KEYS
         .max(CONVERT_FALLBACK_MAX_KEYS.min((rounded_od as i32).saturating_add(1)));
 
@@ -144,9 +130,7 @@ pub fn effective_keys(
 
 /// Key-count dependent LN (coordination) weight: feeling anchors, linearly interpolated.
 ///
-/// The anchors are the user's feeling specification — 4K 0.95, 5K/6K 1.00, 7K 1.15 — and are
-/// exported in the spec; they must not be "improved". Outside them the reference extrapolates
-/// structurally rather than pretending to have data:
+/// The anchors are the user's feeling specification — 4K 0.95, 5K/6K 1.00, 7K 1.15 — and are exported in the spec; they must not be "improved". Outside them the reference extrapolates structurally rather than pretending to have data:
 ///
 /// * below the lowest anchor: linear from `ln_w_key_min` at `keys.min` (1K: a single column
 ///   has no cross-column coordination at all) to the anchor,
@@ -164,8 +148,7 @@ pub fn w_m3_keys(keys: i32) -> f64 {
     let (anchor_lo, value_lo) = anchors[0];
     let (anchor_hi, value_hi) = anchors[anchors.len() - 1];
     if keys < anchor_lo {
-        // `ln_w_key_min` at the lowest supported key count (the reference's
-        // `LN_W_KEY_FLOOR_K`, which equals `keys.min`), rising to the lowest anchor.
+        // `ln_w_key_min` at the lowest supported key count (the reference's `LN_W_KEY_FLOOR_K`, which equals `keys.min`), rising to the lowest anchor.
         let floor_k = k.min;
         let t = f64::from(keys - floor_k) / f64::from(anchor_lo - floor_k);
         return k
@@ -184,16 +167,13 @@ pub fn w_m3_keys(keys: i32) -> f64 {
             return va + (vb - va) * t;
         }
     }
-    // The reference's final fallback (`LN_W_ANCHORS.get(k, 1.0)`): unreachable while the
-    // anchors are integers and `keys` is an integer strictly inside them.
+    // The reference's final fallback (`LN_W_ANCHORS.get(k, 1.0)`): unreachable while the anchors are integers and `keys` is an integer strictly inside them.
     1.0
 }
 
-/// Flat star lift applied from 7K upward (the cross-column load keeps growing while the hand
-/// layout stops changing).
+/// Flat star lift applied from 7K upward (the cross-column load keeps growing while the hand layout stops changing).
 ///
-/// Returns 0.0 outside `star_key_boost_from ..= keys.max`: the reference reads this from a
-/// dict keyed by 7..18, so 19K+ has *no* boost even though [`w_m3_keys`] keeps rising.
+/// Returns 0.0 outside `star_key_boost_from ..= keys.max`: the reference reads this from a dict keyed by 7..18, so 19K+ has *no* boost even though [`w_m3_keys`] keeps rising.
 pub fn star_key_boost(keys: i32) -> f64 {
     let k = &spec().keys;
     if keys >= k.star_key_boost_from && keys <= k.max {
@@ -203,17 +183,11 @@ pub fn star_key_boost(keys: i32) -> f64 {
     }
 }
 
-/// Structural modulation of the LN weight by how fast the player must release one column and
-/// press another (`release -> next press in a different column`, median in ms).
+/// Structural modulation of the LN weight by how fast the player must release one column and press another (`release -> next press in a different column`, median in ms).
 ///
-/// sunny's own long-note model only ever looks at the *same* column (its `Rbar` term uses the
-/// release-to-next-press gap restricted to one column), so cross-column transfer is invisible
-/// to it; this factor supplies that missing dimension. `mod > 1` = faster transfer = harder.
+/// sunny's own long-note model only ever looks at the *same* column (its `Rbar` term uses the release-to-next-press gap restricted to one column), so cross-column transfer is invisible to it; this factor supplies that missing dimension. `mod > 1` = faster transfer = harder.
 ///
-/// The reference value is the map's own key count's typical gap (`coord.gap_ref`), so a map
-/// with a typical gap gets exactly 1.0 and the feeling anchors are left untouched.
-/// `None`, non-finite or non-positive gaps yield the neutral 1.0 (no information, no
-/// extrapolation), and the result is clamped to `coord.mod_clamp`.
+/// The reference value is the map's own key count's typical gap (`coord.gap_ref`), so a map with a typical gap gets exactly 1.0 and the feeling anchors are left untouched. `None`, non-finite or non-positive gaps yield the neutral 1.0 (no information, no extrapolation), and the result is clamped to `coord.mod_clamp`.
 pub fn coord_transfer_mod(ln_gap_cross: Option<f64>, keys: i32) -> f64 {
     let coord = &spec().coord;
     let Some(gap) = ln_gap_cross else {

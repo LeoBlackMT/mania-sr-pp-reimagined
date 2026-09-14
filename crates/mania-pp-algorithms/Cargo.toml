@@ -11,5 +11,6 @@ authors.workspace = true
 [dependencies]
 mania-pp-spec = { path = "../mania-pp-spec" }
 rosu-pp = { workspace = true }
+rosu-pp-official = { workspace = true }
 serde = { workspace = true }
 serde_json = { workspace = true }

@@ -1,32 +1,17 @@
-//! `.osu` parsing for mania maps, ported from `osu_parser.py` (and from the hit-object
-//! counters of `scripts/build_maps_meta.py`, which is where the object counts come from).
+//! `.osu` parsing for mania maps, ported from `osu_parser.py` (and from the hit-object counters of `scripts/build_maps_meta.py`, which is where the object counts come from).
 //!
-//! The parser is deliberately forgiving, exactly like the reference: a malformed hit object
-//! line is skipped rather than aborting the map, because the corpus contains lines written by
-//! many editor versions.
+//! The parser is deliberately forgiving, exactly like the reference: a malformed hit object line is skipped rather than aborting the map, because the corpus contains lines written by many editor versions.
 //!
 //! # Traps preserved
 //!
 //! * **The hold line format is `x,y,time,type,hitSound,endTime:hitSample`.** The sixth field
-//!   is *not* a plain number: it usually carries a sample suffix (`639:0:0:0:0:`), so the end
-//!   time must be read as `parts[5].split(':')[0]`. Parsing the field directly fails on every
-//!   hold of a real corpus and silently degrades holds to zero length, which is what happened
-//!   to this project for several versions (it disabled the LN judgement model everywhere).
+//!   is *not* a plain number: it usually carries a sample suffix (`639:0:0:0:0:`), so the end time must be read as `parts[5].split(':')[0]`. Parsing the field directly fails on every hold of a real corpus and silently degrades holds to zero length, which is what happened to this project for several versions (it disabled the LN judgement model everywhere).
 //! * `x` is the raw first field; the column index is derived by the caller with the key count
-//!   (see [`crate::reimagined::features::column_of`]) — the parser must not guess key counts, because a
-//!   std convert's `CircleSize` is a radius, not a column count.
+//!   (see [`crate::reimagined::features::column_of`]) — the parser must not guess key counts, because a std convert's `CircleSize` is a radius, not a column count.
 //! * `total_objects` is the number of hit objects, `end_time_objects` the number of objects
-//!   **with an end time** (lazer's `TotalObjectCount` / `EndTimeObjectCount`, i.e.
-//!   `hitObjects.Count(h => h is IHasDuration)`): sliders (`type & 2`), spinners (`type & 8`)
-//!   and mania holds (`type & 128`). Both are inputs of the official convert key-count rule,
-//!   so their exact definition matters (`key_count` resolution).
+//!   **with an end time** (lazer's `TotalObjectCount` / `EndTimeObjectCount`, i.e. `hitObjects.Count(h => h is IHasDuration)`): sliders (`type & 2`), spinners (`type & 8`) and mania holds (`type & 128`). Both are inputs of the official convert key-count rule, so their exact definition matters (`key_count` resolution).
 //!
-//!   Traps around `end_time_objects`: the research side's `build_maps_meta.py` counts only
-//!   sliders and spinners, because the value is only ever *consumed* for std converts — and on
-//!   a convert there are no holds, so the two definitions agree everywhere it matters. The
-//!   union is used here because it is the game's definition (the mania ruleset itself reads
-//!   `EndTimeObjectCount / TotalObjectCount` as the *hold note ratio*), and because the
-//!   exported golden vectors are built from the parser's `is_hold` flag.
+//!   Traps around `end_time_objects`: the research side's `build_maps_meta.py` counts only sliders and spinners, because the value is only ever *consumed* for std converts — and on a convert there are no holds, so the two definitions agree everywhere it matters. The union is used here because it is the game's definition (the mania ruleset itself reads `EndTimeObjectCount / TotalObjectCount` as the *hold note ratio*), and because the exported golden vectors are built from the parser's `is_hold` flag.
 
 use std::cmp::Ordering;
 
@@ -65,10 +50,7 @@ pub struct OsuMeta {
     pub hp: f64,
     /// Number of hit objects (lazer's `TotalObjectCount`).
     pub total_objects: usize,
-    /// Number of objects with an end time: sliders (`type & 2`), spinners (`type & 8`) and
-    /// mania holds (`type & 128`). This is lazer's `EndTimeObjectCount`
-    /// (`hitObjects.Count(h => h is IHasDuration)`), which the mania ruleset reads as the
-    /// hold-note ratio of the map.
+    /// Number of objects with an end time: sliders (`type & 2`), spinners (`type & 8`) and mania holds (`type & 128`). This is lazer's `EndTimeObjectCount` (`hitObjects.Count(h => h is IHasDuration)`), which the mania ruleset reads as the hold-note ratio of the map.
     pub end_time_objects: usize,
     /// `Artist` tag.
     pub artist: String,
@@ -80,9 +62,7 @@ pub struct OsuMeta {
     pub creator: String,
     /// `BeatmapSetID` — the beatmapset this difficulty belongs to.
     ///
-    /// Needed because the canonical osu! link to a difficulty is
-    /// `https://osu.ppy.sh/beatmapsets/{set}#mania/{id}`: the beatmap id alone is not enough.
-    /// `-1` means the map was never uploaded (the field is absent or a negative placeholder).
+    /// Needed because the canonical osu! link to a difficulty is `https://osu.ppy.sh/beatmapsets/{set}#mania/{id}`: the beatmap id alone is not enough. `-1` means the map was never uploaded (the field is absent or a negative placeholder).
     pub beatmap_set_id: i64,
 }
 
@@ -122,8 +102,7 @@ fn parse_i32(s: &str) -> Option<i32> {
 
 /// Parse the `[HitObjects]` section into notes, sorted by start time.
 ///
-/// The sort is stable and never panics: a NaN timestamp (which a hand-edited file can contain)
-/// keeps its input position instead of imposing an order.
+/// The sort is stable and never panics: a NaN timestamp (which a hand-edited file can contain) keeps its input position instead of imposing an order.
 pub fn parse_notes(text: &str) -> Vec<Note> {
     let mut notes: Vec<Note> = Vec::new();
     let mut in_hit_objects = false;
@@ -149,8 +128,7 @@ pub fn parse_notes(text: &str) -> Vec<Note> {
         let is_hold = object_type & TYPE_HOLD != 0;
         let mut end = t;
         if is_hold {
-            // `endTime:hitSample` — split on ':' before parsing, and fall back to the start
-            // time when the field is empty or malformed.
+            // `endTime:hitSample` — split on ':' before parsing, and fall back to the start time when the field is empty or malformed.
             let field = parts[5].split(':').next().unwrap_or("");
             end = parse_f64(field).unwrap_or(t);
         }
@@ -163,9 +141,7 @@ pub fn parse_notes(text: &str) -> Vec<Note> {
 
 /// Parse the header and the hit-object counters.
 ///
-/// Parsing is lenient where the reference would raise: an unparsable numeric tag keeps its
-/// default instead of failing the whole map (the reference relies on its callers to catch the
-/// exception and skip the file).
+/// Parsing is lenient where the reference would raise: an unparsable numeric tag keeps its default instead of failing the whole map (the reference relies on its callers to catch the exception and skip the file).
 pub fn parse_meta(text: &str) -> OsuMeta {
     let mut meta = OsuMeta::default();
     let mut in_hit_objects = false;

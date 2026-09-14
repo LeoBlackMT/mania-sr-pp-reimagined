@@ -1,5 +1,4 @@
-//! Comparison CLI: reads a fixture score list, computes four algorithms per score, and writes the
-//! comparison dataset consumed by the site.
+//! Comparison CLI: reads a fixture score list, computes four algorithms per score, and writes the comparison dataset consumed by the site.
 //!
 //! Fixture formats (see `docs/usage.md`):
 //!
@@ -9,16 +8,16 @@
 //!
 //! The map directory holds `{map_id}.osu` files and lives outside the repository.
 //!
-//! Output: `docs/data/index.json` plus `docs/data/players/{uid}.json` — see `emit.rs` for why the
-//! dataset is split and columnar.
+//! Output: `docs/data/index.json` plus `docs/data/players/{uid}.json` — see `emit.rs` for why the dataset is split and columnar.
 
+mod aggregates;
 mod emit;
 
 use std::collections::{BTreeMap, HashMap};
 use std::path::PathBuf;
 use std::time::{Duration, Instant};
 
-use mania_pp_algorithms::{prepare, price_with_detail, Counts, Prepared};
+use mania_pp_algorithms::{prepare, price_with_detail_and_options, Counts, Prepared};
 use serde_json::Value;
 
 #[derive(Clone, Debug)]
@@ -30,6 +29,10 @@ pub struct ScoreRow {
     pub counts: Counts,
     /// osu! score id, when the fixture carries one. Used for the osu.ppy.sh/scores/{id} link.
     pub score_id: Option<i64>,
+    /// True for a lazer (`solo_score`) entry, false for a legacy one, `None` when the fixture does not say.
+    ///
+    /// osu! prices the two score generations with different judgement semantics; the difference reaches 3% to 20% on identical counts, so it cannot be inferred from the counts themselves and has to travel with the score.
+    pub lazer: Option<bool>,
 }
 
 struct Args {
@@ -153,6 +156,12 @@ fn load_tsv(text: &str) -> Result<Vec<ScoreRow>, String> {
             counts,
             // Optional 11th column: the osu! score id (present in exported fixtures).
             score_id: fields.get(10).and_then(|f| f.trim().parse().ok()),
+            // Optional 12th column: 1 for a lazer score, 0 for a legacy one, empty when unknown.
+            lazer: fields.get(11).and_then(|f| match f.trim() {
+                "1" => Some(true),
+                "0" => Some(false),
+                _ => None,
+            }),
         });
     }
     Ok(rows)
@@ -208,6 +217,7 @@ fn load_json(text: &str) -> Result<Vec<ScoreRow>, String> {
                 mods,
                 counts,
                 score_id: score.get("score_id").and_then(Value::as_i64),
+                lazer: score.get("lazer").and_then(Value::as_bool),
             });
         }
     }
@@ -231,8 +241,7 @@ fn load_fixture(path: &PathBuf) -> Result<Vec<ScoreRow>, String> {
 
 /// Space-separated mod flags the site filters on, e.g. `"DT MR"` or `"NM"`.
 ///
-/// The raw mod string is kept as well; these flags just save the page from re-parsing acronyms
-/// whenever a filter changes.
+/// The raw mod string is kept as well; these flags just save the page from re-parsing acronyms whenever a filter changes.
 fn mod_flags(mods_str: &str) -> String {
     let set = mania_pp_algorithms::ModSet::parse(mods_str);
     if set.acronyms.is_empty() {
@@ -360,7 +369,11 @@ fn run() -> Result<(), String> {
             let prepared = prepared_cache.get(&key).expect("just inserted");
 
             let score_started = Instant::now();
-            let (pp, detail) = price_with_detail(prepared, &row.counts);
+            let options = mania_pp_algorithms::ScoreOptions {
+                // A fixture that names no generation is treated as a lazer score, which is what the engine's own calculator assumes.
+                lazer: row.lazer.unwrap_or(true),
+            };
+            let (pp, detail) = price_with_detail_and_options(prepared, &row.counts, options);
             t_score.push(score_started.elapsed());
 
             if args.bench {

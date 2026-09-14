@@ -47,11 +47,11 @@ maps/               NOT here: keep the .osu cache outside the repository
 Score list, tab separated (a header row is auto-detected and skipped):
 
 ```
-uid	username	map_id	mods	320	300	200	100	50	miss	score_id
-21207706	Shirasu-Azusa	3449961	DT	5200	210	14	2	0	1	6057128346
+uid	username	map_id	mods	320	300	200	100	50	miss	score_id	lazer
+21207706	Shirasu-Azusa	3449961	DT	5200	210	14	2	0	1	6057128346	1
 ```
 
-`mods` uses the usual acronyms, joined with `+` (`DT+MR`, `HDHR`) or unseparated (`EZDTV2`) — both are accepted. `score_id` is optional (it only feeds the `osu.ppy.sh/scores/{id}` link on the site) and may be empty. Map metadata (artist, title, version, key count, OD, HP, beatmapset id) is read from the `.osu` file, never from the fixture.
+`mods` uses the usual acronyms, joined with `+` (`DT+MR`, `HDHR`) or unseparated (`EZDTV2`) — both are accepted. `score_id` is optional (it feeds the `osu.ppy.sh/scores/{id}` link on the site) and may be empty. `lazer` is optional too: `1` for a lazer score, `0` for a legacy one, and empty when unknown, which the engine reads as lazer. It exists because osu! prices the two score generations with different judgement semantics — 3% to 20% apart on identical counts — so Bancho's column cannot be right for both without it. Map metadata (artist, title, version, key count, OD, HP, beatmapset id) is read from the `.osu` file, never from the fixture.
 
 **Typing a tab**: the separator is a literal tab character, produced with the <kbd>Tab</kbd> key — not spaces and not `\t`. In Excel or LibreOffice, save as "Text (Tab delimited)" if you build a fixture by hand; in VS Code, check that "Insert Spaces" is off and press <kbd>Tab</kbd> (or use <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>P</kbd> → "Convert Indentation to Tabs", which is a different thing but shows the distinction), and in a terminal use <kbd>Ctrl</kbd>+<kbd>V</kbd> then <kbd>Tab</kbd> in some shells. Tab was chosen over a comma precisely because osu! metadata is full of commas: with tabs a row is a plain `split('\t')` and no quoting rules are needed.
 
@@ -87,15 +87,15 @@ The console prints, per player, the weighted total of each algorithm and the del
 
 **Totals**: per algorithm, the player's scores are ranked by *that algorithm's* PP and summed with weight `0.95^n` — what the profile would look like if that algorithm were the one in use. No bonus PP is applied (the bonus term only becomes relevant above 1000 ranked scores, and these fixtures are the top 100).
 
-### Single-score timings (release build, 1,900 scores over 19 bp lists / 1,060 map-mod pairs, Windows x86-64)
+### Single-score timings (release build, 32,516 scores over 343 bp lists / 5,848 map-mod pairs, Windows x86-64)
 
 | Stage | median | mean | p95 |
 |---|---|---|---|
-| `prepare` per (map, mods) — cached, paid once | 47.5ms | 79.9ms | 244.4ms |
-| Bancho pp | 0.4µs | 0.5µs | 0.8µs |
-| Sunny + Codexxy (one shared upstream pass) | 42.4µs | 41.3µs | 51.6µs |
-| Reimagined pp | 0.7µs | 0.8µs | 1.1µs |
-| **total per score, four columns** | **49.7µs** | 53.3µs | 69.3µs |
+| `prepare` per (map, mods) — cached, paid once | 28.9ms | 53.6ms | 176.3ms |
+| Bancho pp | 0.2µs | 0.3µs | 0.5µs |
+| Sunny + Codexxy (one shared upstream pass) | 60.9µs | 65.3µs | 119.2µs |
+| Reimagined pp | 0.8µs | 1.3µs | 3.0µs |
+| **total per score, four columns** | **64.7µs** | 71.6µs | 131.2µs |
 
 Read it as two very different costs. Pricing a score is microseconds — Reimagined's own arithmetic is 0.7µs, and even Bancho's complete pp calculation is half a microsecond — while the *difficulty* pass (star ratings for the full map, the rice variant and the official calculator) costs tens of milliseconds per map-and-mods pair and is cached, so a bp list pays it once per map. Sunny and Codexxy share that pass by construction, which is why they are timed together; computing them independently would roughly double that cost. For comparison, the Python research reference prices a score in ~5µs and needs ~13-16ms for its diagnostic surface channel, and the Node sunny build needs ~100-350ms per map.
 
@@ -118,7 +118,7 @@ docs/data/.nojekyll             (in docs/) tells GitHub Pages not to run Jekyll
   "users": [ { "uid": 21207706, "username": "Shirasu-Azusa", "fixture": "bp-lists", "scores": 100,
                "file": "players/21207706.json",
                "total_pp": { "bancho": 14923.95, "sunny": 14961.18, "codexxy": 15021.09, "reimagined": 14486.37 } } ],
-  "score_count": 1900,
+  "score_count": 32516,
   "warnings": [] }
 ```
 
@@ -150,7 +150,7 @@ The three id fields exist so the site can link correctly: a difficulty lives at 
 
 Because the intended scale is hundreds of players and tens of thousands of scores, and a single document would be wrong on three counts: every visitor would download all of it before seeing anything, the browser would parse all of it to render one player, and every refresh would produce one enormous diff in git. The split fixes that — the index stays a few kilobytes, and each player is a shard of a few tens of kilobytes fetched on demand.
 
-The current dataset shows the shape of it: 19 players and 1,900 scores occupy 20 files and 759 KB, but a visitor loads only the 6.6 KB index plus one ~40 KB shard. Under the old single-document layout the same content was one 471 KB file for five players, so the initial download has gone from scaling with the whole dataset to being constant — adding a hundred more players would leave the index at a few tens of kilobytes and cost nothing until a visitor actually selects one.
+The current dataset shows the shape of it: 343 players and 32,516 scores occupy 344 files and 14.8 MB, but a visitor loads only the 140 KB index plus the one ~43 KB shard being opened. Under the old single-document layout this would have been a single 15 MB file, so the initial download has stopped scaling with the dataset: the rankings and the dataset-wide modules need no shard at all, and adding hundreds more players grows the index by tens of kilobytes and costs nothing until a visitor opens one.
 
 Inside a shard the layout is **columnar**: the column names appear once and each score is an array of values in that order. Compared with an array of objects this is roughly a third of the bytes (no repeated keys, no braces), it parses faster, and the site can turn it into table rows by index instead of by property lookup. The order is part of the contract: `columns` is authoritative, and adding a column means appending to it and bumping `schema_version`.
 
@@ -158,7 +158,7 @@ If the dataset ever outgrows JSON, the same split means only the shard format ha
 
 ## The comparison site
 
-`docs/` **is** the site: `index.html`, `app.js`, `styles.css`, `web.md` and `data/`. Serve it locally with any static server:
+`docs/` **is** the site: `index.html`, `styles.css`, the ES modules under `js/` (`main.js` is the entry point, the views are in `js/views/`), `web.md` and `data/`. Serve it locally with any static server:
 
 ```bash
 python -m http.server 8080 --directory docs
@@ -240,11 +240,30 @@ In other words the engine reproduces the research specification's production num
 
 **Can the site compute PP for an arbitrary uid or score_id in the browser (a WASM calculator)?**
 
-Partly, and the honest split matters.
+*Computing a score you already have: yes, and it is shipped.* The calculator view accepts a `.osu` file (dropped or pasted), a mod string and the six judgement counts, and prices the score under all four algorithms locally — no server, no key, no rate limit. It runs the same crate that produced the published dataset, so its numbers are identical: verified by pricing a score from `docs/data` in the browser and comparing, where the two agree to the dataset's rounding (≤0.0002 pp).
 
-*Offline calculation* — yes, and it is already proven to be buildable: `cargo build --release --target wasm32-unknown-unknown -p mania-pp-algorithms` succeeds today (0.72 MB rlib, and CI keeps it that way), so the algorithm crate is WebAssembly-ready. What is missing is only the packaging: a thin `wasm-bindgen` wrapper exposing one function (`.osu` text + mods + judgement counts → four PP values plus the detail block), the generated JS glue, and a page section where a visitor drops a `.osu` file and types their counts. Everything needed is local and no key is involved. One condition: the fork's `reports` feature must stay disabled, because it pulls in `crossterm` through `comfy-table`, which does not build for `wasm32-unknown-unknown` — that is why the engine calls `mania::sunny::calculate` directly instead of the `report_utils` helper and parses mod strings itself.
+The module is built from `crates/mania-pp-wasm` and published as a static artefact under `docs/wasm/` (GitHub Pages serves files, so the compiled `.wasm` and its JS glue are committed, exactly like the dataset):
 
-**What WASM is for, and what it cannot do.** WASM replaces the *computation*, not the *acquisition*. It lets the page compute four PP values for a score the visitor already has (their own `.osu` file and judgement counts) with no server and no rate limits. It cannot fetch anything by id, and that is a property of osu!'s infrastructure rather than of the build:
+```bash
+cargo build --release --target wasm32-unknown-unknown -p mania-pp-wasm
+wasm-bindgen --target web --out-dir docs/wasm --out-name mania_pp_wasm \
+  target/wasm32-unknown-unknown/release/mania_pp_wasm.wasm
+```
+
+CI re-runs exactly that and fails if the committed artefact differs, so the page can never serve a stale module. Two conditions hold this together: the crate must stay buildable for `wasm32-unknown-unknown`, and the dependency's `reports` feature must stay disabled — it pulls in `crossterm` through `comfy-table`, which does not build for wasm, which is why the engine calls `mania::sunny::calculate` directly instead of the `report_utils` helper and parses mod strings itself.
+
+The JavaScript surface is deliberately tiny (one class plus one function, both returning JSON):
+
+```js
+const wasm = await import('./wasm/mania_pp_wasm.js');
+await wasm.default();
+const calc = new wasm.Calculator(osuText, 'DT');            // parse + prepare once
+const result = JSON.parse(calc.price(5200, 210, 14, 2, 0, 1)); // price as often as you like
+```
+
+`Calculator` exists because the expensive part is the difficulty pass (tens of milliseconds per map-and-mods pair) while pricing is microseconds: the page prepares once and reprices on every keystroke.
+
+**What WASM is for, and what it cannot do.** WASM replaces the *computation*, not the *acquisition*. It cannot fetch anything by id, and that is a property of osu!'s infrastructure rather than of the build:
 
 | Test | Result |
 |---|---|
@@ -252,7 +271,7 @@ Partly, and the honest split matters.
 | `HEAD https://osu.ppy.sh/osu/1920615` (a `.osu` file) | 200, **no `Access-Control-Allow-Origin` header** |
 | `HEAD https://osu.ppy.sh/api/v2/beatmaps/1920615` | 403 — the API needs a token before it answers at all |
 
-So "give me a score_id and I will fetch the score and the map" is not achievable from a static page: the score page is HTML and cross-origin-blocked, the `.osu` endpoint is cross-origin-blocked, and the API needs credentials the page cannot hold. Also note the API v2 has no documented "get a score by id" endpoint that returns judgements plus map info — the replay download (`/scores/{score}/download`) is the closest, and it yields a `.osr` from which you would still have to resolve the beatmap by checksum. Making that work needs a token, which means either the visitor's own token or a serverless proxy holding the application secret; both were listed above, and neither is a WASM question.
+So "give me a score_id and I will fetch the score and the map" is not achievable from a static page: the score page is HTML and cross-origin-blocked, the `.osu` endpoint is cross-origin-blocked, and the API needs credentials the page cannot hold. Also note the API v2 has no documented "get a score by id" endpoint that returns judgements plus map info — the replay download (`/scores/{score}/download`) is the closest, and it yields a `.osr` from which you would still have to resolve the beatmap by checksum. Making that work needs a token, which means either the visitor's own token or a serverless proxy holding the application secret — neither is a WASM question, and the calculator shipped here deliberately needs no infrastructure at all.
 
 *Fetching by uid/score_id from the browser* — no, not from a static page. The osu! API v2 can only hand out tokens in two ways: the client-credentials flow requires the application's **client secret**, which cannot be embedded in a public page without publishing it; and the authorization-code flow would work from a browser only with PKCE, which osu! does not support — the request has been open since 2020 and was still open in mid-2025 ([ppy/osu-web#7004](https://github.com/ppy/osu-web/issues/7004)), and browser calls to the API have also run into CORS problems.
 

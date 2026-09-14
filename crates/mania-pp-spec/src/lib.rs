@@ -1,10 +1,6 @@
 //! Single source of truth for the *tunable* constants of the reimagined algorithm.
 //!
-//! The Python research repository (`mania_surface_research`) owns the specification.
-//! Its `scripts/export_engine_spec.py` writes `spec/spec.json` in this repository, and
-//! this crate embeds that file at compile time. Nothing here is hand-maintained: if the
-//! research side changes a knob and this repository is not re-synced, the golden-vector replay
-//! on the research side fails loudly (this repository ships no test code by policy).
+//! The Python research repository (`mania_surface_research`) owns the specification. Its `scripts/export_engine_spec.py` writes `spec/spec.json` in this repository, and this crate embeds that file at compile time. Nothing here is hand-maintained: if the research side changes a knob and this repository is not re-synced, the golden-vector replay on the research side fails loudly (this repository ships no test code by policy).
 //!
 //! Rules of the sync protocol (see `docs/usage.md`, section "Specification sync"):
 //! 1. Research repository = specification truth (Python reference implementation).
@@ -13,8 +9,7 @@
 //!    source) live next to the code that uses them, not here; only *tunable* values do.
 //!
 //! ```no_run
-//! let spec = mania_pp_spec::spec();
-//! assert!(spec.accuracy.gamma_wide > 0.0);
+//! let spec = mania_pp_spec::spec(); assert!(spec.accuracy.gamma_wide > 0.0);
 //! ```
 
 use std::collections::BTreeMap;
@@ -24,8 +19,7 @@ use serde::Deserialize;
 
 /// Version of the specification this engine build was synced from.
 ///
-/// Bump this together with a research-side export; the unit test below makes a stale
-/// engine fail instead of silently reporting numbers from an older specification.
+/// Bump this together with a research-side export; the unit test below makes a stale engine fail instead of silently reporting numbers from an older specification.
 pub const EXPECTED_SPEC_VERSION: &str = "v1.14";
 
 /// Embedded export of the research specification.

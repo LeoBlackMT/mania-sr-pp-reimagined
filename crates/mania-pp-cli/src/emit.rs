@@ -2,24 +2,17 @@
 //!
 //! # Why the dataset is split and columnar
 //!
-//! A bp list fixture is a few hundred scores today, but the intended scale is hundreds of players
-//! and tens of thousands of scores. One big JSON document would mean (a) every visitor downloads
-//! everything, (b) the whole thing is parsed on load, (c) a single file grows into a merge-conflict
-//! magnet in git. So the dataset is written as:
+//! A bp list fixture is a few hundred scores today, but the intended scale is hundreds of players and tens of thousands of scores. One big JSON document would mean (a) every visitor downloads everything, (b) the whole thing is parsed on load, (c) a single file grows into a merge-conflict magnet in git. So the dataset is written as:
 //!
 //! ```text
-//! docs/data/index.json            engine info, algorithm list, one entry per player + weighted totals
-//! docs/data/players/{uid}.json    that player's scores only, in columnar form
+//! docs/data/index.json            engine info, algorithm list, one entry per player + weighted totals docs/data/players/{uid}.json    that player's scores only, in columnar form
 //! ```
 //!
-//! The index is small enough to load eagerly; a player's shard is fetched when it is selected.
-//! Inside a shard the column names appear **once**, and each score is a plain array of values in
-//! that order — roughly a third of the bytes of an array of objects, and much faster to turn into
-//! table rows in the browser.
+//! The index is small enough to load eagerly; a player's shard is fetched when it is selected. Inside a shard the column names appear **once**, and each score is a plain array of values in that order — roughly a third of the bytes of an array of objects, and much faster to turn into table rows in the browser.
 //!
-//! Field order is explicit and scores are sorted deterministically, so re-running over unchanged
-//! inputs produces byte-identical files.
+//! Field order is explicit and scores are sorted deterministically, so re-running over unchanged inputs produces byte-identical files.
 
+use std::collections::BTreeMap;
 use std::path::Path;
 use std::time::{SystemTime, UNIX_EPOCH};
 
@@ -37,8 +30,7 @@ pub const SCHEMA_VERSION: u32 = 3;
 
 /// Upstream revision this build compares against.
 ///
-/// Keep in sync with the `rev` in the workspace `Cargo.toml`; it is reported in the dataset so a
-/// published page can always be traced back to the algorithms it used.
+/// Keep in sync with the `rev` in the workspace `Cargo.toml`; it is reported in the dataset so a published page can always be traced back to the algorithms it used.
 pub const ROSU_PP_REV: &str = "3530ba7";
 
 /// Columns of a player shard, in order. The site indexes into `scores` with these names.
@@ -149,11 +141,11 @@ fn sort_scores(scores: &mut [ScoreOut]) {
     });
 }
 
-fn round3(v: f64) -> f64 {
+pub(crate) fn round3(v: f64) -> f64 {
     (v * 1000.0).round() / 1000.0
 }
 
-fn round4(v: f64) -> f64 {
+pub(crate) fn round4(v: f64) -> f64 {
     (v * 10_000.0).round() / 10_000.0
 }
 
@@ -274,6 +266,31 @@ pub fn write_dataset(
         }));
     }
 
+    let aggregate_ids: Vec<&'static str> = algorithm_table().iter().map(|(id, _, _)| *id).collect();
+    let aggregate_scores: Vec<crate::aggregates::AggregateScore> = users
+        .iter()
+        .flat_map(|user| {
+            user.scores.iter().map(|s| {
+                let mut pp = BTreeMap::new();
+                for id in &aggregate_ids {
+                    pp.insert(*id, s.pp.get(id));
+                }
+                crate::aggregates::AggregateScore {
+                    uid: user.uid,
+                    score_id: s.row.score_id,
+                    beatmap_id: s.row.map_id.parse::<i64>().unwrap_or(0),
+                    artist: s.artist.clone(),
+                    title: s.title.clone(),
+                    version: s.version.clone(),
+                    mods: s.row.mods.clone(),
+                    keys: s.keys,
+                    ln_ratio: s.detail.ln_ratio,
+                    pp,
+                }
+            })
+        })
+        .collect();
+
     let index = json!({
         "schema_version": SCHEMA_VERSION,
         "generated_at": rfc3339_now(),
@@ -286,6 +303,7 @@ pub fn write_dataset(
         "algorithms": algorithms,
         "users": index_users,
         "score_count": total_scores,
+        "aggregates": crate::aggregates::build(&aggregate_scores, &aggregate_ids),
         "warnings": warnings,
     });
 

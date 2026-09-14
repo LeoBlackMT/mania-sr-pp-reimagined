@@ -1,18 +1,10 @@
 //! `sunny` — the community algorithm by [Crz]sunnyxxy, pattern and accuracy part only.
 //!
-//! Known in the community simply as **sunny**; its repository is named *Star-Rating-Rebirth*, and
-//! the shortened "SRR" is only used internally in this project's older notes. The site shows it as
-//! plain `sunny`.
+//! Known in the community simply as **sunny**; its repository is named *Star-Rating-Rebirth*, and the shortened "SRR" is only used internally in this project's older notes. The site shows it as plain `sunny`.
 //!
-//! The community algorithm replaces the official difficulty model with one built around per-object
-//! difficulty, long-note structure and a window-derived parameter, and prices PP as
-//! `9.8 · max(star − 0.15, 0.05)^2.2 · variety · length · accuracy terms`.
+//! The community algorithm replaces the official difficulty model with one built around per-object difficulty, long-note structure and a window-derived parameter, and prices PP as `9.8 · max(star − 0.15, 0.05)^2.2 · variety · length · accuracy terms`.
 //!
-//! The calculation available in the pinned dependency is already integrated with the surface timing
-//! model. To expose the *original* community algorithm as its own column, this module reports the
-//! pattern and accuracy components (`xxy_pp_pattern + xxy_pp_accuracy`) and leaves the timing
-//! component to [`crate::codexxy`]. Both come from the same single calculation, so their difference
-//! is exactly the timing model — nothing else.
+//! The calculation available in the pinned dependency is already integrated with the surface timing model. To expose the *original* community algorithm as its own column, this module reports the pattern and accuracy components (`xxy_pp_pattern + xxy_pp_accuracy`) and leaves the timing component to [`crate::codexxy`]. Both come from the same single calculation, so their difference is exactly the timing model — nothing else.
 
 /// Algorithm id used in the dataset.
 pub const ID: &str = "sunny";
@@ -42,8 +34,7 @@ fn state_of(counts: &Counts) -> SunnyScoreState {
 
 /// The shared upstream performance pass for one score.
 ///
-/// Both this module and [`crate::codexxy`] read from its result, so a caller pricing a score should
-/// compute it once and derive both columns — see [`crate::price`].
+/// Both this module and [`crate::codexxy`] read from its result, so a caller pricing a score should compute it once and derive both columns — see [`crate::price`].
 pub fn performance(prepared: &Prepared, counts: &Counts) -> SunnyManiaPerformanceAttributes {
     rosu_pp::mania::sunny::calculate_performance(
         &prepared.sunny_full,

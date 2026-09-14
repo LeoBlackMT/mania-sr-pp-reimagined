@@ -79,6 +79,10 @@ This repository contains **only** source, documentation, the specification, fixt
 * [`docs/web.md`](docs/web.md) — the comparison site itself (running it locally, what it shows)
 * [`docs/reference-csharp-sources.md`](docs/reference-csharp-sources.md) — C# reference notes for Bancho and Sunny (formulas, entry points, porting traps)
 
+## The published page
+
+`docs/` is served by GitHub Pages and holds three views over the published dataset — `#/players` (every player in the index), `#/player/{uid}` (one player's scores, ranked under either algorithm) and `#/dataset` (layers, price distributions, correlations and the widest disagreements across the whole dataset) — plus `#/calc`, which prices a single score in the browser with the engine compiled to WebAssembly, so a visitor can still check a map the page is unable to fetch. The dataset is 343 players and 32,516 scores, published as an index plus one shard per player; the page loads the index and only the shard it is asked for.
+
 ## License and attribution
 
 MIT licensed. The repository builds on and redistributes work by others — see [`NOTICE.md`](NOTICE.md); keep it accurate and do not remove it.

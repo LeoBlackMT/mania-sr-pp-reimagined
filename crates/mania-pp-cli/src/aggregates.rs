@@ -31,6 +31,10 @@ const BINS: usize = 24;
 /// Worst disagreements published to the site.
 const TOP_DISAGREE: usize = 60;
 
+/// A score only counts as a disagreement when every algorithm prices it above [`DISAGREE_MIN_PP`] and the dearest of them clears [`DISAGREE_MIN_TOP_PP`]; below that the spread measures rounding noise around zero rather than a difference of opinion.
+const DISAGREE_MIN_PP: f64 = 50.0;
+const DISAGREE_MIN_TOP_PP: f64 = 200.0;
+
 fn median(values: &mut [f64]) -> Option<f64> {
     if values.is_empty() {
         return None;
@@ -227,6 +231,9 @@ pub fn build(scores: &[AggregateScore], algorithm_ids: &[&'static str]) -> Value
     }
 
     // --- worst disagreements across the whole dataset ----------------------------------------
+    // A score only counts when every algorithm priced it meaningfully. When one of them bottoms out
+    // near zero pp — a trivial map, or a play so bad the curve flattens — the spread jumps towards
+    // 400% and says nothing about the algorithms; those rows used to fill the whole list.
     let mut ranked: Vec<(f64, &AggregateScore)> = scores
         .iter()
         .filter_map(|s| {
@@ -234,16 +241,18 @@ pub fn build(scores: &[AggregateScore], algorithm_ids: &[&'static str]) -> Value
                 .iter()
                 .filter_map(|id| s.pp.get(id).copied().flatten())
                 .collect();
-            if values.len() < 2 {
+            if values.len() < algorithm_ids.len() || values.iter().any(|v| *v <= DISAGREE_MIN_PP) {
+                return None;
+            }
+            let top = values.iter().cloned().fold(f64::MIN, f64::max);
+            if top < DISAGREE_MIN_TOP_PP {
                 return None;
             }
             let mean = values.iter().sum::<f64>() / values.len() as f64;
             if mean <= 0.0 {
                 return None;
             }
-            let spread = (values.iter().cloned().fold(f64::MIN, f64::max)
-                - values.iter().cloned().fold(f64::MAX, f64::min))
-                / mean;
+            let spread = (top - values.iter().cloned().fold(f64::MAX, f64::min)) / mean;
             Some((spread, s))
         })
         .collect();

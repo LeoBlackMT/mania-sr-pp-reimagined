@@ -80,10 +80,13 @@ cargo run --release -p mania-pp-cli -- \
 | `--maps <dir>` | directory containing `{map_id}.osu`, required |
 | `--out <dir\|file>` | dataset location (default `docs/data`) |
 | `--limit N` | only the first `N` scores per user |
+| `--min-bancho-total P` | drop players whose Bancho weighted total is below `P` pp (default 1000) |
 | `--bench` | print per-algorithm single-score timings |
 | `--quiet` | no console summary |
 
 The console prints, per player, the weighted total of each algorithm and the delta against Bancho.
+
+Players below `--min-bancho-total` are dropped before anything is written: a bp list below that floor prices trivia, and those scores drag every dataset-wide module with them. The index records what was left out (`excluded_players`) together with the floor itself (`min_bancho_total`), so a published page can always say so rather than quietly showing a smaller dataset.
 
 **Totals**: per algorithm, the player's scores are ranked by *that algorithm's* PP and summed with weight `0.95^n` — what the profile would look like if that algorithm were the one in use. No bonus PP is applied (the bonus term only becomes relevant above 1000 ranked scores, and these fixtures are the top 100).
 
@@ -250,7 +253,7 @@ wasm-bindgen --target web --out-dir docs/wasm --out-name mania_pp_wasm \
   target/wasm32-unknown-unknown/release/mania_pp_wasm.wasm
 ```
 
-CI re-runs exactly that and fails if the committed artefact differs, so the page can never serve a stale module. Two conditions hold this together: the crate must stay buildable for `wasm32-unknown-unknown`, and the dependency's `reports` feature must stay disabled — it pulls in `crossterm` through `comfy-table`, which does not build for wasm, which is why the engine calls `mania::sunny::calculate` directly instead of the `report_utils` helper and parses mod strings itself.
+CI re-runs exactly that and then checks two things, so the page can never serve a module that disagrees with the source: the committed `.d.ts` must match the freshly generated one (the JavaScript API is unchanged) and the fresh module must price a synthetic map to the same four pp values as the committed one. The `.wasm` bytes themselves are deliberately not compared — that would fail on any toolchain or platform drift while saying nothing about behaviour. `rust-toolchain.toml` pins the compiler to an exact release so a local build and CI agree on what they are building. Two conditions hold this together: the crate must stay buildable for `wasm32-unknown-unknown`, and the dependency's `reports` feature must stay disabled — it pulls in `crossterm` through `comfy-table`, which does not build for wasm, which is why the engine calls `mania::sunny::calculate` directly instead of the `report_utils` helper and parses mod strings itself.
 
 The JavaScript surface is deliberately tiny (one class plus one function, both returning JSON):
 

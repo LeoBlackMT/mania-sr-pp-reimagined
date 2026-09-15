@@ -7,8 +7,8 @@
  * =========================================================================== */
 
 import { $ } from '../dom.js';
-import { esc, fmt, num, signed } from '../format.js';
-import { LN_HB, LN_RC, PAGE_SIZE, algoLabel, registerView, state } from '../core.js';
+import { esc, fmt, num, pctPlain, signed } from '../format.js';
+import { LN_HB, LN_RC, MORE_STEP, algoLabel, registerView, state } from '../core.js';
 
 const el = {
   summary: $('#dataset-summary'),
@@ -140,45 +140,95 @@ function distDomain(a) {
   return { min: Math.min(...entries.map((d) => num(d.bin_min) ?? 0)), max: Math.max(...entries.map((d) => num(d.bin_max) ?? 0)) };
 }
 
-function histogramSvg(d, domain) {
-  const W = 300, H = 132, left = 34, right = 8, top = 12, bottom = 22;
-  const lo = num(d.bin_min) ?? 0, hi = num(d.bin_max) ?? 1;
+/** Every bin of one distribution, as counts, with the total the shares are taken against. */
+function histBins(d) {
   const bins = Array.isArray(d.bins) ? d.bins : [];
   const total = bins.reduce((x, y) => x + y, 0) || num(d.n) || 1;
-  const dMin = domain.min, dMax = domain.max, dSpan = Math.max(1e-9, dMax - dMin);
-  const xAt = (v) => left + ((v - dMin) / dSpan) * (W - left - right);
-  const yAt = (v) => H - bottom - v * (H - top - bottom);
-  const bw = Math.max(0.5, (xAt(hi) - xAt(lo)) / Math.max(1, bins.length));
-  const bars = bins.map((c, i) => {
-    const x = xAt(lo) + i * bw;
-    const h = (H - top - bottom) * (c / total);
-    return `<rect class="bar-a" x="${x.toFixed(2)}" y="${(H - bottom - h).toFixed(2)}" width="${Math.max(0.6, bw - 0.8).toFixed(2)}" height="${h.toFixed(2)}" rx="1"/>`;
-  }).join('');
-  const med = num(d.median);
-  const medLine = med == null ? '' : `<line class="median" x1="${xAt(med).toFixed(1)}" x2="${xAt(med).toFixed(1)}" y1="${top}" y2="${H - bottom}"/>`;
-  const ticks = [dMin, (dMin + dMax) / 2, dMax].map((v) => `<text x="${xAt(v).toFixed(1)}" y="${H - bottom + 13}" text-anchor="${v === dMin ? 'start' : v === dMax ? 'end' : 'middle'}">${fmt(v, 0)}</text>`).join('');
-  const yTop = `<text x="${left - 5}" y="${(yAt(1) + 8).toFixed(1)}" text-anchor="end">${fmt(total ? 1 : 0, 0)}</text>`;
-  return `<svg class="hist" viewBox="0 0 ${W} ${H}" role="img" aria-label="price distribution">`
-    + `<line class="rule" x1="${left}" x2="${W - right}" y1="${H - bottom}" y2="${H - bottom}"/>`
-    + yTop + bars + medLine + ticks + `</svg>`;
+  return { bins, total };
 }
 
-/** The same distribution as a step line, for the A/B overlay: two histograms with different bin edges are far easier to compare as one filled shape and one outline. */
-function histLineSvg(d, domain) {
-  const W = 300, H = 132, left = 34, right = 8, top = 12, bottom = 22;
+/** The geometry of one histogram over the shared domain. */
+function histScale(domain, peak, W, H, pad) {
+  const dSpan = Math.max(1e-9, domain.max - domain.min);
+  const plot = H - pad.top - pad.bottom;
+  return {
+    plot,
+    xAt: (v) => pad.left + ((v - domain.min) / dSpan) * (W - pad.left - pad.right),
+    yAt: (v) => H - pad.bottom - (peak > 0 ? v / peak : 0) * plot,
+  };
+}
+
+/**
+ * The y axis of every price histogram, scaled to the tallest bin of the chart rather than to a fixed 0–1 share.
+ * A price distribution peaks at around a tenth of the scores, so a fixed share axis flattens all twenty-four bins into a two-pixel line and labels the top of it "1"; scaling to the peak is what makes the shape readable, and the top label then says what that peak actually is — "13.6%" for this dataset's Bancho prices.
+ */
+function histAxis(g, { W, H, pad, domain, peak, total }) {
+  const yBase = H - pad.bottom;
+  const yMid = g.yAt(peak / 2);
+  const share = (v) => pctPlain(peak > 0 ? v / total : 0, 1);
+  const xs = [domain.min, (domain.min + domain.max) / 2, domain.max];
+  return `<line class="rule" x1="${pad.left}" x2="${W - pad.right}" y1="${yBase}" y2="${yBase}"/>`
+    + (peak > 0 ? `<line class="grid" x1="${pad.left}" x2="${W - pad.right}" y1="${yMid.toFixed(1)}" y2="${yMid.toFixed(1)}"/>` : '')
+    + `<text class="y-label" x="${pad.left - 5}" y="${(g.yAt(peak) + 3.5).toFixed(1)}" text-anchor="end">${share(peak)}</text>`
+    + (peak > 0 ? `<text class="y-label" x="${pad.left - 5}" y="${(yMid + 3.5).toFixed(1)}" text-anchor="end">${share(peak / 2)}</text>` : '')
+    + `<text class="y-label" x="${pad.left - 5}" y="${(yBase + 3.5).toFixed(1)}" text-anchor="end">0</text>`
+    + xs.map((v, i) => `<text x="${g.xAt(v).toFixed(1)}" y="${(yBase + 13).toFixed(1)}" text-anchor="${i === 0 ? 'start' : i === xs.length - 1 ? 'end' : 'middle'}">${fmt(v, 0)}</text>`).join('');
+}
+
+/** One histogram, with its median marked and its y axis labelled with the share of the tallest bin. */
+function histogramSvg(d, domain) {
+  const W = 300, H = 150, pad = { left: 44, right: 8, top: 14, bottom: 24 };
   const lo = num(d.bin_min) ?? 0, hi = num(d.bin_max) ?? 1;
-  const bins = Array.isArray(d.bins) ? d.bins : [];
-  const total = bins.reduce((x, y) => x + y, 0) || num(d.n) || 1;
-  const dMin = domain.min, dMax = domain.max, dSpan = Math.max(1e-9, dMax - dMin);
-  const xAt = (v) => left + ((v - dMin) / dSpan) * (W - left - right);
-  const yAt = (v) => H - bottom - v * (H - top - bottom);
-  const step = (hi - lo) / Math.max(1, bins.length);
-  const pts = bins.map((c, i) => `${xAt(lo + (i + 0.5) * step).toFixed(2)},${yAt(c / total).toFixed(2)}`).join(' ');
-  return `<svg class="hist hist-line" viewBox="0 0 ${W} ${H}" role="img" aria-label="price distribution as a step line">`
-    + `<line class="rule" x1="${left}" x2="${W - right}" y1="${H - bottom}" y2="${H - bottom}"/>`
-    + `<polyline class="step" points="${pts}"/>`
-    + `<text x="${left - 5}" y="${(yAt(1) + 8).toFixed(1)}" text-anchor="end">1</text>`
-    + [dMin, (dMin + dMax) / 2, dMax].map((v) => `<text x="${xAt(v).toFixed(1)}" y="${H - bottom + 13}" text-anchor="${v === dMin ? 'start' : v === dMax ? 'end' : 'middle'}">${fmt(v, 0)}</text>`).join('')
+  const { bins, total } = histBins(d);
+  const peak = bins.length ? Math.max(...bins) : 0;
+  const g = histScale(domain, peak, W, H, pad);
+  const bw = Math.max(0.5, (g.xAt(hi) - g.xAt(lo)) / Math.max(1, bins.length));
+  const bars = bins.map((c, i) => {
+    const x = g.xAt(lo) + i * bw;
+    const h = (c / peak) * g.plot;
+    return `<rect class="bar-a" x="${x.toFixed(2)}" y="${(H - pad.bottom - h).toFixed(2)}" width="${Math.max(0.6, bw - 0.8).toFixed(2)}" height="${h.toFixed(2)}" rx="1"/>`;
+  }).join('');
+  const med = num(d.median);
+  const medLine = med == null ? '' : `<line class="median" x1="${g.xAt(med).toFixed(1)}" x2="${g.xAt(med).toFixed(1)}" y1="${pad.top}" y2="${H - pad.bottom}"/>`;
+  return `<svg class="hist" viewBox="0 0 ${W} ${H}" role="img" aria-label="price distribution, y axis scaled to the tallest bin">`
+    + histAxis(g, { W, H, pad, domain, peak, total }) + bars + medLine + `</svg>`;
+}
+
+/**
+ * The A-against-B overlay: one chart rather than two stacked ones, so the two distributions share a pair of axes and a reader can compare them without moving their eyes.
+ * A is the bars and B is the step line, which is how this page tells two monochrome series apart; the y axis is scaled to the taller of the two peaks, and both medians are marked.
+ */
+function histOverlaySvg(dA, dB, domain) {
+  const W = 860, H = 150, pad = { left: 48, right: 12, top: 16, bottom: 24 };
+  const a = histBins(dA), b = histBins(dB);
+  const peak = Math.max(a.bins.length ? Math.max(...a.bins) : 0, b.bins.length ? Math.max(...b.bins) : 0);
+  const total = Math.max(a.total, b.total);
+  const g = histScale(domain, peak, W, H, pad);
+  const bars = (() => {
+    const lo = num(dA.bin_min) ?? 0, hi = num(dA.bin_max) ?? 1;
+    const bw = Math.max(0.5, (g.xAt(hi) - g.xAt(lo)) / Math.max(1, a.bins.length));
+    return a.bins.map((c, i) => {
+      const x = g.xAt(lo) + i * bw;
+      const h = (c / peak) * g.plot;
+      return `<rect class="bar-a" x="${x.toFixed(2)}" y="${(H - pad.bottom - h).toFixed(2)}" width="${Math.max(0.6, bw - 0.8).toFixed(2)}" height="${h.toFixed(2)}" rx="1"/>`;
+    }).join('');
+  })();
+  const step = (() => {
+    const lo = num(dB.bin_min) ?? 0, hi = num(dB.bin_max) ?? 1;
+    const w = (hi - lo) / Math.max(1, b.bins.length);
+    return `<polyline class="step" points="${b.bins.map((c, i) => `${g.xAt(lo + (i + 0.5) * w).toFixed(2)},${g.yAt(c).toFixed(2)}`).join(' ')}"/>`;
+  })();
+  const marker = (med, cls, label, dy) => {
+    const v = num(med);
+    if (v == null) return '';
+    return `<line class="${cls}" x1="${g.xAt(v).toFixed(1)}" x2="${g.xAt(v).toFixed(1)}" y1="${pad.top}" y2="${H - pad.bottom}"/>`
+      + `<text class="median-label" x="${(g.xAt(v) + 3).toFixed(1)}" y="${(pad.top + dy).toFixed(1)}">${esc(`${label} ${fmt(v, 0)}`)}</text>`;
+  };
+  return `<svg class="hist hist-overlay-svg" viewBox="0 0 ${W} ${H}" role="img" aria-label="the ${esc(algoLabel(state.A))} and ${esc(algoLabel(state.B))} price distributions on shared axes">`
+    + histAxis(g, { W, H, pad, domain, peak, total })
+    + bars + step
+    + marker(dA.median, 'median', 'A', 10)
+    + marker(dB.median, 'median-b', 'B', 22)
     + `</svg>`;
 }
 
@@ -192,15 +242,19 @@ function renderDistribution(a) {
   }
   const cards = ids.map((id) => {
     const d = a.distribution[id];
+    const { bins, total } = histBins(d);
+    const peak = bins.length ? Math.max(...bins) : 0;
     return `<figure class="hist-card"><figcaption><strong>${esc(algoLabel(id))}</strong>`
-      + `<span class="hint">n ${esc(d.n)} · p25 ${fmt(num(d.p25), 0)} · median ${fmt(num(d.median), 0)} · p75 ${fmt(num(d.p75), 0)} · p95 ${fmt(num(d.p95), 0)} · max ${fmt(num(d.max), 0)}</span></figcaption>`
+      + `<span class="hint">n ${esc(d.n)} · p25 ${fmt(num(d.p25), 0)} · median ${fmt(num(d.median), 0)} · p75 ${fmt(num(d.p75), 0)} · p95 ${fmt(num(d.p95), 0)} · max ${fmt(num(d.max), 0)}</span>`
+      + `<span class="hint">y axis to ${pctPlain(peak / total, 1)} — the share of this algorithm's scores in its tallest bin</span></figcaption>`
       + histogramSvg(d, domain) + '</figure>';
   }).join('');
   const dA = a.distribution[state.A], dB = a.distribution[state.B];
-  const overlay = dA && dB ? `<figure class="hist-card hist-overlay"><figcaption><strong>${esc(algoLabel(state.A))} against ${esc(algoLabel(state.B))}</strong><span class="hint">bars ${esc(algoLabel(state.A))} · step line ${esc(algoLabel(state.B))}, each as a share of its own scores</span></figcaption>`
-    + histogramSvg(dA, domain) + histLineSvg(dB, domain) + '</figure>' : '';
+  const overlay = dA && dB ? `<figure class="hist-card hist-overlay"><figcaption><strong>${esc(algoLabel(state.A))} against ${esc(algoLabel(state.B))}</strong>`
+    + `<span class="hint">bars ${esc(algoLabel(state.A))} · step line ${esc(algoLabel(state.B))}, on one pair of axes, each as a share of its own scores; medians marked ${fmt(num(dA.median), 0)} and ${fmt(num(dB.median), 0)}</span></figcaption>`
+    + histOverlaySvg(dA, dB, domain) + '</figure>' : '';
   el.dist.innerHTML = cards + overlay;
-  el.distNote.textContent = 'One histogram per algorithm, all four drawn over the same pp range so the shapes can be compared; the marker is the median and the y axis is the share of that algorithm\'s own scores, not a count, because the four do not price the same number of scores. The last card overlays the A and B distributions, which is the dataset-wide A/B view this page can offer without downloading a single shard.';
+  el.distNote.textContent = 'One histogram per algorithm, all four drawn over the same pp range so the shapes can be compared. The y axis is the share of that algorithm\'s own scores, not a count, because the four do not price the same number of scores — and it is scaled to the tallest bin of the chart rather than to a fixed 100%, so the label at the top of the axis is the share that peak holds (13.6% of Bancho\'s scores, for instance) and the shape of the distribution stays readable instead of collapsing into a flat line. The dashed marker is the median. The last card overlays the A and B distributions on shared axes, bars against a step line, which is the dataset-wide A/B view this page can offer without downloading a single shard.';
 }
 
 /* ------------------------------- correlation ------------------------------ */
@@ -237,7 +291,7 @@ function renderDisagreements(a) {
     el.more.hidden = true;
     return;
   }
-  const slice = list.slice(0, state.shown.dataset ?? PAGE_SIZE);
+  const slice = list.slice(0, state.shown.dataset ?? MORE_STEP);
   el.disagree.innerHTML = `<table class="grid dis-table"><caption class="sr-only">The scores where the algorithms disagree most, ranked by spread over the mean</caption>`
     + `<thead><tr><th scope="col" class="num">#</th><th scope="col">Beatmap</th><th scope="col">Player</th><th scope="col">Structure</th>${state.algoIds.map((id) => `<th scope="col" class="num">${esc(algoLabel(id))}</th>`).join('')}<th scope="col" class="num">Spread</th></tr></thead><tbody>`
     + slice.map((r, i) => {
@@ -250,7 +304,7 @@ function renderDisagreements(a) {
     }).join('') + '</tbody></table>';
   const left = list.length - slice.length;
   el.more.hidden = left <= 0;
-  el.more.textContent = `Show more (${Math.min(PAGE_SIZE, left)} of ${left} remaining)`;
+  el.more.textContent = `Show more (${Math.min(MORE_STEP, left)} of ${left} remaining)`;
   el.disagreeNote.textContent = `Spread is (max − min) / mean over every algorithm that priced the score, so it is comparable across price levels. The engine publishes the ${list.length} widest ones; a row's beatmap links to osu! by beatmap id and its player number opens that player's view. Score ids and beatmap set ids are not part of the aggregate block, which is why the map link is the short /b/ form here.`;
 }
 
@@ -275,7 +329,7 @@ function render() {
 
 export function initDatasetView() {
   el.more.addEventListener('click', () => {
-    state.shown.dataset = (state.shown.dataset ?? PAGE_SIZE) + PAGE_SIZE;
+    state.shown.dataset = (state.shown.dataset ?? MORE_STEP) + MORE_STEP;
     const a = agg();
     if (a) renderDisagreements(a);
   });

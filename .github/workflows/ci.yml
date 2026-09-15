@@ -16,10 +16,10 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      # The toolchain is pinned by `rust-toolchain.toml`, so this installs exactly the version the
+      # published WASM artefact was built with.
       - name: Install Rust
-        run: |
-          rustup toolchain install stable --profile minimal --component rustfmt,clippy
-          rustup default stable
+        run: rustup show
 
       - name: Cache cargo
         uses: actions/cache@v4
@@ -32,9 +32,9 @@ jobs:
           restore-keys: ${{ runner.os }}-cargo-
 
       # This repository deliberately contains no test code: correctness is verified from the
-      # research repository, which owns the Python reference implementation, the golden vectors
-      # and the dataset validator (see docs/usage.md). CI therefore checks formatting, lints and
-      # the build.
+      # research repository, which owns the Python reference implementation, the golden vectors and
+      # the dataset validator (see docs/usage.md). CI therefore checks formatting, lints, the build
+      # and the behaviour of the published WebAssembly module.
       - name: Formatting
         run: cargo fmt --all -- --check
 
@@ -44,21 +44,71 @@ jobs:
       - name: Build
         run: cargo build --release --workspace
 
-      # The site's calculator runs on WebAssembly, and the compiled module is committed under
-      # `docs/wasm/` because GitHub Pages only serves static files. These two steps keep that
-      # promise honest: the workspace must still build for wasm32, and the committed artefact must
-      # be exactly what the current source produces (see docs/usage.md).
       - name: Build for wasm32
         run: |
           rustup target add wasm32-unknown-unknown
           cargo build --release --target wasm32-unknown-unknown -p mania-pp-algorithms -p mania-pp-wasm
 
-      - name: Verify the committed WASM artefact is current
+      # The site's calculator runs on WebAssembly and GitHub Pages only serves static files, so the
+      # compiled module is committed under docs/wasm/. These steps keep that promise honest: the
+      # freshly built module must expose the same JavaScript API as the committed one, and it must
+      # price a synthetic map to the same numbers. The `.wasm` bytes themselves are deliberately not
+      # compared — that would break on toolchain or platform drift while saying nothing about
+      # behaviour.
+      - name: Install wasm-bindgen-cli
+        uses: taiki-e/install-action@v2
+        with:
+          tool: wasm-bindgen@0.2.128
+
+      - name: Verify the committed WASM artefact
         run: |
-          cargo install wasm-bindgen-cli --version 0.2.128 --locked
           wasm-bindgen --target web --out-dir "$RUNNER_TEMP/wasm" --out-name mania_pp_wasm \
             target/wasm32-unknown-unknown/release/mania_pp_wasm.wasm
-          if ! diff -r --brief docs/wasm "$RUNNER_TEMP/wasm"; then
-            echo "::error::docs/wasm is out of date. Rebuild it with the command in docs/usage.md and commit the result."
+          if ! diff -u docs/wasm/mania_pp_wasm.d.ts "$RUNNER_TEMP/wasm/mania_pp_wasm.d.ts"; then
+            echo "::error::docs/wasm is out of date: the module's JavaScript API changed. Rebuild it with the command in docs/usage.md and commit the result."
             exit 1
           fi
+          cat > "$RUNNER_TEMP/smoke.mjs" <<'SMOKE'
+          import { readFile } from 'node:fs/promises';
+          import { pathToFileURL } from 'node:url';
+          import path from 'node:path';
+
+          const dir = process.argv[2];
+          const mod = await import(pathToFileURL(path.join(dir, 'mania_pp_wasm.js')).href);
+          await mod.default({ module_or_path: await readFile(path.join(dir, 'mania_pp_wasm_bg.wasm')) });
+
+          // A synthetic 4K map: 240 circles and 60 holds, OD 8, every object judged as a 320.
+          const lines = [
+            'osu file format v14', '', '[General]', 'Mode: 3', '', '[Metadata]',
+            'Title:Synthetic', 'Artist:Smoke Test', 'Creator:mania-sr-pp-reimagined', 'Version:4K',
+            'BeatmapID:1', 'BeatmapSetID:1', '', '[Difficulty]',
+            'HPDrainRate:8', 'CircleSize:4', 'OverallDifficulty:8', 'ApproachRate:5',
+            '', '[TimingPoints]', '1000,300,4,2,1,100,1,0', '', '[HitObjects]',
+          ];
+          let time = 2000;
+          for (let i = 0; i < 300; i += 1) {
+            const x = 64 + (i % 4) * 128;
+            lines.push(i % 5 === 4
+              ? `${x},192,${time},128,0,${time + 200}:0:0:0:0:`
+              : `${x},192,${time},1,0,0:0:0:0:`);
+            time += 150;
+          }
+
+          const calc = new mod.Calculator(lines.join('\n') + '\n', '');
+          const result = JSON.parse(calc.price(300, 0, 0, 0, 0, 0));
+          const got = Object.fromEntries(result.algorithms.map((a) => [a.id, a.pp]));
+          const want = { bancho: 23.361, sunny: 51.618, codexxy: 51.817, reimagined: 48.731 };
+          let bad = 0;
+          for (const [id, expected] of Object.entries(want)) {
+            const pp = got[id];
+            const ok = typeof pp === 'number' && Number.isFinite(pp) && Math.abs(pp - expected) <= 0.5;
+            console.log(`${ok ? 'ok  ' : 'FAIL'} ${id.padEnd(11)} ${pp} (want ${expected})`);
+            if (!ok) bad += 1;
+          }
+          if (bad) {
+            console.error(`${bad} algorithm(s) moved: the published dataset and this module disagree.`);
+            process.exit(1);
+          }
+          console.log('WASM smoke test passed.');
+          SMOKE
+          node "$RUNNER_TEMP/smoke.mjs" "$RUNNER_TEMP/wasm"

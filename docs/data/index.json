@@ -3,26 +3,26 @@
     "correlation": {
       "bancho": {
         "bancho": 1.0,
-        "codexxy": 0.9242,
-        "reimagined": 0.9308,
-        "sunny": 0.9343
+        "codexxy": 0.9203,
+        "reimagined": 0.9273,
+        "sunny": 0.9309
       },
       "codexxy": {
-        "bancho": 0.9242,
+        "bancho": 0.9203,
         "codexxy": 1.0,
-        "reimagined": 0.9803,
-        "sunny": 0.9967
+        "reimagined": 0.9792,
+        "sunny": 0.9965
       },
       "reimagined": {
-        "bancho": 0.9308,
-        "codexxy": 0.9803,
+        "bancho": 0.9273,
+        "codexxy": 0.9792,
         "reimagined": 1.0,
-        "sunny": 0.9898
+        "sunny": 0.9893
       },
       "sunny": {
-        "bancho": 0.9343,
-        "codexxy": 0.9967,
-        "reimagined": 0.9898,
+        "bancho": 0.9309,
+        "codexxy": 0.9965,
+        "reimagined": 0.9893,
         "sunny": 1.0
       }
     },
@@ -31,7 +31,7 @@
         "bin_max": 1844.03,
         "bin_min": 0.0,
         "bins": [
-          1661,
+          1336,
           680,
           776,
           1804,
@@ -57,19 +57,19 @@
           2
         ],
         "max": 1844.03,
-        "median": 774.249,
+        "median": 777.685,
         "min": 0.0,
-        "n": 32516,
-        "p25": 526.838,
-        "p75": 926.881,
-        "p95": 1203.118
+        "n": 32191,
+        "p25": 542.293,
+        "p75": 928.793,
+        "p95": 1204.347
       },
       "codexxy": {
         "bin_max": 1471.771,
         "bin_min": 0.0,
         "bins": [
-          881,
-          1108,
+          596,
+          1068,
           371,
           442,
           1160,
@@ -94,19 +94,19 @@
           2
         ],
         "max": 1471.771,
-        "median": 820.853,
+        "median": 823.716,
         "min": 0.0,
-        "n": 32516,
-        "p25": 567.41,
-        "p75": 954.485,
-        "p95": 1122.487
+        "n": 32191,
+        "p25": 582.586,
+        "p75": 955.879,
+        "p95": 1123.095
       },
       "reimagined": {
         "bin_max": 1555.355,
         "bin_min": 0.0,
         "bins": [
-          882,
-          1143,
+          589,
+          1111,
           345,
           523,
           1327,
@@ -131,19 +131,19 @@
           29
         ],
         "max": 1555.355,
-        "median": 950.679,
+        "median": 953.799,
         "min": 0.0,
-        "n": 32516,
-        "p25": 600.604,
-        "p75": 1091.478,
-        "p95": 1250.049
+        "n": 32191,
+        "p25": 621.456,
+        "p75": 1092.738,
+        "p95": 1250.749
       },
       "sunny": {
         "bin_max": 1451.564,
         "bin_min": 0.0,
         "bins": [
-          785,
-          1109,
+          510,
+          1059,
           436,
           350,
           1006,
@@ -168,12 +168,12 @@
           3
         ],
         "max": 1451.564,
-        "median": 851.99,
+        "median": 854.401,
         "min": 0.0,
-        "n": 32516,
-        "p25": 582.474,
-        "p75": 975.436,
-        "p95": 1128.861
+        "n": 32191,
+        "p25": 598.933,
+        "p75": 976.925,
+        "p95": 1129.625
       }
     },
     "layers": [
@@ -181,32 +181,32 @@
         "family": "key mode",
         "layer": "4K",
         "median_pp": {
-          "bancho": 344.039,
-          "codexxy": 389.056,
-          "reimagined": 388.897,
-          "sunny": 394.537
+          "bancho": 355.142,
+          "codexxy": 402.535,
+          "reimagined": 399.57,
+          "sunny": 406.474
         },
-        "n": 10544,
+        "n": 10226,
         "rel_pct": {
           "bancho": {
-            "codexxy": 12.5759,
-            "reimagined": 11.7862,
-            "sunny": 13.8708
+            "codexxy": 12.4475,
+            "reimagined": 11.5716,
+            "sunny": 13.6987
           },
           "codexxy": {
-            "bancho": -11.1964,
-            "reimagined": -0.0404,
-            "sunny": 1.1093
+            "bancho": -11.0852,
+            "reimagined": -0.0622,
+            "sunny": 1.0092
           },
           "reimagined": {
-            "bancho": -10.5565,
-            "codexxy": 0.0404,
-            "sunny": 1.2949
+            "bancho": -10.381,
+            "codexxy": 0.0623,
+            "sunny": 1.2644
           },
           "sunny": {
-            "bancho": -12.2057,
-            "codexxy": -1.0971,
-            "reimagined": -1.2783
+            "bancho": -12.0562,
+            "codexxy": -0.9991,
+            "reimagined": -1.2486
           }
         }
       },
@@ -214,32 +214,32 @@
         "family": "key mode",
         "layer": "5K",
         "median_pp": {
-          "bancho": 7.981,
-          "codexxy": 1.374,
-          "reimagined": 1.69,
-          "sunny": 1.577
+          "bancho": 16.273,
+          "codexxy": 12.873,
+          "reimagined": 14.696,
+          "sunny": 14.185
         },
-        "n": 18,
+        "n": 13,
         "rel_pct": {
           "bancho": {
-            "codexxy": -23.467,
-            "reimagined": -23.8301,
-            "sunny": -24.7489
+            "codexxy": -34.2534,
+            "reimagined": -35.1756,
+            "sunny": -35.3173
           },
           "codexxy": {
-            "bancho": 30.2468,
-            "reimagined": 15.9653,
-            "sunny": 11.8603
+            "bancho": 56.7091,
+            "reimagined": 12.7783,
+            "sunny": 9.2749
           },
           "reimagined": {
-            "bancho": 18.5675,
-            "codexxy": -13.7665,
-            "sunny": -1.6752
+            "bancho": 59.1375,
+            "codexxy": -11.2745,
+            "sunny": -1.3266
           },
           "sunny": {
-            "bancho": 22.8349,
-            "codexxy": -10.5829,
-            "reimagined": 1.7042
+            "bancho": 58.8413,
+            "codexxy": -8.4812,
+            "reimagined": 1.3446
           }
         }
       },
@@ -247,32 +247,32 @@
         "family": "key mode",
         "layer": "6K",
         "median_pp": {
-          "bancho": 800.599,
-          "codexxy": 789.443,
-          "reimagined": 817.191,
-          "sunny": 810.474
+          "bancho": 800.658,
+          "codexxy": 789.486,
+          "reimagined": 817.224,
+          "sunny": 810.514
         },
-        "n": 419,
+        "n": 418,
         "rel_pct": {
           "bancho": {
-            "codexxy": -1.5951,
-            "reimagined": -0.0162,
-            "sunny": 1.9226
+            "codexxy": -1.5013,
+            "reimagined": 0.0269,
+            "sunny": 2.0061
           },
           "codexxy": {
-            "bancho": 1.6209,
-            "reimagined": 4.0399,
-            "sunny": 2.5186
+            "bancho": 1.5242,
+            "reimagined": 4.0362,
+            "sunny": 2.5085
           },
           "reimagined": {
-            "bancho": 0.0162,
-            "codexxy": -3.883,
-            "sunny": -1.4354
+            "bancho": -0.0269,
+            "codexxy": -3.8796,
+            "sunny": -1.4346
           },
           "sunny": {
-            "bancho": -1.8864,
-            "codexxy": -2.4567,
-            "reimagined": 1.4563
+            "bancho": -1.9666,
+            "codexxy": -2.4471,
+            "reimagined": 1.4555
           }
         }
       },
@@ -280,32 +280,32 @@
         "family": "key mode",
         "layer": "7K",
         "median_pp": {
-          "bancho": 857.194,
-          "codexxy": 895.22,
-          "reimagined": 1045.166,
-          "sunny": 924.605
+          "bancho": 857.208,
+          "codexxy": 895.224,
+          "reimagined": 1045.17,
+          "sunny": 924.62
         },
-        "n": 21526,
+        "n": 21525,
         "rel_pct": {
           "bancho": {
-            "codexxy": 3.7463,
-            "reimagined": 20.9586,
-            "sunny": 7.1716
+            "codexxy": 3.7469,
+            "reimagined": 20.9577,
+            "sunny": 7.1707
           },
           "codexxy": {
-            "bancho": -3.6132,
+            "bancho": -3.6142,
             "reimagined": 16.7499,
-            "sunny": 2.7441
+            "sunny": 2.744
           },
           "reimagined": {
-            "bancho": -17.3314,
+            "bancho": -17.3303,
             "codexxy": -14.3468,
-            "sunny": -11.5315
+            "sunny": -11.5314
           },
           "sunny": {
-            "bancho": -6.6953,
-            "codexxy": -2.6708,
-            "reimagined": 13.0346
+            "bancho": -6.6952,
+            "codexxy": -2.6707,
+            "reimagined": 13.0345
           }
         }
       },
@@ -379,32 +379,32 @@
         "family": "long notes",
         "layer": "HB",
         "median_pp": {
-          "bancho": 819.671,
-          "codexxy": 858.612,
-          "reimagined": 998.67,
-          "sunny": 888.572
+          "bancho": 821.051,
+          "codexxy": 859.989,
+          "reimagined": 999.898,
+          "sunny": 889.832
         },
-        "n": 25294,
+        "n": 25149,
         "rel_pct": {
           "bancho": {
-            "codexxy": 4.9566,
-            "reimagined": 17.6992,
-            "sunny": 7.6899
+            "codexxy": 4.8643,
+            "reimagined": 17.5707,
+            "sunny": 7.5991
           },
           "codexxy": {
-            "bancho": -4.7291,
-            "reimagined": 14.6315,
-            "sunny": 2.3352
+            "bancho": -4.6407,
+            "reimagined": 14.6731,
+            "sunny": 2.3188
           },
           "reimagined": {
-            "bancho": -15.042,
-            "codexxy": -12.7639,
-            "sunny": -10.813
+            "bancho": -14.948,
+            "codexxy": -12.7956,
+            "sunny": -10.8345
           },
           "sunny": {
-            "bancho": -7.1491,
-            "codexxy": -2.2819,
-            "reimagined": 12.124
+            "bancho": -7.0654,
+            "codexxy": -2.2662,
+            "reimagined": 12.1509
           }
         }
       },
@@ -412,32 +412,32 @@
         "family": "long notes",
         "layer": "LN",
         "median_pp": {
-          "bancho": 642.946,
-          "codexxy": 749.02,
-          "reimagined": 710.833,
-          "sunny": 747.259
+          "bancho": 646.257,
+          "codexxy": 753.039,
+          "reimagined": 716.0,
+          "sunny": 749.112
         },
-        "n": 148,
+        "n": 146,
         "rel_pct": {
           "bancho": {
-            "codexxy": 13.1465,
-            "reimagined": 9.1932,
-            "sunny": 12.8774
+            "codexxy": 13.1105,
+            "reimagined": 9.1801,
+            "sunny": 12.831
           },
           "codexxy": {
-            "bancho": -11.619,
-            "reimagined": -1.2988,
-            "sunny": 0.307
+            "bancho": -11.5909,
+            "reimagined": -1.2942,
+            "sunny": 0.2909
           },
           "reimagined": {
-            "bancho": -8.4192,
-            "codexxy": 1.3159,
-            "sunny": 1.619
+            "bancho": -8.4083,
+            "codexxy": 1.3111,
+            "sunny": 1.6153
           },
           "sunny": {
-            "bancho": -11.4083,
-            "codexxy": -0.3061,
-            "reimagined": -1.5932
+            "bancho": -11.3719,
+            "codexxy": -0.2901,
+            "reimagined": -1.5897
           }
         }
       },
@@ -445,32 +445,32 @@
         "family": "long notes",
         "layer": "RC",
         "median_pp": {
-          "bancho": 366.155,
-          "codexxy": 416.39,
-          "reimagined": 424.99,
-          "sunny": 421.728
+          "bancho": 380.227,
+          "codexxy": 434.393,
+          "reimagined": 442.99,
+          "sunny": 439.011
         },
-        "n": 7074,
+        "n": 6896,
         "rel_pct": {
           "bancho": {
-            "codexxy": 11.6167,
-            "reimagined": 20.514,
-            "sunny": 14.5471
+            "codexxy": 11.8298,
+            "reimagined": 20.7435,
+            "sunny": 14.6876
           },
           "codexxy": {
-            "bancho": -10.4264,
-            "reimagined": 7.5503,
-            "sunny": 2.1458
+            "bancho": -10.5929,
+            "reimagined": 7.6256,
+            "sunny": 2.0903
           },
           "reimagined": {
-            "bancho": -17.0412,
-            "codexxy": -7.0203,
-            "sunny": -3.1874
+            "bancho": -17.2038,
+            "codexxy": -7.0853,
+            "sunny": -3.336
           },
           "sunny": {
-            "bancho": -12.7156,
-            "codexxy": -2.1007,
-            "reimagined": 3.2923
+            "bancho": -12.8191,
+            "codexxy": -2.0475,
+            "reimagined": 3.4511
           }
         }
       },
@@ -478,32 +478,32 @@
         "family": "mod family",
         "layer": "NM",
         "median_pp": {
-          "bancho": 755.706,
-          "codexxy": 803.186,
-          "reimagined": 935.957,
-          "sunny": 837.437
+          "bancho": 760.621,
+          "codexxy": 808.759,
+          "reimagined": 941.67,
+          "sunny": 841.774
         },
-        "n": 19789,
+        "n": 19493,
         "rel_pct": {
           "bancho": {
-            "codexxy": 6.6571,
-            "reimagined": 17.9752,
-            "sunny": 9.3733
+            "codexxy": 6.5984,
+            "reimagined": 17.9039,
+            "sunny": 9.2929
           },
           "codexxy": {
-            "bancho": -6.2547,
-            "reimagined": 12.8368,
-            "sunny": 2.2374
+            "bancho": -6.1954,
+            "reimagined": 12.9548,
+            "sunny": 2.204
           },
           "reimagined": {
-            "bancho": -15.2485,
-            "codexxy": -11.3764,
-            "sunny": -9.6256
+            "bancho": -15.1923,
+            "codexxy": -11.469,
+            "sunny": -9.7239
           },
           "sunny": {
-            "bancho": -8.5896,
-            "codexxy": -2.1885,
-            "reimagined": 10.6508
+            "bancho": -8.5141,
+            "codexxy": -2.1564,
+            "reimagined": 10.7713
           }
         }
       },
@@ -511,32 +511,32 @@
         "family": "mod family",
         "layer": "Other mods",
         "median_pp": {
-          "bancho": 855.153,
-          "codexxy": 878.9,
-          "reimagined": 1024.344,
-          "sunny": 908.994
+          "bancho": 856.272,
+          "codexxy": 879.854,
+          "reimagined": 1025.465,
+          "sunny": 909.513
         },
-        "n": 3812,
+        "n": 3795,
         "rel_pct": {
           "bancho": {
-            "codexxy": 2.3218,
+            "codexxy": 2.3745,
             "reimagined": 16.1082,
             "sunny": 4.9461
           },
           "codexxy": {
-            "bancho": -2.3194,
-            "reimagined": 15.6398,
-            "sunny": 2.3816
+            "bancho": -2.3525,
+            "reimagined": 15.6643,
+            "sunny": 2.3712
           },
           "reimagined": {
             "bancho": -13.8759,
-            "codexxy": -13.5246,
-            "sunny": -11.0996
+            "codexxy": -13.5429,
+            "sunny": -11.1098
           },
           "sunny": {
             "bancho": -4.7247,
-            "codexxy": -2.3262,
-            "reimagined": 12.4855
+            "codexxy": -2.3162,
+            "reimagined": 12.4984
           }
         }
       },
@@ -577,1117 +577,1117 @@
         "family": "mod family",
         "layer": "Rate-up",
         "median_pp": {
-          "bancho": 786.377,
-          "codexxy": 850.575,
-          "reimagined": 960.493,
-          "sunny": 878.316
+          "bancho": 786.645,
+          "codexxy": 850.82,
+          "reimagined": 960.833,
+          "sunny": 878.53
         },
-        "n": 6768,
+        "n": 6756,
         "rel_pct": {
           "bancho": {
-            "codexxy": 8.8901,
-            "reimagined": 20.8397,
-            "sunny": 12.054
+            "codexxy": 8.8853,
+            "reimagined": 20.8376,
+            "sunny": 12.0529
           },
           "codexxy": {
-            "bancho": -8.1722,
-            "reimagined": 12.226,
-            "sunny": 2.4638
+            "bancho": -8.1622,
+            "reimagined": 12.2458,
+            "sunny": 2.4593
           },
           "reimagined": {
-            "bancho": -17.247,
-            "codexxy": -10.8941,
-            "sunny": -9.3555
+            "bancho": -17.2448,
+            "codexxy": -10.9098,
+            "sunny": -9.3703
           },
           "sunny": {
-            "bancho": -10.7576,
-            "codexxy": -2.4046,
-            "reimagined": 10.3211
+            "bancho": -10.7565,
+            "codexxy": -2.4003,
+            "reimagined": 10.3391
           }
         }
       }
     ],
-    "score_count": 32516,
+    "score_count": 32191,
     "top_disagreements": [
       {
-        "artist": "Hanasaka Yui(CV: M.A.O)",
-        "beatmap_id": 1180148,
-        "keys": 4,
-        "ln_ratio": 0.0,
-        "mods": "",
-        "pp": {
-          "bancho": 2.943,
-          "codexxy": 0.008,
-          "reimagined": 0.009,
-          "sunny": 0.009
-        },
-        "score_id": 585590769,
-        "spread": 395.3618,
-        "title": "Harumachi Clover",
-        "uid": 13662966,
-        "version": "Easy"
-      },
-      {
-        "artist": "IOSYS",
-        "beatmap_id": 87170,
-        "keys": 4,
-        "ln_ratio": 0.0,
-        "mods": "",
-        "pp": {
-          "bancho": 3.111,
-          "codexxy": 0.009,
-          "reimagined": 0.01,
-          "sunny": 0.01
-        },
-        "score_id": 555088096,
-        "spread": 395.2279,
-        "title": "Cirno's Perfect Math Class",
-        "uid": 13662966,
-        "version": "Easy"
-      },
-      {
-        "artist": "MPAA",
-        "beatmap_id": 57416,
-        "keys": 4,
-        "ln_ratio": 0.0,
-        "mods": "DT",
-        "pp": {
-          "bancho": 1.437,
-          "codexxy": 0.005,
-          "reimagined": 0.006,
-          "sunny": 0.005
-        },
-        "score_id": 386147032,
-        "spread": 394.4357,
-        "title": "Piracy - It's a Crime",
-        "uid": 12208695,
-        "version": "Easy"
-      },
-      {
-        "artist": "Hanasaka Yui(CV: M.A.O)",
-        "beatmap_id": 1201505,
-        "keys": 4,
-        "ln_ratio": 0.0,
-        "mods": "",
-        "pp": {
-          "bancho": 3.394,
-          "codexxy": 0.012,
-          "reimagined": 0.012,
-          "sunny": 0.013
-        },
-        "score_id": 453890235,
-        "spread": 394.3662,
-        "title": "Harumachi Clover",
-        "uid": 12208695,
-        "version": "Easy"
-      },
-      {
-        "artist": "Kirsten Price",
-        "beatmap_id": 1230041,
-        "keys": 4,
-        "ln_ratio": 0.0,
-        "mods": "",
-        "pp": {
-          "bancho": 4.743,
-          "codexxy": 0.015,
-          "reimagined": 0.021,
-          "sunny": 0.019
-        },
-        "score_id": 453890386,
-        "spread": 394.1605,
-        "title": "We Will Be Heroes",
-        "uid": 12208695,
-        "version": "Forest's Normal"
-      },
-      {
-        "artist": "Dan Salvato",
-        "beatmap_id": 1506886,
-        "keys": 4,
-        "ln_ratio": 0.0,
-        "mods": "",
-        "pp": {
-          "bancho": 1.808,
-          "codexxy": 0.008,
-          "reimagined": 0.009,
-          "sunny": 0.008
-        },
-        "score_id": 451461972,
-        "spread": 393.0597,
-        "title": "Your Reality",
-        "uid": 24544012,
-        "version": "Just Shurelia's Easy"
-      },
-      {
-        "artist": "Silver Forest",
-        "beatmap_id": 34527,
-        "keys": 4,
-        "ln_ratio": 0.0,
-        "mods": "",
-        "pp": {
-          "bancho": 2.863,
-          "codexxy": 0.014,
-          "reimagined": 0.014,
-          "sunny": 0.014
-        },
-        "score_id": 396136294,
-        "spread": 392.2785,
-        "title": "Marisa Spark",
-        "uid": 12208695,
-        "version": "Easy"
-      },
-      {
-        "artist": "Subplaid",
-        "beatmap_id": 146224,
-        "keys": 4,
-        "ln_ratio": 0.0,
-        "mods": "",
-        "pp": {
-          "bancho": 2.554,
-          "codexxy": 0.013,
-          "reimagined": 0.012,
-          "sunny": 0.014
-        },
-        "score_id": 493137904,
-        "spread": 392.1226,
-        "title": "If you went out with friends in a way",
-        "uid": 12208695,
-        "version": "Easy"
-      },
-      {
-        "artist": "Silver Forest",
-        "beatmap_id": 34529,
-        "keys": 4,
-        "ln_ratio": 0.0,
-        "mods": "",
-        "pp": {
-          "bancho": 13.718,
-          "codexxy": 0.071,
-          "reimagined": 0.073,
-          "sunny": 0.075
-        },
-        "score_id": 386147150,
-        "spread": 391.6847,
-        "title": "Marisa Spark",
-        "uid": 12208695,
-        "version": "Normal"
-      },
-      {
-        "artist": "Dendei",
-        "beatmap_id": 951401,
-        "keys": 4,
-        "ln_ratio": 0.0,
-        "mods": "",
-        "pp": {
-          "bancho": 1.759,
-          "codexxy": 0.013,
-          "reimagined": 0.012,
-          "sunny": 0.014
-        },
-        "score_id": 272217410,
-        "spread": 388.657,
-        "title": "gabe power",
-        "uid": 12208695,
-        "version": "Cheesecake's Easy"
-      },
-      {
-        "artist": "Dendei",
-        "beatmap_id": 942001,
-        "keys": 4,
-        "ln_ratio": 0.0,
-        "mods": "",
-        "pp": {
-          "bancho": 5.303,
-          "codexxy": 0.043,
-          "reimagined": 0.037,
-          "sunny": 0.043
-        },
-        "score_id": 400009081,
-        "spread": 388.2604,
-        "title": "gabe power",
-        "uid": 12208695,
-        "version": "Arphimigon's Normal"
-      },
-      {
-        "artist": "Gekidan Hitotose",
-        "beatmap_id": 1415659,
-        "keys": 4,
-        "ln_ratio": 0.0,
-        "mods": "",
-        "pp": {
-          "bancho": 5.425,
-          "codexxy": 0.053,
-          "reimagined": 0.044,
-          "sunny": 0.053
-        },
-        "score_id": 5913047131,
-        "spread": 386.112,
-        "title": "a e i u e o ao!!",
-        "uid": 35315620,
-        "version": "Collab Easy"
-      },
-      {
-        "artist": "TK from Ling tosite sigure",
-        "beatmap_id": 556179,
-        "keys": 4,
-        "ln_ratio": 0.0,
-        "mods": "",
-        "pp": {
-          "bancho": 4.55,
-          "codexxy": 0.042,
-          "reimagined": 0.046,
-          "sunny": 0.045
-        },
-        "score_id": 6243817599,
-        "spread": 384.9474,
-        "title": "unravel (TV edit)",
-        "uid": 33018882,
-        "version": "Easy"
-      },
-      {
-        "artist": "cYsmix",
-        "beatmap_id": 1661046,
-        "keys": 4,
-        "ln_ratio": 0.0,
-        "mods": "",
-        "pp": {
-          "bancho": 5.025,
-          "codexxy": 0.054,
-          "reimagined": 0.045,
-          "sunny": 0.054
-        },
-        "score_id": 5912850929,
-        "spread": 384.6739,
-        "title": "Little Knight",
-        "uid": 35315620,
-        "version": "Easy"
-      },
-      {
-        "artist": "ClariS",
-        "beatmap_id": 1290480,
-        "keys": 4,
-        "ln_ratio": 0.0,
-        "mods": "",
-        "pp": {
-          "bancho": 3.611,
-          "codexxy": 0.037,
-          "reimagined": 0.041,
-          "sunny": 0.041
-        },
-        "score_id": 555179643,
-        "spread": 383.3431,
-        "title": "Hitorigoto -TV MIX-",
-        "uid": 13662966,
-        "version": "RsAk's Easy"
-      },
-      {
-        "artist": "fripSide",
-        "beatmap_id": 186676,
-        "keys": 4,
-        "ln_ratio": 0.0,
-        "mods": "",
-        "pp": {
-          "bancho": 5.401,
-          "codexxy": 0.075,
-          "reimagined": 0.064,
-          "sunny": 0.076
-        },
-        "score_id": 6795490270,
-        "spread": 380.1508,
-        "title": "only my railgun (TV size)",
-        "uid": 39376969,
-        "version": "-kevincela-'s Easy"
-      },
-      {
-        "artist": "ClariS",
-        "beatmap_id": 1262271,
-        "keys": 4,
-        "ln_ratio": 0.0,
-        "mods": "",
-        "pp": {
-          "bancho": 2.893,
-          "codexxy": 0.037,
-          "reimagined": 0.044,
-          "sunny": 0.041
-        },
-        "score_id": 285432309,
-        "spread": 378.951,
-        "title": "Hitorigoto -TV MIX-",
-        "uid": 12208695,
-        "version": "Little's Easy"
-      },
-      {
-        "artist": "Hanasaka Yui(CV: M.A.O)",
-        "beatmap_id": 1180150,
-        "keys": 4,
-        "ln_ratio": 0.0,
-        "mods": "",
-        "pp": {
-          "bancho": 3.903,
-          "codexxy": 0.056,
-          "reimagined": 0.06,
-          "sunny": 0.059
-        },
-        "score_id": 555179733,
-        "spread": 377.3863,
-        "title": "Harumachi Clover",
-        "uid": 13662966,
-        "version": "Normal"
-      },
-      {
-        "artist": "Drop",
-        "beatmap_id": 1059410,
-        "keys": 4,
-        "ln_ratio": 0.0,
-        "mods": "",
-        "pp": {
-          "bancho": 4.915,
-          "codexxy": 0.082,
-          "reimagined": 0.073,
-          "sunny": 0.083
-        },
-        "score_id": 396136154,
-        "spread": 375.8618,
-        "title": "Granat",
-        "uid": 12208695,
-        "version": "Normal"
-      },
-      {
-        "artist": "Brad Breeck",
-        "beatmap_id": 1119784,
-        "keys": 4,
-        "ln_ratio": 0.0,
-        "mods": "NC+PF",
-        "pp": {
-          "bancho": 7.286,
-          "codexxy": 0.125,
-          "reimagined": 0.109,
-          "sunny": 0.125
-        },
-        "score_id": 503418451,
-        "spread": 375.5134,
-        "title": "Gravity Falls Theme Song",
-        "uid": 23298104,
-        "version": "Easy"
-      },
-      {
-        "artist": "Hanasaka Yui(CV: M.A.O)",
-        "beatmap_id": 1180311,
-        "keys": 4,
-        "ln_ratio": 0.0,
-        "mods": "",
-        "pp": {
-          "bancho": 6.026,
-          "codexxy": 0.107,
-          "reimagined": 0.093,
-          "sunny": 0.108
-        },
-        "score_id": 396136481,
-        "spread": 374.6292,
-        "title": "Harumachi Clover",
-        "uid": 12208695,
-        "version": "Normal"
-      },
-      {
-        "artist": "Awake",
-        "beatmap_id": 135133,
-        "keys": 4,
-        "ln_ratio": 0.0,
-        "mods": "",
-        "pp": {
-          "bancho": 7.248,
-          "codexxy": 0.136,
-          "reimagined": 0.13,
-          "sunny": 0.138
-        },
-        "score_id": 7426677980,
-        "spread": 372.0797,
-        "title": "Supernova",
-        "uid": 13662966,
-        "version": "Easy"
-      },
-      {
-        "artist": "Will Stetson",
-        "beatmap_id": 1801936,
-        "keys": 4,
-        "ln_ratio": 0.0,
-        "mods": "",
-        "pp": {
-          "bancho": 4.011,
-          "codexxy": 0.073,
-          "reimagined": 0.098,
-          "sunny": 0.092
-        },
-        "score_id": 413443239,
-        "spread": 368.6327,
-        "title": "Harumachi Clover (Swing Arrangement)",
-        "uid": 12208695,
-        "version": "Yuri's Normal"
-      },
-      {
-        "artist": "Neon Genesis Evangelion",
-        "beatmap_id": 12787,
-        "keys": 4,
-        "ln_ratio": 0.0,
-        "mods": "",
-        "pp": {
-          "bancho": 0.288,
-          "codexxy": 0.005,
-          "reimagined": 0.008,
-          "sunny": 0.007
-        },
-        "score_id": 6022551364,
-        "spread": 367.2859,
-        "title": "Cruel Angel's Thesis",
-        "uid": 38827749,
-        "version": "Rei (Easy)"
-      },
-      {
-        "artist": "Turbo",
-        "beatmap_id": 2231839,
-        "keys": 4,
-        "ln_ratio": 0.0,
-        "mods": "",
-        "pp": {
-          "bancho": 4.425,
-          "codexxy": 0.108,
-          "reimagined": 0.091,
-          "sunny": 0.109
-        },
-        "score_id": 7430717885,
-        "spread": 366.21,
-        "title": "PADORU / PADORU",
-        "uid": 13662966,
-        "version": "Haruki's Easy"
-      },
-      {
-        "artist": "Turbo",
-        "beatmap_id": 2231839,
-        "keys": 4,
-        "ln_ratio": 0.0,
-        "mods": "",
-        "pp": {
-          "bancho": 3.966,
-          "codexxy": 0.099,
-          "reimagined": 0.087,
-          "sunny": 0.101
-        },
-        "score_id": 393083764,
-        "spread": 364.8538,
-        "title": "PADORU / PADORU",
-        "uid": 12208695,
-        "version": "Haruki's Easy"
-      },
-      {
-        "artist": "Coda",
-        "beatmap_id": 1804847,
-        "keys": 4,
-        "ln_ratio": 0.0,
-        "mods": "",
-        "pp": {
-          "bancho": 3.092,
-          "codexxy": 0.072,
-          "reimagined": 0.087,
-          "sunny": 0.081
-        },
-        "score_id": 6478736823,
-        "spread": 362.5304,
-        "title": "Fighting Gold (TV Size)",
-        "uid": 39474433,
-        "version": "Shiinoha's Easy"
-      },
-      {
-        "artist": "Ben Briggs",
-        "beatmap_id": 1951847,
-        "keys": 4,
-        "ln_ratio": 0.0,
-        "mods": "",
-        "pp": {
-          "bancho": 5.739,
-          "codexxy": 0.163,
-          "reimagined": 0.138,
-          "sunny": 0.164
-        },
-        "score_id": 4264453071,
-        "spread": 361.1267,
-        "title": "New Game Plus",
-        "uid": 35315620,
-        "version": "Easy"
-      },
-      {
-        "artist": "One Direction",
-        "beatmap_id": 194480,
-        "keys": 4,
-        "ln_ratio": 0.0,
-        "mods": "",
-        "pp": {
-          "bancho": 0.345,
-          "codexxy": 0.008,
-          "reimagined": 0.012,
-          "sunny": 0.011
-        },
-        "score_id": 6478790778,
-        "spread": 358.278,
-        "title": "What Makes You Beautiful",
-        "uid": 39474433,
-        "version": "Easy"
-      },
-      {
-        "artist": "cYsmix",
-        "beatmap_id": 1148432,
-        "keys": 4,
-        "ln_ratio": 0.0,
-        "mods": "",
-        "pp": {
-          "bancho": 5.701,
-          "codexxy": 0.167,
-          "reimagined": 0.162,
-          "sunny": 0.171
-        },
-        "score_id": 614576878,
-        "spread": 357.3241,
-        "title": "Moonlight Sonata",
-        "uid": 13662966,
-        "version": "Easy"
-      },
-      {
-        "artist": "cYsmix",
-        "beatmap_id": 1036654,
-        "keys": 4,
-        "ln_ratio": 0.0,
-        "mods": "",
-        "pp": {
-          "bancho": 4.428,
-          "codexxy": 0.127,
-          "reimagined": 0.143,
-          "sunny": 0.14
-        },
-        "score_id": 270934624,
-        "spread": 355.556,
-        "title": "Fright March",
-        "uid": 12208695,
-        "version": "Easy"
-      },
-      {
-        "artist": "beatMARIO",
-        "beatmap_id": 830081,
-        "keys": 4,
-        "ln_ratio": 0.0,
-        "mods": "",
-        "pp": {
-          "bancho": 6.157,
-          "codexxy": 0.186,
-          "reimagined": 0.191,
-          "sunny": 0.195
-        },
-        "score_id": 614247599,
-        "spread": 354.9937,
-        "title": "Night of Knights",
-        "uid": 13662966,
-        "version": "Easy"
-      },
-      {
-        "artist": "cYsmix",
-        "beatmap_id": 1036654,
-        "keys": 4,
-        "ln_ratio": 0.0,
-        "mods": "",
-        "pp": {
-          "bancho": 5.315,
-          "codexxy": 0.166,
-          "reimagined": 0.17,
-          "sunny": 0.173
-        },
-        "score_id": 574328235,
-        "spread": 353.6745,
-        "title": "Fright March",
-        "uid": 13662966,
-        "version": "Easy"
-      },
-      {
-        "artist": "cYsmix",
-        "beatmap_id": 3783210,
-        "keys": 4,
-        "ln_ratio": 0.0,
-        "mods": "",
-        "pp": {
-          "bancho": 8.578,
-          "codexxy": 0.298,
-          "reimagined": 0.25,
-          "sunny": 0.299
-        },
-        "score_id": 5311908787,
-        "spread": 353.4546,
-        "title": "triangles",
-        "uid": 35315620,
-        "version": "Easy"
-      },
-      {
-        "artist": "ZAQ",
-        "beatmap_id": 1122617,
+        "artist": "Omoi",
+        "beatmap_id": 1551961,
         "keys": 4,
         "ln_ratio": 0.0,
         "mods": "4K",
         "pp": {
-          "bancho": 9.101,
-          "codexxy": 0.327,
-          "reimagined": 0.259,
-          "sunny": 0.329
+          "bancho": 68.157,
+          "codexxy": 319.562,
+          "reimagined": 229.307,
+          "sunny": 269.946
         },
-        "score_id": 6796256646,
-        "spread": 353.0855,
-        "title": "Serendipity",
-        "uid": 39376969,
-        "version": "Easy"
+        "score_id": 299694815,
+        "spread": 113.3771,
+        "title": "Teo",
+        "uid": 6042315,
+        "version": "Kawa's Expert"
       },
       {
-        "artist": "samfree",
-        "beatmap_id": 1267493,
+        "artist": "Camellia",
+        "beatmap_id": 3054701,
         "keys": 4,
         "ln_ratio": 0.0,
-        "mods": "HD",
+        "mods": "4K",
         "pp": {
-          "bancho": 2.84,
-          "codexxy": 0.111,
-          "reimagined": 0.124,
-          "sunny": 0.12
+          "bancho": 72.721,
+          "codexxy": 346.437,
+          "reimagined": 299.622,
+          "sunny": 322.033
         },
-        "score_id": 386960328,
-        "spread": 341.7033,
-        "title": "Chicken's Theme",
-        "uid": 12208695,
-        "version": "UC's Easy"
+        "score_id": 524064102,
+        "spread": 105.1932,
+        "title": "Xeroa",
+        "uid": 29215315,
+        "version": "Regou's VIVID"
       },
       {
-        "artist": "Hanasaka Yui (CV: M.A.O) feat. Koalazy",
-        "beatmap_id": 1639740,
+        "artist": "yanaginagi",
+        "beatmap_id": 1642605,
         "keys": 4,
         "ln_ratio": 0.0,
+        "mods": "4K",
+        "pp": {
+          "bancho": 68.987,
+          "codexxy": 257.471,
+          "reimagined": 187.223,
+          "sunny": 217.975
+        },
+        "score_id": 319319961,
+        "spread": 103.0453,
+        "title": "over and over",
+        "uid": 6042315,
+        "version": "Kamiya's Extra"
+      },
+      {
+        "artist": "LiSA",
+        "beatmap_id": 740692,
+        "keys": 4,
+        "ln_ratio": 0.0,
+        "mods": "4K",
+        "pp": {
+          "bancho": 67.677,
+          "codexxy": 241.033,
+          "reimagined": 170.907,
+          "sunny": 206.364
+        },
+        "score_id": 294416080,
+        "spread": 101.085,
+        "title": "Rally Go Round",
+        "uid": 6042315,
+        "version": "Extra"
+      },
+      {
+        "artist": "THE ORAL CIGARETTES",
+        "beatmap_id": 1758255,
+        "keys": 4,
+        "ln_ratio": 0.0,
+        "mods": "4K",
+        "pp": {
+          "bancho": 73.382,
+          "codexxy": 222.286,
+          "reimagined": 163.482,
+          "sunny": 194.255
+        },
+        "score_id": 294416772,
+        "spread": 91.1554,
+        "title": "Sesshoku",
+        "uid": 6042315,
+        "version": "Apocalypse"
+      },
+      {
+        "artist": "Tennoji Rina (CV: Tanaka Chiemi)",
+        "beatmap_id": 4626777,
+        "keys": 7,
+        "ln_ratio": 0.5546,
         "mods": "",
         "pp": {
-          "bancho": 5.688,
-          "codexxy": 0.253,
-          "reimagined": 0.283,
-          "sunny": 0.273
+          "bancho": 214.356,
+          "codexxy": 381.078,
+          "reimagined": 480.623,
+          "sunny": 395.187
         },
-        "score_id": 400008684,
-        "spread": 334.6504,
-        "title": "Harumachi Clover (TV Size)",
-        "uid": 12208695,
-        "version": "Laura's Normal"
+        "score_id": 589905833,
+        "spread": 72.3924,
+        "title": "Tsunagaru Connect (TV Size)",
+        "uid": 2281719,
+        "version": "Happiness"
       },
       {
-        "artist": "TWICE",
-        "beatmap_id": 988328,
-        "keys": 4,
-        "ln_ratio": 0.0,
+        "artist": "Yorushika",
+        "beatmap_id": 5145574,
+        "keys": 7,
+        "ln_ratio": 0.5636,
         "mods": "",
         "pp": {
-          "bancho": 28.558,
-          "codexxy": 1.34,
-          "reimagined": 1.349,
-          "sunny": 1.384
+          "bancho": 263.72,
+          "codexxy": 453.478,
+          "reimagined": 574.546,
+          "sunny": 462.87
         },
-        "score_id": 532892207,
-        "spread": 333.6507,
-        "title": "CHEER UP",
-        "uid": 30278649,
-        "version": "Normal"
+        "score_id": 5755275415,
+        "spread": 70.8591,
+        "title": "The Old Man and the Sea",
+        "uid": 2281719,
+        "version": "Lone Sailor"
       },
       {
-        "artist": "Phonetic",
-        "beatmap_id": 1670492,
-        "keys": 4,
-        "ln_ratio": 0.0,
+        "artist": "Lee Jin Ah",
+        "beatmap_id": 4551960,
+        "keys": 7,
+        "ln_ratio": 0.3171,
         "mods": "",
         "pp": {
-          "bancho": 7.068,
-          "codexxy": 0.376,
-          "reimagined": 0.314,
-          "sunny": 0.377
+          "bancho": 261.901,
+          "codexxy": 507.379,
+          "reimagined": 594.835,
+          "sunny": 521.858
         },
-        "score_id": 5912826733,
-        "spread": 332.0619,
-        "title": "Journey",
-        "uid": 35315620,
-        "version": "Kibb's Easy"
+        "score_id": 632928189,
+        "spread": 70.6127,
+        "title": "Target for Love (Ludicin's Hardcore Bootleg)",
+        "uid": 2281719,
+        "version": "Blocko's Extra"
       },
       {
-        "artist": "James Landino",
-        "beatmap_id": 4091820,
-        "keys": 4,
-        "ln_ratio": 0.0,
+        "artist": "Natsumi Takamori, Eri Sendai, Yuu Asakawa, Atsumi Tanezaki",
+        "beatmap_id": 4075328,
+        "keys": 7,
+        "ln_ratio": 0.6884,
         "mods": "",
         "pp": {
-          "bancho": 8.047,
-          "codexxy": 0.431,
-          "reimagined": 0.362,
-          "sunny": 0.434
+          "bancho": 317.654,
+          "codexxy": 564.399,
+          "reimagined": 691.314,
+          "sunny": 569.4
         },
-        "score_id": 6759476306,
-        "spread": 331.469,
-        "title": "Aresene's Bazaar",
-        "uid": 39376969,
-        "version": "Easy"
+        "score_id": 5506815004,
+        "spread": 69.7528,
+        "title": "Ne! Ko! (TV Size)",
+        "uid": 2281719,
+        "version": "Extra"
       },
       {
-        "artist": "Lexurus",
-        "beatmap_id": 1656878,
-        "keys": 4,
-        "ln_ratio": 0.0,
-        "mods": "DT+PF",
+        "artist": "iKz",
+        "beatmap_id": 5157466,
+        "keys": 7,
+        "ln_ratio": 0.3945,
+        "mods": "MR",
         "pp": {
-          "bancho": 5.982,
-          "codexxy": 0.326,
-          "reimagined": 0.291,
-          "sunny": 0.33
+          "bancho": 356.01,
+          "codexxy": 608.506,
+          "reimagined": 760.683,
+          "sunny": 634.666
         },
-        "score_id": 503417895,
-        "spread": 328.5661,
-        "title": "Gravity",
-        "uid": 23298104,
-        "version": "Easy"
+        "score_id": 648829627,
+        "spread": 68.5925,
+        "title": "Gong Xing Xian Shi Ji",
+        "uid": 35442039,
+        "version": "Tian1 Ting2 \"Yi1\" Ye4 You2"
       },
       {
-        "artist": "Hyper Potions",
-        "beatmap_id": 1399951,
-        "keys": 4,
-        "ln_ratio": 0.0,
+        "artist": "fripSide",
+        "beatmap_id": 329213,
+        "keys": 7,
+        "ln_ratio": 0.4248,
+        "mods": "MR",
+        "pp": {
+          "bancho": 229.363,
+          "codexxy": 375.771,
+          "reimagined": 481.895,
+          "sunny": 399.828
+        },
+        "score_id": 390069309,
+        "spread": 67.9371,
+        "title": "sister's noise (TV Size)",
+        "uid": 2281719,
+        "version": "Lv.42"
+      },
+      {
+        "artist": "Halozy",
+        "beatmap_id": 2692497,
+        "keys": 7,
+        "ln_ratio": 0.4051,
         "mods": "",
         "pp": {
-          "bancho": 14.215,
-          "codexxy": 0.764,
-          "reimagined": 0.799,
-          "sunny": 0.805
+          "bancho": 374.235,
+          "codexxy": 671.826,
+          "reimagined": 787.301,
+          "sunny": 680.95
         },
-        "score_id": 534988892,
-        "spread": 324.4414,
-        "title": "Friends",
-        "uid": 23298104,
-        "version": "Normal"
+        "score_id": 411245289,
+        "spread": 65.7144,
+        "title": "Deconstruction Star",
+        "uid": 2281719,
+        "version": "Twinkling Stars"
       },
       {
-        "artist": "Rostik",
-        "beatmap_id": 315550,
-        "keys": 4,
-        "ln_ratio": 0.0,
+        "artist": "Akatsuki Records",
+        "beatmap_id": 3411685,
+        "keys": 7,
+        "ln_ratio": 0.4741,
         "mods": "",
         "pp": {
-          "bancho": 2.745,
-          "codexxy": 0.148,
-          "reimagined": 0.157,
-          "sunny": 0.157
+          "bancho": 323.145,
+          "codexxy": 547.336,
+          "reimagined": 659.906,
+          "sunny": 564.691
         },
-        "score_id": 585590501,
-        "spread": 324.0037,
-        "title": "Liquid (Paul Rosenthal Remix)",
-        "uid": 13662966,
-        "version": "Easy"
+        "score_id": 492730538,
+        "spread": 64.2957,
+        "title": "HANIPAGANDA",
+        "uid": 2281719,
+        "version": "THE TORCH OF THE ANNIHILATION"
       },
       {
-        "artist": "HyuN",
-        "beatmap_id": 1863293,
+        "artist": "P4koo",
+        "beatmap_id": 5817916,
         "keys": 4,
-        "ln_ratio": 0.0,
+        "ln_ratio": 0.4168,
         "mods": "",
         "pp": {
-          "bancho": 5.26,
-          "codexxy": 0.297,
-          "reimagined": 0.344,
-          "sunny": 0.329
+          "bancho": 246.948,
+          "codexxy": 529.345,
+          "reimagined": 475.428,
+          "sunny": 511.353
         },
-        "score_id": 651438194,
-        "spread": 318.7074,
-        "title": "Illusion of Inflict",
-        "uid": 39184910,
-        "version": "Easy"
+        "score_id": 7471062239,
+        "spread": 64.0692,
+        "title": "overwhelm",
+        "uid": 40488011,
+        "version": "Spinning"
       },
       {
-        "artist": "HyuN feat. LyuU",
-        "beatmap_id": 1863223,
+        "artist": "Camellia",
+        "beatmap_id": 1907379,
         "keys": 4,
-        "ln_ratio": 0.0,
+        "ln_ratio": 0.0579,
+        "mods": "NF",
+        "pp": {
+          "bancho": 105.367,
+          "codexxy": 154.069,
+          "reimagined": 204.192,
+          "sunny": 158.305
+        },
+        "score_id": 590842221,
+        "spread": 63.5596,
+        "title": "potential curve",
+        "uid": 36774512,
+        "version": "lunatic"
+      },
+      {
+        "artist": "Sound piercer & ginkiha (feat. Yuzuha & NeLiME)",
+        "beatmap_id": 4807366,
+        "keys": 7,
+        "ln_ratio": 0.4862,
         "mods": "",
         "pp": {
-          "bancho": 11.713,
-          "codexxy": 0.772,
-          "reimagined": 0.645,
-          "sunny": 0.772
+          "bancho": 440.818,
+          "codexxy": 722.649,
+          "reimagined": 883.073,
+          "sunny": 748.554
         },
-        "score_id": 5311957769,
-        "spread": 318.4665,
-        "title": "Cross Over",
-        "uid": 35315620,
-        "version": "Easy"
+        "score_id": 613969647,
+        "spread": 63.2902,
+        "title": "MI:LIGHT CONNECT",
+        "uid": 35442039,
+        "version": "Daybreak"
       },
       {
-        "artist": "Ryo to Kirin(Satou Rina to Oogame Asuka)",
-        "beatmap_id": 659679,
-        "keys": 4,
-        "ln_ratio": 0.0,
+        "artist": "Maverick",
+        "beatmap_id": 2119517,
+        "keys": 7,
+        "ln_ratio": 0.5868,
         "mods": "",
         "pp": {
-          "bancho": 2.366,
-          "codexxy": 0.136,
-          "reimagined": 0.155,
-          "sunny": 0.149
+          "bancho": 362.48,
+          "codexxy": 582.274,
+          "reimagined": 719.366,
+          "sunny": 598.722
         },
-        "score_id": 396136390,
-        "spread": 317.9366,
-        "title": "Shiawase Graffiti",
-        "uid": 12208695,
-        "version": "Lunch"
+        "score_id": 586734979,
+        "spread": 63.0864,
+        "title": "Shironaga Star Jet -aquamarine mix-",
+        "uid": 35442039,
+        "version": "Cosmic Journey // 7K"
       },
       {
-        "artist": "S3RL",
-        "beatmap_id": 832801,
-        "keys": 4,
-        "ln_ratio": 0.0,
+        "artist": "dj TAKA feat. AiMEE",
+        "beatmap_id": 3226089,
+        "keys": 7,
+        "ln_ratio": 0.4741,
         "mods": "",
         "pp": {
-          "bancho": 4.796,
-          "codexxy": 0.297,
-          "reimagined": 0.348,
-          "sunny": 0.333
+          "bancho": 386.69,
+          "codexxy": 650.57,
+          "reimagined": 771.082,
+          "sunny": 662.389
         },
-        "score_id": 5596825616,
-        "spread": 311.7565,
-        "title": "Bass Slut (Original Mix)",
-        "uid": 38590791,
-        "version": "Rizen's Easy"
+        "score_id": 589858257,
+        "spread": 62.2314,
+        "title": "True Blue",
+        "uid": 35442039,
+        "version": "7K Farewell"
       },
       {
-        "artist": "Hanasaka Yui(CV: M.A.O)",
-        "beatmap_id": 1180150,
+        "artist": "TSAR & ariiol & Sou",
+        "beatmap_id": 5289223,
         "keys": 4,
-        "ln_ratio": 0.0,
+        "ln_ratio": 0.0966,
+        "mods": "",
+        "pp": {
+          "bancho": 185.499,
+          "codexxy": 385.113,
+          "reimagined": 333.365,
+          "sunny": 380.986
+        },
+        "score_id": 656274193,
+        "spread": 62.1386,
+        "title": "ABYSS MOTION 192.333",
+        "uid": 35679551,
+        "version": "Platinum's I crash at the speed of 192.333"
+      },
+      {
+        "artist": "Natsumi Takamori, Eri Sendai, Yuu Asakawa, Atsumi Tanezaki",
+        "beatmap_id": 4074807,
+        "keys": 7,
+        "ln_ratio": 0.8362,
+        "mods": "HT",
+        "pp": {
+          "bancho": 272.365,
+          "codexxy": 384.181,
+          "reimagined": 517.598,
+          "sunny": 407.91
+        },
+        "score_id": 537279384,
+        "spread": 62.0036,
+        "title": "Ne! Ko! (TV Size)",
+        "uid": 2281719,
+        "version": "Nya~"
+      },
+      {
+        "artist": "EVERGLOW",
+        "beatmap_id": 2532343,
+        "keys": 7,
+        "ln_ratio": 0.4444,
         "mods": "DT",
         "pp": {
-          "bancho": 7.788,
-          "codexxy": 0.544,
-          "reimagined": 0.519,
-          "sunny": 0.548
+          "bancho": 283.362,
+          "codexxy": 464.014,
+          "reimagined": 561.946,
+          "sunny": 490.373
         },
-        "score_id": 549682764,
-        "spread": 309.3312,
-        "title": "Harumachi Clover",
-        "uid": 12208695,
-        "version": "Normal"
+        "score_id": 412809465,
+        "spread": 61.9179,
+        "title": "DUN DUN",
+        "uid": 2281719,
+        "version": "REMINISCENCE"
       },
       {
-        "artist": "Koto Spirit",
-        "beatmap_id": 5238578,
-        "keys": 4,
+        "artist": "Lime",
+        "beatmap_id": 1701215,
+        "keys": 7,
+        "ln_ratio": 0.4789,
+        "mods": "",
+        "pp": {
+          "bancho": 362.325,
+          "codexxy": 621.852,
+          "reimagined": 723.663,
+          "sunny": 629.026
+        },
+        "score_id": 411413778,
+        "spread": 61.85,
+        "title": "Smiling",
+        "uid": 2281719,
+        "version": "Be Happy"
+      },
+      {
+        "artist": "Ironami",
+        "beatmap_id": 2027282,
+        "keys": 7,
+        "ln_ratio": 0.4912,
+        "mods": "MR",
+        "pp": {
+          "bancho": 355.549,
+          "codexxy": 585.262,
+          "reimagined": 702.096,
+          "sunny": 600.239
+        },
+        "score_id": 457764656,
+        "spread": 61.7966,
+        "title": "Melty Sweets",
+        "uid": 2281719,
+        "version": "HEAVENLY"
+      },
+      {
+        "artist": "Suzuki Konomi",
+        "beatmap_id": 2486275,
+        "keys": 7,
+        "ln_ratio": 0.2348,
+        "mods": "",
+        "pp": {
+          "bancho": 265.842,
+          "codexxy": 435.382,
+          "reimagined": 522.034,
+          "sunny": 447.802
+        },
+        "score_id": 493104061,
+        "spread": 61.3242,
+        "title": "Realize (TV Size)",
+        "uid": 2281719,
+        "version": "Redo"
+      },
+      {
+        "artist": "Ironami",
+        "beatmap_id": 2027283,
+        "keys": 7,
+        "ln_ratio": 0.4054,
+        "mods": "",
+        "pp": {
+          "bancho": 280.163,
+          "codexxy": 502.696,
+          "reimagined": 564.329,
+          "sunny": 507.836
+        },
+        "score_id": 412314214,
+        "spread": 61.2748,
+        "title": "Melty Sweets",
+        "uid": 2281719,
+        "version": "CS' MAXIMUM"
+      },
+      {
+        "artist": "Maverick",
+        "beatmap_id": 2119517,
+        "keys": 7,
+        "ln_ratio": 0.5868,
+        "mods": "",
+        "pp": {
+          "bancho": 449.273,
+          "codexxy": 742.5,
+          "reimagined": 872.992,
+          "sunny": 734.812
+        },
+        "score_id": 409387082,
+        "spread": 60.5405,
+        "title": "Shironaga Star Jet -aquamarine mix-",
+        "uid": 2281719,
+        "version": "Cosmic Journey // 7K"
+      },
+      {
+        "artist": "Lime",
+        "beatmap_id": 3855012,
+        "keys": 7,
         "ln_ratio": 0.0,
         "mods": "",
         "pp": {
-          "bancho": 12.041,
-          "codexxy": 0.926,
-          "reimagined": 0.791,
-          "sunny": 0.932
+          "bancho": 465.366,
+          "codexxy": 801.643,
+          "reimagined": 923.955,
+          "sunny": 841.771
         },
-        "score_id": 6435831143,
-        "spread": 306.3391,
-        "title": "Locus of Hexagram",
-        "uid": 39376969,
-        "version": "Easy"
+        "score_id": 7054755753,
+        "spread": 60.4852,
+        "title": "BEYOND",
+        "uid": 39397249,
+        "version": "Ultra"
       },
       {
-        "artist": "Koto Spirit",
-        "beatmap_id": 5238578,
-        "keys": 4,
-        "ln_ratio": 0.0,
-        "mods": "HD",
-        "pp": {
-          "bancho": 9.815,
-          "codexxy": 0.71,
-          "reimagined": 0.702,
-          "sunny": 0.733
-        },
-        "score_id": 7433077707,
-        "spread": 304.7916,
-        "title": "Locus of Hexagram",
-        "uid": 13662966,
-        "version": "Easy"
-      },
-      {
-        "artist": "tieff",
-        "beatmap_id": 1976049,
-        "keys": 4,
-        "ln_ratio": 0.0,
+        "artist": "ARForest",
+        "beatmap_id": 3101268,
+        "keys": 7,
+        "ln_ratio": 0.1892,
         "mods": "",
         "pp": {
-          "bancho": 8.739,
-          "codexxy": 0.696,
-          "reimagined": 0.582,
-          "sunny": 0.695
+          "bancho": 369.982,
+          "codexxy": 706.882,
+          "reimagined": 754.272,
+          "sunny": 712.561
         },
-        "score_id": 5913634564,
-        "spread": 304.6367,
-        "title": "Take Your Swimsuit",
-        "uid": 35315620,
-        "version": "Hinsvar's Easy"
+        "score_id": 650547672,
+        "spread": 60.4301,
+        "title": "Rainbow Magic!!",
+        "uid": 15438131,
+        "version": "Expert"
       },
       {
-        "artist": "Dan Salvato",
-        "beatmap_id": 1506885,
-        "keys": 5,
-        "ln_ratio": 0.0,
+        "artist": "ARForest",
+        "beatmap_id": 3090158,
+        "keys": 7,
+        "ln_ratio": 0.3141,
+        "mods": "MR",
+        "pp": {
+          "bancho": 457.576,
+          "codexxy": 806.816,
+          "reimagined": 908.206,
+          "sunny": 814.159
+        },
+        "score_id": 659673716,
+        "spread": 60.3505,
+        "title": "Rainbow Magic!!",
+        "uid": 34677424,
+        "version": "Iridescent"
+      },
+      {
+        "artist": "Nanatsukaze",
+        "beatmap_id": 4917018,
+        "keys": 7,
+        "ln_ratio": 0.6916,
         "mods": "",
         "pp": {
-          "bancho": 0.768,
-          "codexxy": 0.052,
-          "reimagined": 0.071,
-          "sunny": 0.065
+          "bancho": 242.376,
+          "codexxy": 367.524,
+          "reimagined": 460.256,
+          "sunny": 376.743
         },
-        "score_id": 459666035,
-        "spread": 299.544,
-        "title": "Your Reality",
-        "uid": 24544012,
-        "version": "Just Pachi's Normal"
+        "score_id": 5795907518,
+        "spread": 60.2338,
+        "title": "Replay",
+        "uid": 2281719,
+        "version": "Noodles"
       },
       {
-        "artist": "Unknown Artist",
-        "beatmap_id": 1492015,
-        "keys": 4,
-        "ln_ratio": 0.0,
+        "artist": "dj TAKA feat. AiMEE",
+        "beatmap_id": 3226089,
+        "keys": 7,
+        "ln_ratio": 0.4741,
+        "mods": "",
+        "pp": {
+          "bancho": 437.169,
+          "codexxy": 737.431,
+          "reimagined": 851.336,
+          "sunny": 739.276
+        },
+        "score_id": 610417893,
+        "spread": 59.911,
+        "title": "True Blue",
+        "uid": 16318630,
+        "version": "7K Farewell"
+      },
+      {
+        "artist": "DJ Genki VS Camellia feat. moimoi",
+        "beatmap_id": 1399542,
+        "keys": 7,
+        "ln_ratio": 0.3341,
+        "mods": "MR",
+        "pp": {
+          "bancho": 320.371,
+          "codexxy": 542.949,
+          "reimagined": 624.127,
+          "sunny": 546.559
+        },
+        "score_id": 390070503,
+        "spread": 59.7355,
+        "title": "YELL!",
+        "uid": 2281719,
+        "version": "Solitude"
+      },
+      {
+        "artist": "Ironami",
+        "beatmap_id": 2027282,
+        "keys": 7,
+        "ln_ratio": 0.4912,
+        "mods": "",
+        "pp": {
+          "bancho": 365.667,
+          "codexxy": 582.961,
+          "reimagined": 701.582,
+          "sunny": 599.747
+        },
+        "score_id": 653994488,
+        "spread": 59.7193,
+        "title": "Melty Sweets",
+        "uid": 15438131,
+        "version": "HEAVENLY"
+      },
+      {
+        "artist": "dj TAKA feat. AiMEE",
+        "beatmap_id": 3226089,
+        "keys": 7,
+        "ln_ratio": 0.4741,
+        "mods": "",
+        "pp": {
+          "bancho": 415.934,
+          "codexxy": 677.161,
+          "reimagined": 800.23,
+          "sunny": 690.041
+        },
+        "score_id": 614536376,
+        "spread": 59.5032,
+        "title": "True Blue",
+        "uid": 32339039,
+        "version": "7K Farewell"
+      },
+      {
+        "artist": "Lee Jin Ah",
+        "beatmap_id": 4471228,
+        "keys": 7,
+        "ln_ratio": 0.3188,
+        "mods": "",
+        "pp": {
+          "bancho": 351.103,
+          "codexxy": 576.803,
+          "reimagined": 677.879,
+          "sunny": 599.405
+        },
+        "score_id": 650548223,
+        "spread": 59.274,
+        "title": "Target for Love (Ludicin's Hardcore Bootleg)",
+        "uid": 15438131,
+        "version": "Always with me"
+      },
+      {
+        "artist": "dj TAKA feat. AiMEE",
+        "beatmap_id": 3226089,
+        "keys": 7,
+        "ln_ratio": 0.4741,
+        "mods": "",
+        "pp": {
+          "bancho": 413.956,
+          "codexxy": 661.34,
+          "reimagined": 787.873,
+          "sunny": 678.278
+        },
+        "score_id": 652998019,
+        "spread": 58.8509,
+        "title": "True Blue",
+        "uid": 15438131,
+        "version": "7K Farewell"
+      },
+      {
+        "artist": "ARForest",
+        "beatmap_id": 3090158,
+        "keys": 7,
+        "ln_ratio": 0.3141,
+        "mods": "",
+        "pp": {
+          "bancho": 432.271,
+          "codexxy": 711.43,
+          "reimagined": 829.748,
+          "sunny": 735.068
+        },
+        "score_id": 599621173,
+        "spread": 58.7003,
+        "title": "Rainbow Magic!!",
+        "uid": 16318630,
+        "version": "Iridescent"
+      },
+      {
+        "artist": "cosMo@BousouP",
+        "beatmap_id": 3755561,
+        "keys": 7,
+        "ln_ratio": 0.0185,
+        "mods": "",
+        "pp": {
+          "bancho": 378.626,
+          "codexxy": 626.244,
+          "reimagined": 728.604,
+          "sunny": 653.627
+        },
+        "score_id": 648472555,
+        "spread": 58.6449,
+        "title": "For UltraPlayers",
+        "uid": 15438131,
+        "version": "Blocko's HEAVENLY"
+      },
+      {
+        "artist": "Kashii Moimi feat. HARU",
+        "beatmap_id": 4952157,
+        "keys": 7,
+        "ln_ratio": 0.4771,
+        "mods": "",
+        "pp": {
+          "bancho": 272.083,
+          "codexxy": 378.052,
+          "reimagined": 502.075,
+          "sunny": 418.796
+        },
+        "score_id": 632438630,
+        "spread": 58.5591,
+        "title": "Murasakiiro no Himawari",
+        "uid": 2281719,
+        "version": "Limerence."
+      },
+      {
+        "artist": "Nachoneko",
+        "beatmap_id": 4822687,
+        "keys": 7,
+        "ln_ratio": 0.444,
+        "mods": "NC",
+        "pp": {
+          "bancho": 413.034,
+          "codexxy": 707.511,
+          "reimagined": 795.554,
+          "sunny": 702.314
+        },
+        "score_id": 652324617,
+        "spread": 58.4355,
+        "title": "Kanojo wa Tabi ni Deru (K's Remix)",
+        "uid": 35442039,
+        "version": "Sayonara Trip [7K]"
+      },
+      {
+        "artist": "Victorious Cast",
+        "beatmap_id": 4205295,
+        "keys": 7,
+        "ln_ratio": 0.8298,
+        "mods": "",
+        "pp": {
+          "bancho": 474.371,
+          "codexxy": 720.426,
+          "reimagined": 883.461,
+          "sunny": 729.894
+        },
+        "score_id": 608037949,
+        "spread": 58.2718,
+        "title": "Take a Hint feat. Victoria Justice & Elizabeth Gillies (Sped Up & Cut Ver.)",
+        "uid": 34677424,
+        "version": "Take a Mint"
+      },
+      {
+        "artist": "Sayuri x MY FIRST STORY",
+        "beatmap_id": 4973092,
+        "keys": 7,
+        "ln_ratio": 0.8896,
+        "mods": "HT",
+        "pp": {
+          "bancho": 275.985,
+          "codexxy": 357.248,
+          "reimagined": 497.275,
+          "sunny": 404.053
+        },
+        "score_id": 631852603,
+        "spread": 57.6818,
+        "title": "Reimei",
+        "uid": 2281719,
+        "version": "Foredawn."
+      },
+      {
+        "artist": "KOTOKO",
+        "beatmap_id": 2698643,
+        "keys": 7,
+        "ln_ratio": 0.4322,
+        "mods": "MR",
+        "pp": {
+          "bancho": 362.042,
+          "codexxy": 554.91,
+          "reimagined": 672.56,
+          "sunny": 567.997
+        },
+        "score_id": 492322932,
+        "spread": 57.5697,
+        "title": "Sociometry (TV Size)",
+        "uid": 2281719,
+        "version": "Eternal"
+      },
+      {
+        "artist": "ALI PROJECT",
+        "beatmap_id": 261893,
+        "keys": 7,
+        "ln_ratio": 0.1451,
         "mods": "DT",
         "pp": {
-          "bancho": 5.128,
-          "codexxy": 0.391,
-          "reimagined": 0.411,
-          "sunny": 0.41
+          "bancho": 157.743,
+          "codexxy": 313.813,
+          "reimagined": 302.278,
+          "sunny": 311.33
         },
-        "score_id": 403019885,
-        "spread": 298.9023,
-        "title": "Miniministop Hitoyasumi no Uta[Mokuyoubi]Gakusei no Uta",
-        "uid": 12208695,
-        "version": "Chromstrata's Normal"
+        "score_id": 7472906747,
+        "spread": 57.5288,
+        "title": "Kyoumu Densen (TV Size)",
+        "uid": 40488011,
+        "version": "Roxas' Hard"
       },
       {
-        "artist": "xi",
-        "beatmap_id": 680919,
+        "artist": "Narmaya (CV: M.A.O)",
+        "beatmap_id": 1630021,
+        "keys": 7,
+        "ln_ratio": 0.5267,
+        "mods": "",
+        "pp": {
+          "bancho": 355.536,
+          "codexxy": 533.337,
+          "reimagined": 657.37,
+          "sunny": 553.447
+        },
+        "score_id": 589849232,
+        "spread": 57.5006,
+        "title": "Houmatsumugen Kochoujin",
+        "uid": 35442039,
+        "version": "7K Transient Butterfly Blade"
+      },
+      {
+        "artist": "Memme",
+        "beatmap_id": 4262252,
+        "keys": 7,
+        "ln_ratio": 0.5855,
+        "mods": "",
+        "pp": {
+          "bancho": 390.888,
+          "codexxy": 591.143,
+          "reimagined": 724.503,
+          "sunny": 614.861
+        },
+        "score_id": 649360352,
+        "spread": 57.4852,
+        "title": "Gaehwa",
+        "uid": 35442039,
+        "version": "Expert"
+      },
+      {
+        "artist": "Kankitsu",
+        "beatmap_id": 3798808,
+        "keys": 7,
+        "ln_ratio": 0.5401,
+        "mods": "",
+        "pp": {
+          "bancho": 352.91,
+          "codexxy": 549.499,
+          "reimagined": 658.442,
+          "sunny": 567.132
+        },
+        "score_id": 651726894,
+        "spread": 57.4314,
+        "title": "Prayer",
+        "uid": 15438131,
+        "version": "Saint"
+      },
+      {
+        "artist": "Maverick",
+        "beatmap_id": 2119517,
+        "keys": 7,
+        "ln_ratio": 0.5868,
+        "mods": "",
+        "pp": {
+          "bancho": 474.562,
+          "codexxy": 778.243,
+          "reimagined": 890.184,
+          "sunny": 766.759
+        },
+        "score_id": 439437639,
+        "spread": 57.1351,
+        "title": "Shironaga Star Jet -aquamarine mix-",
+        "uid": 3215366,
+        "version": "Cosmic Journey // 7K"
+      },
+      {
+        "artist": "coltrane",
+        "beatmap_id": 3549255,
+        "keys": 4,
+        "ln_ratio": 0.3167,
+        "mods": "",
+        "pp": {
+          "bancho": 184.59,
+          "codexxy": 361.559,
+          "reimagined": 358.46,
+          "sunny": 365.243
+        },
+        "score_id": 574825891,
+        "spread": 56.9051,
+        "title": "zeke didn't \"invent dariacore\", i did",
+        "uid": 35679551,
+        "version": "s1 e1"
+      },
+      {
+        "artist": "kamome sano",
+        "beatmap_id": 1742328,
+        "keys": 7,
+        "ln_ratio": 0.4954,
+        "mods": "",
+        "pp": {
+          "bancho": 348.781,
+          "codexxy": 550.218,
+          "reimagined": 647.122,
+          "sunny": 555.223
+        },
+        "score_id": 588609259,
+        "spread": 56.7906,
+        "title": "starlights feat. TEA",
+        "uid": 35442039,
+        "version": "Celestial Radiance // 7K"
+      },
+      {
+        "artist": "Shiganai Koukousei",
+        "beatmap_id": 4178128,
+        "keys": 7,
+        "ln_ratio": 0.6543,
+        "mods": "",
+        "pp": {
+          "bancho": 391.915,
+          "codexxy": 591.731,
+          "reimagined": 719.969,
+          "sunny": 609.97
+        },
+        "score_id": 651727615,
+        "spread": 56.7178,
+        "title": "Moonlight",
+        "uid": 15438131,
+        "version": "Radiance Reflection"
+      },
+      {
+        "artist": "S.S.H.",
+        "beatmap_id": 323070,
+        "keys": 7,
+        "ln_ratio": 0.0798,
+        "mods": "",
+        "pp": {
+          "bancho": 371.708,
+          "codexxy": 591.814,
+          "reimagined": 694.832,
+          "sunny": 621.08
+        },
+        "score_id": 653994070,
+        "spread": 56.7024,
+        "title": "Intersect Thunderbolt-Remix",
+        "uid": 15438131,
+        "version": "7K Exceed"
+      },
+      {
+        "artist": "Sub-69",
+        "beatmap_id": 4469722,
+        "keys": 4,
+        "ln_ratio": 0.0115,
+        "mods": "",
+        "pp": {
+          "bancho": 370.349,
+          "codexxy": 731.373,
+          "reimagined": 720.28,
+          "sunny": 726.945
+        },
+        "score_id": 650216035,
+        "spread": 56.6545,
+        "title": "kill the dog",
+        "uid": 36878075,
+        "version": "mourning"
+      },
+      {
+        "artist": "you",
+        "beatmap_id": 5338803,
+        "keys": 4,
+        "ln_ratio": 0.0092,
+        "mods": "",
+        "pp": {
+          "bancho": 154.37,
+          "codexxy": 251.231,
+          "reimagined": 290.758,
+          "sunny": 275.367
+        },
+        "score_id": 7043149262,
+        "spread": 56.1424,
+        "title": "Hold Angel",
+        "uid": 39744900,
+        "version": "Extreme"
+      },
+      {
+        "artist": "Kashii Moimi feat. HARU",
+        "beatmap_id": 4952157,
+        "keys": 7,
+        "ln_ratio": 0.4771,
+        "mods": "",
+        "pp": {
+          "bancho": 380.068,
+          "codexxy": 534.373,
+          "reimagined": 680.957,
+          "sunny": 552.861
+        },
+        "score_id": 628042670,
+        "spread": 56.0246,
+        "title": "Murasakiiro no Himawari",
+        "uid": 35442039,
+        "version": "Limerence."
+      },
+      {
+        "artist": "kamome sano",
+        "beatmap_id": 1742328,
+        "keys": 7,
+        "ln_ratio": 0.4954,
+        "mods": "",
+        "pp": {
+          "bancho": 352.44,
+          "codexxy": 544.443,
+          "reimagined": 644.574,
+          "sunny": 552.399
+        },
+        "score_id": 390427728,
+        "spread": 55.8079,
+        "title": "starlights feat. TEA",
+        "uid": 2281719,
+        "version": "Celestial Radiance // 7K"
+      },
+      {
+        "artist": "II-L",
+        "beatmap_id": 5156512,
         "keys": 4,
         "ln_ratio": 0.0,
         "mods": "",
         "pp": {
-          "bancho": 3.199,
-          "codexxy": 0.25,
-          "reimagined": 0.284,
-          "sunny": 0.274
+          "bancho": 154.137,
+          "codexxy": 295.333,
+          "reimagined": 277.401,
+          "sunny": 286.678
         },
-        "score_id": 555180061,
-        "spread": 294.4313,
-        "title": "Blue Zenith",
-        "uid": 13662966,
-        "version": "Easy"
+        "score_id": 650780142,
+        "spread": 55.7235,
+        "title": "SPUTNIK-3",
+        "uid": 35679551,
+        "version": "ANCHOR-3"
       },
       {
-        "artist": "R3 Music Box",
-        "beatmap_id": 1285690,
-        "keys": 4,
+        "artist": "bbn",
+        "beatmap_id": 568463,
+        "keys": 7,
+        "ln_ratio": 0.1424,
+        "mods": "",
+        "pp": {
+          "bancho": 160.785,
+          "codexxy": 210.636,
+          "reimagined": 285.294,
+          "sunny": 242.858
+        },
+        "score_id": 5746674937,
+        "spread": 55.3636,
+        "title": "Identic Conflict",
+        "uid": 2790454,
+        "version": "Birdcage"
+      },
+      {
+        "artist": "EBIMAYO",
+        "beatmap_id": 4973024,
+        "keys": 7,
         "ln_ratio": 0.0,
         "mods": "",
         "pp": {
-          "bancho": 3.023,
-          "codexxy": 0.246,
-          "reimagined": 0.256,
-          "sunny": 0.256
+          "bancho": 435.882,
+          "codexxy": 696.475,
+          "reimagined": 801.928,
+          "sunny": 720.435
         },
-        "score_id": 459667221,
-        "spread": 293.7693,
-        "title": "Aozora no Rhapsody",
-        "uid": 24544012,
-        "version": "Normal"
+        "score_id": 649938773,
+        "spread": 55.1541,
+        "title": "NIGHTMARE INVITATION",
+        "uid": 35442039,
+        "version": "EXTREME"
       },
       {
-        "artist": "Hyper Potions",
-        "beatmap_id": 2463266,
-        "keys": 4,
-        "ln_ratio": 0.0,
+        "artist": "yanaginagi",
+        "beatmap_id": 417910,
+        "keys": 7,
+        "ln_ratio": 0.2994,
         "mods": "",
         "pp": {
-          "bancho": 10.233,
-          "codexxy": 0.842,
-          "reimagined": 0.859,
-          "sunny": 0.871
+          "bancho": 254.321,
+          "codexxy": 379.528,
+          "reimagined": 459.894,
+          "sunny": 402.859
         },
-        "score_id": 6450338392,
-        "spread": 293.3705,
-        "title": "Jungle Cruise",
-        "uid": 24544012,
-        "version": "Easy"
-      },
-      {
-        "artist": "cYsmix",
-        "beatmap_id": 3783212,
-        "keys": 5,
-        "ln_ratio": 0.0,
-        "mods": "",
-        "pp": {
-          "bancho": 16.273,
-          "codexxy": 1.341,
-          "reimagined": 1.586,
-          "sunny": 1.522
-        },
-        "score_id": 2936265297,
-        "spread": 288.2221,
-        "title": "triangles",
-        "uid": 35315620,
-        "version": "Tt's Normal"
-      },
-      {
-        "artist": "takehirotei",
-        "beatmap_id": 5271667,
-        "keys": 4,
-        "ln_ratio": 0.0,
-        "mods": "",
-        "pp": {
-          "bancho": 9.742,
-          "codexxy": 0.942,
-          "reimagined": 0.804,
-          "sunny": 0.942
-        },
-        "score_id": 6436373375,
-        "spread": 287.6176,
-        "title": "Haiboku no Altra Vita",
-        "uid": 39376969,
-        "version": "Easy"
-      },
-      {
-        "artist": "Raphlesia & BilliumMoto",
-        "beatmap_id": 2868384,
-        "keys": 4,
-        "ln_ratio": 0.0,
-        "mods": "",
-        "pp": {
-          "bancho": 9.984,
-          "codexxy": 0.966,
-          "reimagined": 0.835,
-          "sunny": 0.973
-        },
-        "score_id": 5274516325,
-        "spread": 286.8543,
-        "title": "My Love",
-        "uid": 35315620,
-        "version": "Easy"
-      },
-      {
-        "artist": "Thaehan",
-        "beatmap_id": 2699283,
-        "keys": 4,
-        "ln_ratio": 0.0,
-        "mods": "",
-        "pp": {
-          "bancho": 11.693,
-          "codexxy": 1.194,
-          "reimagined": 1.023,
-          "sunny": 1.199
-        },
-        "score_id": 6436400794,
-        "spread": 282.5165,
-        "title": "Never Give Up",
-        "uid": 39376969,
-        "version": "Easy"
+        "score_id": 392910727,
+        "spread": 54.9442,
+        "title": "Tokohana (TV Size)",
+        "uid": 2281719,
+        "version": "17VA's Mania Insane"
       }
     ]
   },
@@ -1719,9 +1719,11 @@
     "spec_version": "v1.14",
     "version": "0.1.0"
   },
-  "generated_at": "2026-09-14T05:27:54Z",
+  "excluded_players": 16,
+  "generated_at": "2026-09-15T05:47:38Z",
+  "min_bancho_total": 1000.0,
   "schema_version": 3,
-  "score_count": 32516,
+  "score_count": 32191,
   "users": [
     {
       "file": "players/10024264.json",
@@ -2010,19 +2012,6 @@
       "username": "Ox Q"
     },
     {
-      "file": "players/13332650.json",
-      "fixture": "bp-lists",
-      "scores": 5,
-      "total_pp": {
-        "bancho": 0.0,
-        "codexxy": 0.0,
-        "reimagined": 0.0,
-        "sunny": 0.0
-      },
-      "uid": 13332650,
-      "username": "Lena shippor"
-    },
-    {
       "file": "players/13656264.json",
       "fixture": "bp-lists",
       "scores": 100,
@@ -2047,19 +2036,6 @@
       },
       "uid": 13656583,
       "username": "jesmoxd"
-    },
-    {
-      "file": "players/13662966.json",
-      "fixture": "bp-lists",
-      "scores": 26,
-      "total_pp": {
-        "bancho": 101.816,
-        "codexxy": 153.046,
-        "reimagined": 155.264,
-        "sunny": 168.417
-      },
-      "uid": 13662966,
-      "username": "maxx1921"
     },
     {
       "file": "players/13880550.json",
@@ -2437,19 +2413,6 @@
       },
       "uid": 19234344,
       "username": "kraljica"
-    },
-    {
-      "file": "players/19525500.json",
-      "fixture": "bp-lists",
-      "scores": 4,
-      "total_pp": {
-        "bancho": 0.027,
-        "codexxy": 0.003,
-        "reimagined": 0.006,
-        "sunny": 0.004
-      },
-      "uid": 19525500,
-      "username": "Wavzylol"
     },
     {
       "file": "players/19613925.json",
@@ -3076,19 +3039,6 @@
       "username": "somnus_"
     },
     {
-      "file": "players/33018882.json",
-      "fixture": "bp-lists",
-      "scores": 9,
-      "total_pp": {
-        "bancho": 11.643,
-        "codexxy": 41.252,
-        "reimagined": 41.992,
-        "sunny": 47.608
-      },
-      "uid": 33018882,
-      "username": "01Frizks"
-    },
-    {
       "file": "players/33366048.json",
       "fixture": "bp-lists",
       "scores": 100,
@@ -3180,32 +3130,6 @@
       "username": "samuelgiraffe"
     },
     {
-      "file": "players/34814765.json",
-      "fixture": "bp-lists",
-      "scores": 1,
-      "total_pp": {
-        "bancho": 0.0,
-        "codexxy": 0.0,
-        "reimagined": 0.0,
-        "sunny": 0.0
-      },
-      "uid": 34814765,
-      "username": "Shetecit"
-    },
-    {
-      "file": "players/34899307.json",
-      "fixture": "bp-lists",
-      "scores": 1,
-      "total_pp": {
-        "bancho": 0.0,
-        "codexxy": 0.0,
-        "reimagined": 0.0,
-        "sunny": 0.0
-      },
-      "uid": 34899307,
-      "username": "itf1k"
-    },
-    {
       "file": "players/35315620.json",
       "fixture": "bp-lists",
       "scores": 74,
@@ -3282,32 +3206,6 @@
       },
       "uid": 36108015,
       "username": "thx_peace"
-    },
-    {
-      "file": "players/36143964.json",
-      "fixture": "bp-lists",
-      "scores": 100,
-      "total_pp": {
-        "bancho": 947.065,
-        "codexxy": 1450.256,
-        "reimagined": 1449.62,
-        "sunny": 1524.684
-      },
-      "uid": 36143964,
-      "username": "scorpyon"
-    },
-    {
-      "file": "players/36151411.json",
-      "fixture": "bp-lists",
-      "scores": 3,
-      "total_pp": {
-        "bancho": 0.0,
-        "codexxy": 0.0,
-        "reimagined": 0.0,
-        "sunny": 0.0
-      },
-      "uid": 36151411,
-      "username": "LS09X"
     },
     {
       "file": "players/3628783.json",
@@ -3388,19 +3286,6 @@
       "username": "QWERTY9487"
     },
     {
-      "file": "players/37995746.json",
-      "fixture": "bp-lists",
-      "scores": 60,
-      "total_pp": {
-        "bancho": 600.757,
-        "codexxy": 978.058,
-        "reimagined": 956.57,
-        "sunny": 1025.112
-      },
-      "uid": 37995746,
-      "username": "OoflandianLord"
-    },
-    {
       "file": "players/38246190.json",
       "fixture": "bp-lists",
       "scores": 100,
@@ -3425,19 +3310,6 @@
       },
       "uid": 38368498,
       "username": "ilonaaaa"
-    },
-    {
-      "file": "players/38482000.json",
-      "fixture": "bp-lists",
-      "scores": 3,
-      "total_pp": {
-        "bancho": 0.0,
-        "codexxy": 0.0,
-        "reimagined": 0.0,
-        "sunny": 0.0
-      },
-      "uid": 38482000,
-      "username": "ELFINOGOD"
     },
     {
       "file": "players/38517867.json",
@@ -3466,32 +3338,6 @@
       "username": "myonlychance_"
     },
     {
-      "file": "players/38588400.json",
-      "fixture": "bp-lists",
-      "scores": 2,
-      "total_pp": {
-        "bancho": 3.138,
-        "codexxy": 0.633,
-        "reimagined": 0.753,
-        "sunny": 0.73
-      },
-      "uid": 38588400,
-      "username": "dverzxc"
-    },
-    {
-      "file": "players/38590791.json",
-      "fixture": "bp-lists",
-      "scores": 9,
-      "total_pp": {
-        "bancho": 10.527,
-        "codexxy": 9.457,
-        "reimagined": 11.345,
-        "sunny": 11.717
-      },
-      "uid": 38590791,
-      "username": "Cenco"
-    },
-    {
       "file": "players/38618938.json",
       "fixture": "bp-lists",
       "scores": 65,
@@ -3505,19 +3351,6 @@
       "username": "Al1ce_er"
     },
     {
-      "file": "players/38827749.json",
-      "fixture": "bp-lists",
-      "scores": 1,
-      "total_pp": {
-        "bancho": 0.288,
-        "codexxy": 0.005,
-        "reimagined": 0.008,
-        "sunny": 0.007
-      },
-      "uid": 38827749,
-      "username": "furryzinjp"
-    },
-    {
       "file": "players/39035134.json",
       "fixture": "bp-lists",
       "scores": 100,
@@ -3529,45 +3362,6 @@
       },
       "uid": 39035134,
       "username": "Dramiaze"
-    },
-    {
-      "file": "players/39184910.json",
-      "fixture": "bp-lists",
-      "scores": 7,
-      "total_pp": {
-        "bancho": 7.304,
-        "codexxy": 1.747,
-        "reimagined": 2.203,
-        "sunny": 2.017
-      },
-      "uid": 39184910,
-      "username": "Intto"
-    },
-    {
-      "file": "players/39376969.json",
-      "fixture": "bp-lists",
-      "scores": 91,
-      "total_pp": {
-        "bancho": 323.988,
-        "codexxy": 770.669,
-        "reimagined": 715.285,
-        "sunny": 806.932
-      },
-      "uid": 39376969,
-      "username": "caeldori"
-    },
-    {
-      "file": "players/39474433.json",
-      "fixture": "bp-lists",
-      "scores": 3,
-      "total_pp": {
-        "bancho": 6.925,
-        "codexxy": 0.491,
-        "reimagined": 0.638,
-        "sunny": 0.599
-      },
-      "uid": 39474433,
-      "username": "flameate"
     },
     {
       "file": "players/39676845.json",

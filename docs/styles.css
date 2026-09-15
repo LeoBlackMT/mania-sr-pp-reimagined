@@ -250,6 +250,8 @@ pre.cmd code { background: none; padding: 0; white-space: pre; color: inherit; }
 
 main { margin-top: var(--sp-6); }
 .view { display: flex; flex-direction: column; gap: var(--sp-4); }
+/* A column of panels inside one view. The gap belongs on the container that actually holds the panels: `.view` only reaches its own direct children, so a plain block wrapper silently stacks everything inside it edge to edge. */
+.stack { display: flex; flex-direction: column; gap: var(--sp-4); }
 .view-head { display: flex; flex-direction: column; gap: var(--sp-2); }
 .view-head .hint { max-width: 96ch; }
 .crumbs { margin: 0; font-size: 14px; font-weight: 500; }
@@ -263,6 +265,14 @@ main { margin-top: var(--sp-6); }
 .count { font-size: 12px; color: var(--ink-subtle); white-space: nowrap; }
 .empty { color: var(--ink-subtle); font-size: 14px; margin: var(--sp-2) 0; }
 .more { margin: var(--sp-3) 0 0; }
+
+/* Pagination: the page indicator on the left of the row, the four controls on the right, in one line that wraps rather than scrolls. */
+.pager { display: flex; align-items: center; justify-content: space-between; gap: var(--sp-2); flex-wrap: wrap; margin-top: var(--sp-3); }
+.pager-nav { display: flex; align-items: center; gap: var(--sp-2); flex-wrap: wrap; }
+.page-info { color: var(--ink-muted); }
+
+/* The filtering indicator sits beside the row count it is about to replace, in the same size, so a keystroke never moves the toolbar. */
+.filter-state { font-size: 12px; color: var(--ink-tertiary); white-space: nowrap; }
 
 .toolbar { display: flex; flex-direction: column; gap: var(--sp-2); margin-bottom: var(--sp-3); }
 .search-line { display: flex; gap: var(--sp-2); align-items: center; flex-wrap: wrap; }
@@ -285,7 +295,8 @@ input[type="search"]::-webkit-search-cancel-button { cursor: pointer; }
 /* ---------------------------------------------------------------- tables -- */
 
 .table-wrap { overflow-x: auto; max-width: 100%; }
-table.grid { border-collapse: separate; border-spacing: 0; width: 100%; font-size: 13px; }
+/* Paging scrolls a long table back to its head; the sticky nav is 48 px tall, so the header row needs that much clearance to stay visible. */
+table.grid { border-collapse: separate; border-spacing: 0; width: 100%; font-size: 13px; scroll-margin-top: 72px; }
 table.grid th, table.grid td { text-align: left; padding: 5px 4px; border-bottom: 1px solid var(--hairline); vertical-align: top; }
 table.grid thead th {
   font-size: 12px; font-weight: 400; letter-spacing: 0.4px; text-transform: uppercase; color: var(--ink-subtle);
@@ -396,6 +407,36 @@ table.layers td.layer-name { white-space: nowrap; font-weight: 500; }
 .scatter .axis-label { fill: var(--ink-subtle); font-family: var(--sans); font-size: 11px; }
 .scatter .median-label { fill: var(--ink-muted); font-weight: 600; }
 
+/* -------------------------------------------------------- player charts -- */
+
+/* Every chart on a player page is capped in width for the same reason the histograms are: the panel is usually wider than the chart needs to be, and an SVG with `width: 100%` scales to the panel instead of to its own viewBox. */
+.chart { display: block; width: 100%; height: auto; max-width: 660px; }
+.chart text { fill: var(--ink-subtle); font-size: 10px; font-family: var(--mono); }
+.chart .y-label { fill: var(--ink-muted); }
+.chart .rule { stroke: var(--hairline); stroke-width: 1; }
+.chart .zero { stroke: var(--hairline-strong); stroke-width: 1; }
+.chart .line-a { fill: none; stroke: var(--ink); stroke-width: 1.6; }
+.chart .line-b { fill: none; stroke: var(--ink-subtle); stroke-width: 1.6; stroke-dasharray: 5 3; }
+.chart .median { stroke: var(--ink-subtle); stroke-width: 1.5; stroke-dasharray: 5 3; }
+.chart .dot { fill: var(--ink); fill-opacity: 0.3; stroke: none; cursor: pointer; }
+.chart .dot:hover { fill-opacity: 0.85; stroke: var(--ink); stroke-width: 1; }
+.chart .dot.hollow { fill: none; stroke: var(--ink-subtle); stroke-width: 1; }
+.chart .dot.hollow:hover { stroke: var(--ink); stroke-width: 1.4; }
+.chart .axis-label { fill: var(--ink-subtle); font-family: var(--sans); font-size: 11px; }
+.chart .series-label { fill: var(--ink); font-weight: 600; }
+.chart .point-label { fill: var(--ink-muted); }
+
+/* The two top-ten tables sit side by side while there is room and stack when there is not. */
+.top-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: var(--sp-4); }
+.top-grid table.grid { min-width: 0; }
+.top-grid h4 { margin-bottom: var(--sp-2); }
+
+/* The three analysis tables of a player page: a floor so the wrapper scrolls them rather than squeezing the numbers, and the same ellipsis for a long map name the score table uses. */
+table.mods, table.internals, table.top { min-width: 560px; }
+table.top .map-cell { max-width: 260px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+table.internals td.layer-name { font-family: var(--mono); }
+table.internals .hint { max-width: 32ch; }
+
 /* --------------------------------------------------------------- dataset -- */
 
 .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: var(--sp-3); margin: 0; }
@@ -418,12 +459,18 @@ table.layers td.layer-name { white-space: nowrap; font-weight: 500; }
 .hist-card { margin: 0; border: 1px solid var(--hairline); border-radius: var(--r-md); background: var(--surface-2); padding: var(--sp-3); }
 .hist-card figcaption { display: flex; flex-direction: column; gap: 2px; margin-bottom: var(--sp-2); font-size: 14px; font-weight: 500; }
 .hist-overlay { grid-column: 1 / -1; }
-.hist { display: block; width: 100%; height: auto; }
-.hist text { fill: var(--ink-tertiary); font-size: 10px; font-family: var(--mono); }
+/* The price histograms are read at a glance, so their width is capped: an SVG with `width: 100%` keeps its viewBox aspect ratio, and inside a full-width card that is what turns a small chart into a half-metre-tall picture. The overlay gets the wider cap because its card spans the panel. */
+.hist { display: block; width: 100%; height: auto; max-width: 420px; margin: 0 auto; }
+.hist-overlay .hist { max-width: 860px; }
+.hist text { fill: var(--ink-subtle); font-size: 10px; font-family: var(--mono); }
+.hist .y-label { fill: var(--ink-muted); }
 .hist .rule { stroke: var(--hairline-strong); stroke-width: 1; }
+.hist .grid { stroke: var(--hairline); stroke-width: 1; }
 .hist .bar-a { fill: var(--ink); fill-opacity: 0.75; }
-.hist .median { stroke: var(--ink-muted); stroke-width: 1.5; stroke-dasharray: 4 3; }
-.hist .step { fill: none; stroke: var(--ink-subtle); stroke-width: 1.5; stroke-dasharray: 5 3; }
+.hist .step { fill: none; stroke: var(--ink); stroke-width: 1.5; }
+.hist .median { stroke: var(--ink); stroke-width: 1.5; stroke-dasharray: 4 3; }
+.hist .median-b { stroke: var(--ink-subtle); stroke-width: 1.5; stroke-dasharray: 2 3; }
+.hist .median-label { fill: var(--ink-muted); }
 
 table.corr { min-width: 480px; }
 table.corr th[scope="row"] { text-align: left; font-weight: 500; color: var(--ink-muted); background: none; border-bottom: 1px solid var(--hairline); text-transform: none; letter-spacing: 0; font-size: 13px; }

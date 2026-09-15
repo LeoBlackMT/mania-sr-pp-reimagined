@@ -126,6 +126,7 @@
         <input type="search" id="players-q" autocomplete="off" spellcheck="false" placeholder="Search players — e.g. pp_reimagined>10000, rank<5, shirasu" aria-describedby="players-q-count">
         <button type="button" class="btn" id="players-reset" title="Clear this view's search and sort">Reset</button>
         <button type="button" class="btn" id="players-export">Export CSV</button>
+        <span class="filter-state" id="players-filter" hidden>filtering…</span>
         <span class="count" id="players-q-count" role="status"></span>
       </div>
     </div>
@@ -137,7 +138,15 @@
         <tbody></tbody>
       </table>
     </div>
-    <p class="more"><button type="button" class="btn" id="players-more" hidden>Show more</button></p>
+    <nav class="pager" id="players-pager" aria-label="Rankings pages" hidden>
+      <span class="count page-info" id="players-page-info" role="status"></span>
+      <span class="pager-nav">
+        <button type="button" class="btn" data-page="first" title="Go to the first page">« First</button>
+        <button type="button" class="btn" data-page="prev" title="Go to the previous page">‹ Prev</button>
+        <button type="button" class="btn" data-page="next" title="Go to the next page">Next ›</button>
+        <button type="button" class="btn" data-page="last" title="Go to the last page">Last »</button>
+      </span>
+    </nav>
     <p class="hint" id="players-note"></p>
   </section>
 
@@ -197,6 +206,7 @@
           <label class="sr-only" for="scores-q">Search scores</label>
           <input type="search" id="scores-q" autocomplete="off" spellcheck="false" placeholder="Search scores — e.g. mod=DT key=4 star<7" aria-describedby="search-state">
           <button type="button" class="btn" id="scores-reset" title="Clear this view's search and sort">Reset</button>
+          <span class="filter-state" id="scores-filter" hidden>filtering…</span>
           <span class="count" id="search-state" role="status"></span>
         </div>
         <p class="err" id="search-warn" hidden></p>
@@ -209,7 +219,65 @@
           <tbody></tbody>
         </table>
       </div>
-      <p class="more"><button type="button" class="btn" id="show-more" hidden>Show more</button></p>
+      <nav class="pager" id="scores-pager" aria-label="Score table pages" hidden>
+        <span class="count page-info" id="scores-page-info" role="status"></span>
+        <span class="pager-nav">
+          <button type="button" class="btn" data-page="first" title="Go to the first page">« First</button>
+          <button type="button" class="btn" data-page="prev" title="Go to the previous page">‹ Prev</button>
+          <button type="button" class="btn" data-page="next" title="Go to the next page">Next ›</button>
+          <button type="button" class="btn" data-page="last" title="Go to the last page">Last »</button>
+        </span>
+      </nav>
+    </section>
+
+    <!-- How the weighted total builds up: the same 0.95-decay sum the totals panel prints, drawn as a curve over the top-N scores, for A and for B. -->
+    <section class="panel" id="panel-cumulative" aria-labelledby="cumulative-title">
+      <div class="panel-head">
+        <h3 class="eyebrow" id="cumulative-title">How the weighted total builds up</h3>
+        <span class="hint">the 0.95-decay sum over the best N scores, so the height of the plateau is the total and the slope is how much each score still adds</span>
+      </div>
+      <div class="chart-wrap" id="cumulative"></div>
+      <p class="hint" id="cumulative-note"></p>
+    </section>
+
+    <!-- Pp per star: what one star of rating pays on each score under A, with the A/B disagreement carried by the dot's size and fill. -->
+    <section class="panel" id="panel-efficiency" aria-labelledby="efficiency-title">
+      <div class="panel-head">
+        <h3 class="eyebrow" id="efficiency-title">Pp per star</h3>
+        <span class="hint">A's pp divided by the score's star rating, one dot per score; the bigger the dot the more the two sides disagree, and a hollow dot means B pays more</span>
+      </div>
+      <div class="chart-wrap" id="efficiency"></div>
+      <p class="hint" id="efficiency-note"></p>
+    </section>
+
+    <!-- The ten scores each side rates highest, with the rank those same scores hold under the other side. -->
+    <section class="panel" id="panel-top" aria-labelledby="top-title">
+      <div class="panel-head">
+        <h3 class="eyebrow" id="top-title">The top ten under each algorithm</h3>
+        <span class="hint">the ten scores each side rates highest, and where those scores land under the other side</span>
+      </div>
+      <div class="top-grid" id="top-tables"></div>
+      <p class="hint" id="top-note"></p>
+    </section>
+
+    <!-- Mod family breakdown: the same families the layer table partitions by, with the share of the weighted total each of them carries. -->
+    <section class="panel" id="panel-modfamily" aria-labelledby="modfamily-title">
+      <div class="panel-head">
+        <h3 class="eyebrow" id="modfamily-title">Mod family breakdown</h3>
+        <span class="hint">each family's price and the share of the weighted total it carries, under A and under B</span>
+      </div>
+      <div class="table-wrap" id="modfamily-table"></div>
+      <p class="hint" id="modfamily-note"></p>
+    </section>
+
+    <!-- Internal parameters: the percentiles of everything the Reimagined pricing derives per score, over this whole bp list. -->
+    <section class="panel" id="panel-internals" aria-labelledby="internals-title">
+      <div class="panel-head">
+        <h3 class="eyebrow" id="internals-title">Internal parameters</h3>
+        <span class="hint">percentiles of the Reimagined internals and of the score inputs they derive from, over this whole bp list</span>
+      </div>
+      <div class="table-wrap" id="internals-table"></div>
+      <p class="hint" id="internals-note"></p>
     </section>
 
     <!-- Layer summary, computed over the whole bp list on purpose. -->
@@ -249,7 +317,7 @@
 
     <section class="panel" id="dataset-missing" hidden aria-labelledby="dataset-missing-title"></section>
 
-    <div id="dataset-body" hidden>
+    <div id="dataset-body" class="stack" hidden>
       <section class="panel" aria-labelledby="dataset-summary-title">
         <div class="panel-head"><h3 class="eyebrow" id="dataset-summary-title">At a glance</h3></div>
         <dl class="stats" id="dataset-summary"></dl>
@@ -345,7 +413,7 @@
       <p class="err" id="calc-error-text"></p>
     </section>
 
-    <div id="calc-body" hidden>
+    <div id="calc-body" class="stack" hidden>
       <section class="panel" aria-labelledby="calc-result-title">
         <div class="panel-head">
           <h3 class="eyebrow" id="calc-result-title">Result</h3>

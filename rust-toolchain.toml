@@ -1,3 +1,6 @@
 [toolchain]
-channel = "stable"
+# Pinned to an exact release rather than `stable`: the published WebAssembly artefact under
+# `docs/wasm/` is built with this compiler and CI rebuilds it to check behaviour, so a floating
+# channel would let a developer's machine and CI drift apart for no benefit.
+channel = "1.98.0"
 components = ["rustfmt", "clippy"]

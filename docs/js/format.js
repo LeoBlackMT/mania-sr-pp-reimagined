@@ -32,10 +32,18 @@ export const pctPlain = (v, d = 1) => (v == null ? '–' : (v * 100).toFixed(d) 
 export const dirClass = (v) => (v == null ? '' : v > 0 ? 'up' : v < 0 ? 'down' : '');
 export const clamp = (v, lo, hi) => Math.max(lo, Math.min(hi, v));
 
-/** Trailing-edge debounce, used by the two search boxes so a keystroke does not re-sort a 20 000-row list. */
+/** Trailing-edge debounce: the two search boxes wait for a pause in the typing before they filter, so a burst of keystrokes costs one pass and not one per character. */
 export function debounce(fn, ms) {
   let t = 0;
   return (...args) => { clearTimeout(t); t = setTimeout(() => fn(...args), ms); };
+}
+
+/** Run work off the keystroke path: an idle slice when the browser offers one, and a timer that runs it anyway when the page never goes idle (a background tab, a long frame). Only one of the two ever calls fn, so the work happens exactly once and the handler that scheduled it has already returned. */
+export function idle(fn, timeout = 120) {
+  let done = false;
+  const once = () => { if (done) return; done = true; fn(); };
+  if (typeof requestIdleCallback === 'function') requestIdleCallback(once, { timeout });
+  setTimeout(once, timeout);
 }
 
 /** "2026-09-13T10:40:33Z" -> "2026-09-13 10:40 UTC"; an unparsable input passes through unchanged. */

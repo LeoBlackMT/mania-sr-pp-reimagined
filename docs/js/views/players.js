@@ -3,14 +3,15 @@
  *
  * One row per player in data/index.json, so this view fetches no shard at all: totals, ranks, deltas and moves are all in the index.
  * The anchor every delta and every ▲/▼ is measured against is A, because A is the baseline by definition; the totals themselves come from each algorithm's own ordering of that player's scores.
- * Sorting re-renders only the tbody and patches the header in place, rows are rendered a page at a time, and the CSV button exports the whole current sort and filter rather than the visible page.
+ * Sorting re-renders only the tbody and patches the header in place, the rows are paged fifty at a time with the page number in the hash, and the CSV button exports the whole current sort and filter rather than the visible page.
+ * Typing never filters in its own keystroke: the box waits for a pause, then filters in an idle slice with a "filtering…" indicator beside the row count.
  * =========================================================================== */
 
 import { $ } from '../dom.js';
-import { csvCell, csvNum, debounce, dirClass, downloadCsv, esc, flash, fmtG, num, pct, signed } from '../format.js';
+import { csvCell, csvNum, debounce, dirClass, downloadCsv, esc, flash, fmtG, idle, num, pct, signed } from '../format.js';
 import {
-  PAGE_SIZE, algoLabel, compareRows, headHtml, nextSort, openPlayer, patchSort, playerDelta, playerMove, playerRank, playerRel,
-  registerView, resetPaging, setSort, shownFor, state, uidKey, writeHash,
+  algoLabel, compareRows, headHtml, nextSort, openPlayer, pageArg, pageScrollIntoView, pageTarget, pageWindow, patchSort,
+  playerDelta, playerMove, playerRank, playerRel, registerView, resetPaging, setSort, state, syncPager, uidKey, writeHash,
 } from '../core.js';
 import { matchesPlayer, parseQuery, playerFields } from '../search.js';
 
@@ -19,10 +20,15 @@ const el = {
   reset: $('#players-reset'),
   exportBtn: $('#players-export'),
   count: $('#players-q-count'),
+  filter: $('#players-filter'),
   table: $('#players-table'),
   note: $('#players-note'),
-  more: $('#players-more'),
+  pager: $('#players-pager'),
+  pageInfo: $('#players-page-info'),
 };
+
+/** How long the box waits for the typing to stop before it filters. A little longer than a keyboard repeat, so a burst of characters costs one filter pass. */
+const FILTER_DELAY = 220;
 
 /** Default sort: the baseline algorithm's weighted total, highest first. */
 const defaultSort = () => ({ key: state.A ? `pp:${state.A}` : 'username', dir: state.A ? -1 : 1 });
@@ -99,7 +105,8 @@ function render() {
   const columns = rankingColumns();
   $('thead', el.table).innerHTML = headHtml(columns);
   const { rows, parsed } = selected();
-  const slice = rows.slice(0, shownFor('players'));
+  const w = pageWindow(state.view.players, rows.length);
+  const slice = rows.slice(w.start, w.end);
   $('tbody', el.table).innerHTML = slice.length
     ? slice.map((u) => {
       const active = state.uid != null && u.uid === state.uid;
@@ -108,15 +115,28 @@ function render() {
     : `<tr><td colspan="${columns.length}" class="empty">${state.users.length ? 'No player matches the current search.' : 'This dataset contains no players.'}</td></tr>`;
   patchSort(el.table, state.sort.players || defaultSort(), columns);
 
-  const left = rows.length - slice.length;
-  el.more.hidden = left <= 0;
-  el.more.textContent = `Show more (${Math.min(PAGE_SIZE, left)} of ${left} remaining)`;
+  el.pager.hidden = !rows.length;
+  syncPager(el.pager, el.pageInfo, w);
+  el.filter.hidden = true;   // the results the indicator was waiting for are on screen
 
   const bad = parsed.filter((t) => t.kind === 'field' && t.spec.available === false).map((t) => t.raw);
   el.count.textContent = (parsed.length ? `${rows.length} of ${state.users.length} players match · ${parsed.length} term${parsed.length === 1 ? '' : 's'}` : `${rows.length} player${rows.length === 1 ? '' : 's'}`)
     + (bad.length ? ` · ${bad.join(', ')} always matches nothing (no map creator in the dataset)` : '');
   el.exportBtn.disabled = !rows.length;
-  el.note.textContent = `Ranks cover the ${state.users.length} player${state.users.length === 1 ? '' : 's'} in this dataset (1 = the highest weighted total) and come from data/index.json alone — no player shard is fetched for this view. ▲/▼ is the move against the same player's ${algoLabel(state.A)} rank, so it shows who gains or loses when the algorithm is switched.`;
+  el.note.textContent = `Ranks cover the ${state.users.length} player${state.users.length === 1 ? '' : 's'} in this dataset (1 = the highest weighted total) and come from data/index.json alone — no player shard is fetched for this view. ▲/▼ is the move against the same player's ${algoLabel(state.A)} rank, so it shows who gains or loses when the algorithm is switched. The table is paged fifty rows at a time and the page number lives in the hash, so a link reproduces the page it was copied from.`;
+}
+
+/** One pager button. The target is clamped to the pages the current filter actually has, and the page number goes into the hash like the rest of the view state. */
+function goPage(kind) {
+  const view = state.view.players;
+  if (!view) return;
+  const w = pageWindow(view, selected().rows.length);
+  const target = pageTarget(kind, w);
+  if (target === w.page || target < 1 || target > w.pages) return;
+  view.page = target;
+  writeHash(true);
+  render();
+  pageScrollIntoView(el.table);
 }
 
 /** Export the current sort and filter, one row per player, all of them rather than the visible page. */
@@ -140,20 +160,32 @@ function exportCsv() {
   flash(el.exportBtn, `Exported ${rows.length} players`, 'Export CSV');
 }
 
+/** A filtering pass that a newer keystroke has already superseded is dropped rather than rendered, and the indicator clears only once a pass has actually drawn its results. */
+let filterToken = 0;
+function scheduleFilter() {
+  const token = ++filterToken;
+  el.filter.hidden = false;
+  idle(() => {
+    if (token !== filterToken) return;
+    render();
+  });
+}
+
 const onInput = debounce(() => {
   const view = state.view.players;
   if (!view) return;
   view.q = el.q.value;
-  resetPaging('players');
+  view.page = 1;   // a new filter makes the old page number meaningless
   writeHash(true);
-  render();
-}, 120);
+  scheduleFilter();
+}, FILTER_DELAY);
 
 /** Reset clears this view's search and sort; the A/B pair is global and has its own control. */
 function resetView() {
   const view = state.view.players;
   if (!view) return;
   view.q = '';
+  view.page = 1;
   el.q.value = '';
   resetPaging('players');
   const d = defaultSort();
@@ -187,9 +219,9 @@ export function initPlayersView() {
   el.q.addEventListener('input', onInput);
   el.reset.addEventListener('click', resetView);
   el.exportBtn.addEventListener('click', exportCsv);
-  el.more.addEventListener('click', () => {
-    state.shown.players = shownFor('players') + PAGE_SIZE;
-    render();
+  el.pager.addEventListener('click', (ev) => {
+    const b = ev.target.closest('button[data-page]');
+    if (b) goPage(b.dataset.page);
   });
 
   registerView({
@@ -204,6 +236,7 @@ export function initPlayersView() {
         q: q.q ?? '',
         sort,
         dir: q.dir ? (q.dir === 'asc' ? 1 : -1) : defaultSort().dir,
+        page: pageArg(q.page),
       };
     },
     path: () => '#/players',
@@ -219,7 +252,16 @@ export function initPlayersView() {
       if (rows.length) openPlayer(rows[0].uid);
     },
     focusSearch() { el.q.focus(); el.q.select(); },
-    clearSearch() { el.q.value = ''; onInput(); },
+    /** Esc clears the box at once rather than after the debounce, because the reader asked for it and is waiting. */
+    clearSearch() {
+      const view = state.view.players;
+      el.q.value = '';
+      if (!view) return;
+      view.q = '';
+      view.page = 1;
+      writeHash(true);
+      scheduleFilter();
+    },
     isSearchFocused: () => document.activeElement === el.q,
     invalidate() { cache = { key: '', rows: [], parsed: [] }; },
     searchInput: el.q,

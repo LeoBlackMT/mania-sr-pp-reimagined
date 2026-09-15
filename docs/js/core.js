@@ -24,8 +24,10 @@ export const SCHEMA_VERSION = 3;
 /** Presentation order for the algorithms this repository publishes; anything else follows, sorted by id. */
 export const KNOWN_ALGOS = ['bancho', 'sunny', 'codexxy', 'reimagined'];
 
-/** Rows added by one "Show more" click. Small enough to keep a 20 000-score shard responsive, large enough to fill a screen. */
-export const PAGE_SIZE = 150;
+/** Rows on one page of the two paged tables — the rankings and one player's scores. Fifty rows fill a screen at the density these tables are read at, and the page indicator then says something a reader can act on. */
+export const PAGE_ROWS = 50;
+/** Rows one "Show more" click adds to the one list that still grows in place rather than paging: the dataset view's disagreement table, which the engine publishes sixty of. */
+export const MORE_STEP = 150;
 /** Engine warnings printed in the provenance footer. */
 export const WARN_LIMIT = 25;
 
@@ -265,6 +267,17 @@ export const modKey = (v) => String(v ?? '').toUpperCase().replace(/[^A-Z0-9]/g,
 
 /* -------------------------------- 7 layers -------------------------------- */
 
+/** The mod families of one list, in the order every table prints them. They partition the list, so a score belongs to exactly one of them and only the families that actually occur come back. */
+export function modFamilies(list) {
+  const rows = [];
+  if (list.some(isNoMod)) rows.push({ id: 'nm', name: 'NM', grade: 'no mods', test: isNoMod });
+  if (list.some(isRateUp)) rows.push({ id: 'dt', name: 'Rate-up', grade: 'DT · NC', test: isRateUp });
+  if (list.some(isRateDown)) rows.push({ id: 'ht', name: 'Rate-down', grade: 'HT · DC', test: isRateDown });
+  const otherMods = (s) => !isNoMod(s) && !isRateUp(s) && !isRateDown(s);
+  if (list.some(otherMods)) rows.push({ id: 'other', name: 'Other mods', grade: 'neither rate-up nor rate-down', test: otherMods });
+  return rows;
+}
+
 /** Layer families of one bp list. Every family partitions the list, so the rows of one family add up to its size, and only buckets that actually occur come back: as many layers as there are, no more, no fewer. */
 export function layerFamilies(list) {
   const fams = [];
@@ -274,12 +287,7 @@ export function layerFamilies(list) {
   if (list.some(otherKeys)) keyRows.push({ id: 'kother', name: 'Other key modes', grade: 'not 4K, 6K or 7K', test: otherKeys });
   if (keyRows.length) fams.push({ title: 'By key mode', rows: keyRows });
 
-  const modRows = [];
-  if (list.some(isNoMod)) modRows.push({ id: 'nm', name: 'NM', grade: 'no mods', test: isNoMod });
-  if (list.some(isRateUp)) modRows.push({ id: 'dt', name: 'Rate-up', grade: 'DT · NC', test: isRateUp });
-  if (list.some(isRateDown)) modRows.push({ id: 'ht', name: 'Rate-down', grade: 'HT · DC', test: isRateDown });
-  const otherMods = (s) => !isNoMod(s) && !isRateUp(s) && !isRateDown(s);
-  if (list.some(otherMods)) modRows.push({ id: 'other', name: 'Other mods', grade: 'neither rate-up nor rate-down', test: otherMods });
+  const modRows = modFamilies(list);
   if (modRows.length) fams.push({ title: 'By mod family', rows: modRows });
 
   const styleRows = LN_BUCKETS.filter((b) => list.some((s) => b.test(s.ln))).map((b) => ({ id: b.id, name: b.label, grade: LN_GRADES[b.id], test: (s) => b.test(s.ln) }));
@@ -506,6 +514,8 @@ export function writeHash(replace = true) {
     p.set('dir', view.dir === 1 ? 'asc' : 'desc');
   }
   if (view.layout && view.layout !== 'compact') p.set('layout', view.layout);
+  // Only a page other than the first is written, so an ordinary link stays as short as it was and page 1 is what an absent key means.
+  if (num(view.page) > 1) p.set('page', String(Math.trunc(view.page)));
   if (state.A) p.set('a', state.A);
   if (state.B) p.set('b', state.B);
   const url = `${spec.path(view, state.arg)}?${p.toString()}`;
@@ -523,19 +533,69 @@ export function openPlayer(uid) {
 
 /** Paging and the expanded-row set are per view, so switching views never inherits the other one's window. */
 export function resetPaging(id) {
-  state.shown[id] = PAGE_SIZE;
+  state.shown[id] = MORE_STEP;
   state.open.clear();
+  const view = state.view[id];
+  if (view) view.page = 1;
 }
-export const shownFor = (id) => state.shown[id] ?? PAGE_SIZE;
+export const shownFor = (id) => state.shown[id] ?? MORE_STEP;
 
 /** Change one view's sort and put it in the hash. The live sort and the hash's copy are written together here, so they cannot drift. */
 export function setSort(id, key, dir) {
   const view = state.view[id] || (state.view[id] = {});
   view.sort = key;
   view.dir = dir;
+  view.page = 1;   // a new order makes the old page number meaningless
   state.sort[id] = { key, dir };
-  state.shown[id] = PAGE_SIZE;
+  state.shown[id] = MORE_STEP;
   writeHash(true);
+}
+
+/* ------------------------------- 10b paging ------------------------------- */
+
+/** A hash `page` value as a 1-based page number; anything unparsable or below 1 is the first page. */
+export const pageArg = (v) => {
+  const n = Math.trunc(num(v) ?? 1);
+  return !Number.isFinite(n) || n < 1 ? 1 : n;
+};
+
+/** How many pages a row count needs. Never zero, so an empty table still reads "page 1 / 1" instead of "page 1 / 0". */
+export const pageCount = (n) => Math.max(1, Math.ceil(Math.max(0, n) / PAGE_ROWS));
+
+/**
+ * The window one view shows: the clamped page number, the page count, the slice bounds and the `rows a–b of n` figures the indicator prints.
+ * The page number is clamped here rather than written back into the hash, because the hash carries what the reader asked for and a search that shrinks the list should not silently rewrite it.
+ */
+export function pageWindow(view, rowCount) {
+  const total = Math.max(0, rowCount);
+  const pages = pageCount(total);
+  const page = Math.min(pageArg(view?.page), pages);
+  const start = (page - 1) * PAGE_ROWS;
+  const end = Math.min(total, start + PAGE_ROWS);
+  return { page, pages, total, start, end, from: total ? start + 1 : 0, to: end };
+}
+
+/** The one sentence the pager prints: which rows are on screen and which page that is. */
+export const pageLabel = (w) => (w.total ? `rows ${w.from}–${w.to} of ${w.total} · page ${w.page} / ${w.pages}` : 'no rows to page');
+
+/** The target page of one pager button. */
+export function pageTarget(kind, w) {
+  return kind === 'first' ? 1 : kind === 'last' ? w.pages : kind === 'prev' ? w.page - 1 : w.page + 1;
+}
+
+/** Reflect a page window into one pager's controls: the buttons that cannot move are disabled rather than hidden, so the row never reflows as the reader pages. */
+export function syncPager(pager, info, w) {
+  if (info) info.textContent = pageLabel(w);
+  if (!pager) return;
+  for (const b of $$('button[data-page]', pager)) {
+    const target = pageTarget(b.dataset.page, w);
+    b.disabled = target === w.page || target < 1 || target > w.pages;
+  }
+}
+
+/** Paging a long table brings the reader back to its head, but only when that head has already scrolled out of sight — a table that is fully visible must not jump. */
+export function pageScrollIntoView(el) {
+  if (el && el.getBoundingClientRect().top < 0) el.scrollIntoView({ block: 'start' });
 }
 
 /* ---------------------------- 11 shell rendering -------------------------- */
@@ -617,6 +677,10 @@ export function renderProvenance() {
     ['schema version', s.schema_version == null ? '–' : String(s.schema_version)],
     ['players', String(state.users.length)],
     ['scores', s.score_count == null ? '–' : String(s.score_count)],
+    // The engine drops players below a Bancho pp floor before writing anything; saying so here is what keeps "327 players" from looking like the whole population.
+    ['excluded players', s.excluded_players == null || s.excluded_players === 0
+      ? 'none'
+      : `${s.excluded_players} below ${s.min_bancho_total == null ? 'the floor' : `${fmt(s.min_bancho_total, 0)} Bancho pp`}`],
     ['dataset source', s.origin === 'file' ? `local file: ${s.filename || '(unnamed)'}` : INDEX_URL],
     ['repository', `<a href="${esc(REPO_URL)}" target="_blank" rel="noopener noreferrer">${esc(REPO_URL.replace('https://', ''))}</a>`],
   ] : [['dataset', 'not loaded']];
@@ -684,6 +748,8 @@ export function renderAll() {
     syncThemeButton();
     return;
   }
+  // A view that does not read the dataset hides the load-failure panel: on `#/calc` it would sit above a working calculator explaining a file that view does not need. The panel is still there for the views that do need it.
+  if (!hasData) els.loader.hidden = true;
   if (state.spec.id === 'players') refreshIndexRanks();
   const view = state.view[state.spec.id];
   document.title = state.spec.title(view, state.arg);
@@ -724,7 +790,8 @@ export function showEmpty(reason, blocked) {
     : 'Run the command below to write <code>docs/data/index.json</code>, then reload — or load an existing <code>index.json</code> (or a single player shard) below.';
   els.loaderCmd.textContent = engineCommand();
   notifyData();
-  renderAll();
+  // The router decides what is visible, not this function: when the hash points at a view that does not read the dataset — the calculator — it still has to render, and calling renderAll() directly here would leave a deep link to it showing nothing until the visitor clicked the navigation.
+  applyRoute();
 }
 
 /** Adopt an index document. `eagerShard` carries a shard that was dropped in on its own. */
@@ -775,7 +842,7 @@ function enterRoute() {
     renderAll();
     return;
   }
-  for (const s of viewSpecs()) if (state.shown[s.id] == null) state.shown[s.id] = PAGE_SIZE;
+  for (const s of viewSpecs()) if (state.shown[s.id] == null) state.shown[s.id] = MORE_STEP;
   spec.sync?.(view, state.arg);
   renderAll();
   if (spec.needsShard) loadShard();

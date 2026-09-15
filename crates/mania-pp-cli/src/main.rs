@@ -40,6 +40,7 @@ struct Args {
     maps: PathBuf,
     out: PathBuf,
     limit: Option<usize>,
+    min_bancho_total: f64,
     quiet: bool,
     bench: bool,
 }
@@ -57,6 +58,8 @@ OPTIONS:
     --out <dir|file>   dataset location (default: docs/data; a path ending in index.json is
                        accepted and its parent directory is used)
     --limit N          only the first N scores per user, in input order
+    --min-bancho-total P
+                       drop players whose Bancho weighted total is below P pp (default 1000)
     --bench            print per-algorithm single-score timings after the run
     --quiet            suppress the console summary
     -h, --help         print this help
@@ -76,6 +79,8 @@ fn parse_args() -> Result<Args, String> {
     let mut maps: Option<PathBuf> = None;
     let mut out = PathBuf::from("docs/data");
     let mut limit = None;
+    // Players below this Bancho weighted total are dropped from the published dataset: their lists price trivia, and they drag the dataset-wide modules with them.
+    let mut min_bancho_total = 1000.0_f64;
     let mut quiet = false;
     let mut bench = false;
 
@@ -96,6 +101,12 @@ fn parse_args() -> Result<Args, String> {
                         .map_err(|_| format!("bad --limit: {raw}"))?,
                 );
             }
+            "--min-bancho-total" => {
+                let raw = next_value(&mut it, "--min-bancho-total")?;
+                min_bancho_total = raw
+                    .parse::<f64>()
+                    .map_err(|_| format!("bad --min-bancho-total: {raw}"))?;
+            }
             "--bench" => bench = true,
             "--quiet" => quiet = true,
             other => return Err(format!("unknown argument: {other}\n\n{USAGE}")),
@@ -107,6 +118,7 @@ fn parse_args() -> Result<Args, String> {
         maps: maps.ok_or_else(|| format!("--maps is required\n\n{USAGE}"))?,
         out,
         limit,
+        min_bancho_total,
         quiet,
         bench,
     })
@@ -423,7 +435,7 @@ fn run() -> Result<(), String> {
         });
     }
 
-    let document = emit::write_dataset(&mut users_out, warnings, &args.out)?;
+    let document = emit::write_dataset(users_out, warnings, &args.out, args.min_bancho_total)?;
     if !args.quiet {
         emit::print_summary(&document, &args.out);
     }

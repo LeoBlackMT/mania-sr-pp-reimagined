@@ -158,12 +158,35 @@ fn opt(v: Option<f64>) -> Value {
 
 /// Write `index.json` plus one shard per player, and return the index document.
 pub fn write_dataset(
-    users: &mut [UserOut],
+    mut users: Vec<UserOut>,
     warnings: Vec<String>,
     out: &Path,
+    min_bancho_total: f64,
 ) -> Result<Value, String> {
     for user in users.iter_mut() {
         sort_scores(&mut user.scores);
+    }
+
+    // A bp list only says something once the player has one worth comparing: below this the four
+    // algorithms price trivia, and the dataset-wide modules (layer medians, the widest
+    // disagreements) get dragged towards scores nobody cares about. The threshold is Bancho's own
+    // weighted total, which is now the official calculation, so it means the same thing as the pp
+    // osu! shows for that profile.
+    let before = users.len();
+    users.retain(|user| {
+        let pps: Vec<f64> = user
+            .scores
+            .iter()
+            .filter_map(|s| s.pp.bancho)
+            .filter(|pp| pp.is_finite() && *pp > 0.0)
+            .collect();
+        weighted_total(&pps) >= min_bancho_total
+    });
+    let excluded = before - users.len();
+    if users.is_empty() {
+        return Err(format!(
+            "every player was excluded by the {min_bancho_total:.0} Bancho pp floor; lower it with --min-bancho-total"
+        ));
     }
 
     // `--out` may be the data directory itself or the index file inside it.
@@ -303,6 +326,8 @@ pub fn write_dataset(
         "algorithms": algorithms,
         "users": index_users,
         "score_count": total_scores,
+        "excluded_players": excluded,
+        "min_bancho_total": min_bancho_total,
         "aggregates": crate::aggregates::build(&aggregate_scores, &aggregate_ids),
         "warnings": warnings,
     });

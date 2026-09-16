@@ -90,15 +90,15 @@ Players below `--min-bancho-total` are dropped before anything is written: a bp 
 
 **Totals**: per algorithm, the player's scores are ranked by *that algorithm's* PP and summed with weight `0.95^n` — what the profile would look like if that algorithm were the one in use. No bonus PP is applied (the bonus term only becomes relevant above 1000 ranked scores, and these fixtures are the top 100).
 
-### Single-score timings (release build, 32,516 scores over 343 bp lists / 5,848 map-mod pairs, Windows x86-64)
+### Single-score timings (release build, 32,191 published scores over 327 bp lists / 5,848 map-mod pairs, Windows x86-64)
 
 | Stage | median | mean | p95 |
 |---|---|---|---|
-| `prepare` per (map, mods) — cached, paid once | 28.9ms | 53.6ms | 176.3ms |
+| `prepare` per (map, mods) — cached, paid once | 27.9ms | 51.5ms | 170.5ms |
 | Bancho pp | 0.2µs | 0.3µs | 0.5µs |
-| Sunny + Codexxy (one shared upstream pass) | 60.9µs | 65.3µs | 119.2µs |
-| Reimagined pp | 0.8µs | 1.3µs | 3.0µs |
-| **total per score, four columns** | **64.7µs** | 71.6µs | 131.2µs |
+| Sunny + Codexxy (one shared upstream pass) | 60.9µs | 64.8µs | 103.6µs |
+| Reimagined pp | 0.8µs | 1.1µs | 2.0µs |
+| **total per score, four columns** | **64.8µs** | 70.8µs | 113.1µs |
 
 Read it as two very different costs. Pricing a score is microseconds — Reimagined's own arithmetic is 0.7µs, and even Bancho's complete pp calculation is half a microsecond — while the *difficulty* pass (star ratings for the full map, the rice variant and the official calculator) costs tens of milliseconds per map-and-mods pair and is cached, so a bp list pays it once per map. Sunny and Codexxy share that pass by construction, which is why they are timed together; computing them independently would roughly double that cost. For comparison, the Python research reference prices a score in ~5µs and needs ~13-16ms for its diagnostic surface channel, and the Node sunny build needs ~100-350ms per map.
 
@@ -153,7 +153,7 @@ The three id fields exist so the site can link correctly: a difficulty lives at 
 
 Because the intended scale is hundreds of players and tens of thousands of scores, and a single document would be wrong on three counts: every visitor would download all of it before seeing anything, the browser would parse all of it to render one player, and every refresh would produce one enormous diff in git. The split fixes that — the index stays a few kilobytes, and each player is a shard of a few tens of kilobytes fetched on demand.
 
-The current dataset shows the shape of it: 343 players and 32,516 scores occupy 344 files and 14.8 MB, but a visitor loads only the 140 KB index plus the one ~43 KB shard being opened. Under the old single-document layout this would have been a single 15 MB file, so the initial download has stopped scaling with the dataset: the rankings and the dataset-wide modules need no shard at all, and adding hundreds more players grows the index by tens of kilobytes and costs nothing until a visitor opens one.
+The current dataset shows the shape of it: 327 players and 32,191 scores occupy 328 files and 14.6 MB, but a visitor loads only the 137 KB index plus the one ~44 KB shard being opened. Under the old single-document layout this would have been a single 15 MB file, so the initial download has stopped scaling with the dataset: the rankings and the dataset-wide modules need no shard at all, and adding hundreds more players grows the index by tens of kilobytes and costs nothing until a visitor opens one.
 
 Inside a shard the layout is **columnar**: the column names appear once and each score is an array of values in that order. Compared with an array of objects this is roughly a third of the bytes (no repeated keys, no braces), it parses faster, and the site can turn it into table rows by index instead of by property lookup. The order is part of the contract: `columns` is authoritative, and adding a column means appending to it and bumping `schema_version`.
 

@@ -6,7 +6,7 @@ The other three algorithms exist in the engine so that Reimagined has something 
 
 | id | algorithm | provenance |
 |---|---|---|
-| `bancho` | **Bancho** — the official osu! pp (osu!lazer) | ported upstream in the pinned [`rosu-pp`](https://github.com/ppy-sb/rosu-pp) fork |
+| `bancho` | **Bancho** — the official osu! pp (osu!lazer) | computed from the **untouched upstream [`rosu-pp`](https://github.com/MaxOhn/rosu-pp) v4.0.1**: the pinned fork below rewrites the official star rating, so it cannot supply this column (see [docs/algorithms.md](docs/algorithms.md)) |
 | `sunny` | **Sunny** — the community algorithm by [Crz]sunnyxxy (its repository is named *Star-Rating-Rebirth*) | the `mania::sunny` module of the same fork |
 | `codexxy` | **Codexxy** — Sunny plus a map-based timing surface | the `pp_timing` part of the same calculation |
 | `reimagined` | **Reimagined** — this project's three-channel R / L / A algorithm | implemented here, from a Python research reference |

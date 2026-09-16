@@ -199,6 +199,19 @@ pub fn write_dataset(
     std::fs::create_dir_all(&players_dir)
         .map_err(|e| format!("cannot create {}: {e}", players_dir.display()))?;
 
+    // The dataset is regenerated wholesale, so whatever is already in `players/` is stale. A player
+    // dropped by the Bancho floor would otherwise leave a shard behind that the index no longer
+    // references: published, fetchable, and indistinguishable from a real one.
+    if let Ok(entries) = std::fs::read_dir(&players_dir) {
+        for entry in entries.flatten() {
+            let path = entry.path();
+            if path.extension().and_then(|e| e.to_str()) == Some("json") {
+                std::fs::remove_file(&path)
+                    .map_err(|e| format!("cannot clear the stale shard {}: {e}", path.display()))?;
+            }
+        }
+    }
+
     let algorithms: Vec<Value> = algorithm_table()
         .iter()
         .map(|(id, label, description)| {

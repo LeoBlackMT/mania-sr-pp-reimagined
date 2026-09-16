@@ -18,6 +18,8 @@ Fixtures are the **input** side of the pipeline. The computed results are the *o
 | mod mix | NM ×19,789 · DT ×4,213 · MR ×3,368 · HT ×1,853 · NC ×1,320 · DT+MR ×797 · NC+MR ×395 · HT+MR ×252 · 4K ×168 · HD ×83 · FL ×70 · FI ×52 |
 | map coverage | 32,516 / 32,516 rows (100%) — every `.osu` present in the local map cache, none skipped |
 
+**The published dataset is smaller than this fixture**: the CLI drops every player below `--min-bancho-total` (1000 Bancho pp by default), which leaves **327 players and 32,191 of these 32,516 scores**. A bp list below that floor prices trivia, and those scores would drag every dataset-wide module — the layer medians, the correlation matrix, the disagreement list — with them. The index records how many players were dropped (`excluded_players`) and the floor itself (`min_bancho_total`), and the site's provenance footer shows both, so a visitor can always see what was left out instead of a quietly smaller dataset.
+
 Composition rationale: the world top 200 supplies the skill ceiling and the current mod meta in bulk (NM/DT/MR dominate, with every rate mod represented), while the research-side players carry the deliberate key-mode and rate-mod spread built up for algorithm calibration — eleven 4K lists, seven 7K lists, pure-NM baselines, and HT-dominant lists such as Ox Q and Firefly Neko. Together they give both breadth and the controlled contrasts the four algorithms are compared on; the pure-NM lists in particular act as a baseline where the algorithms can only disagree about the map itself.
 
 Format (tab separated, header included):

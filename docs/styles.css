@@ -268,6 +268,8 @@ main { margin-top: var(--sp-6); }
 
 /* Pagination: the page indicator on the left of the row, the four controls on the right, in one line that wraps rather than scrolls. */
 .pager { display: flex; align-items: center; justify-content: space-between; gap: var(--sp-2); flex-wrap: wrap; margin-top: var(--sp-3); }
+/* The copy above a long table: the same controls, sitting where the reader already is, so reaching the next page never costs a scroll up and a scroll back down. */
+.pager-top { margin-top: 0; margin-bottom: var(--sp-2); }
 .pager-nav { display: flex; align-items: center; gap: var(--sp-2); flex-wrap: wrap; }
 .page-info { color: var(--ink-muted); }
 

@@ -10,10 +10,10 @@
 import { $, $$ } from '../dom.js';
 import { cellNum, cellSigned, clamp, csvCell, csvNum, debounce, dirClass, downloadCsv, esc, EXTERNAL, flash, fmt, fmtG, idle, link, median, pct, pctPlain, quantile, signed } from '../format.js';
 import {
-  CSV_ORDER, LN_BUCKETS, LN_HB, LN_RC, SHIFT_BIG, SHIFT_MID, algoLabel, compareRows, detailGrid, diffOf, expandButton, headHtml,
-  layerFamilies, loadShard, modFamilies, nextSort, pageArg, pageScrollIntoView, pageTarget, pageWindow, patchSort, ppA, ppB, player,
+  CSV_ORDER, LN_BUCKETS, LN_HB, LN_RC, SHIFT_BIG, SHIFT_MID, algoLabel, bindPagers, compareRows, detailGrid, diffOf, expandButton, headHtml,
+  layerFamilies, loadShard, modFamilies, nextSort, pageArg, pageScrollIntoView, pageTarget, pageWindow, pagerNodes, patchSort, ppA, ppB, player,
   primaryStar, registerView, relOf, resetPaging, scoreRank, setSort, shiftClass, shiftOf, spreadOf, starColumns, starValue, state,
-  syncPager, totalFor, writeHash,
+  syncPagers, totalFor, writeHash,
 } from '../core.js';
 import { matchesScore, parseQuery, scoreFields, unsatisfiable } from '../search.js';
 
@@ -45,8 +45,6 @@ const el = {
   searchState: $('#search-state'),
   searchWarn: $('#search-warn'),
   table: $('#score-table'),
-  pager: $('#scores-pager'),
-  pageInfo: $('#scores-page-info'),
   cumulative: $('#cumulative'),
   cumulativeNote: $('#cumulative-note'),
   efficiency: $('#efficiency'),
@@ -292,8 +290,7 @@ function renderScores() {
     : `<tr><td colspan="${columns.length}" class="empty">${state.scores.length ? 'No score matches the current search.' : 'This bp list has no scores in this dataset.'}</td></tr>`;
   patchSort(el.table, state.sort.player || defaultSort(), columns);
 
-  el.pager.hidden = !rows.length;
-  syncPager(el.pager, el.pageInfo, w);
+  syncPagers('scores', w, rows.length);
   el.filter.hidden = true;   // the results the indicator was waiting for are on screen
   el.count.textContent = `${slice.length} of ${rows.length} score${rows.length === 1 ? '' : 's'} shown`;
   el.exportBtn.disabled = !rows.length;
@@ -306,7 +303,7 @@ function renderScores() {
 }
 
 /** One pager button. The target is clamped to the pages the current filter actually has, and the page number goes into the hash with the rest of the view state. */
-function goPage(kind) {
+function goPage(kind, from) {
   const view = state.view.player;
   if (!view) return;
   const w = pageWindow(view, selected().rows.length);
@@ -315,7 +312,8 @@ function goPage(kind) {
   view.page = target;
   writeHash(true);
   renderScores();
-  pageScrollIntoView(el.table);
+  // The copy above the table keeps the table where it is; only the bottom copy pulls the head back into view.
+  if (!from || !from.classList.contains('pager-top')) pageScrollIntoView(el.table);
 }
 
 function rowHtml(s, columns) {
@@ -646,7 +644,7 @@ function renderList() {
     el.searchState.textContent = '';
     el.searchWarn.hidden = true;
     el.filter.hidden = true;
-    el.pager.hidden = true;
+    for (const p of pagerNodes('scores')) p.hidden = true;
     el.layerTable.innerHTML = '';
     el.layerNote.textContent = '';
     el.cumulative.innerHTML = '';
@@ -789,10 +787,7 @@ export function initPlayerView() {
   el.q.addEventListener('input', onInput);
   el.reset.addEventListener('click', resetView);
   el.exportBtn.addEventListener('click', exportScoresCsv);
-  el.pager.addEventListener('click', (ev) => {
-    const b = ev.target.closest('button[data-page]');
-    if (b) goPage(b.dataset.page);
-  });
+  bindPagers('scores', goPage);
   el.layoutBox.addEventListener('click', (ev) => {
     const b = ev.target.closest('button[data-layout]');
     if (b) setLayout(b.dataset.layout);

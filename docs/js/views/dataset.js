@@ -8,7 +8,7 @@
 
 import { $ } from '../dom.js';
 import { esc, fmt, num, pctPlain, signed } from '../format.js';
-import { LN_HB, LN_RC, MORE_STEP, algoLabel, registerView, state } from '../core.js';
+import { LN_HB, LN_RC, algoLabel, bindPagers, pageArg, pageScrollIntoView, pageTarget, pageWindow, pagerNodes, registerView, state, syncPagers, writeHash } from '../core.js';
 
 const el = {
   summary: $('#dataset-summary'),
@@ -24,7 +24,12 @@ const el = {
   corrNote: $('#ds-corr-note'),
   disagree: $('#ds-disagree'),
   disagreeNote: $('#ds-disagree-note'),
-  more: $('#ds-more'),
+};
+
+/** The disagreement list this view is paged over, re-derived on every render because the aggregates are read straight from the loaded index. */
+const disagreeList = () => {
+  const a = agg();
+  return a && Array.isArray(a.top_disagreements) ? a.top_disagreements : [];
 };
 
 const agg = () => (state.source && state.source.aggregates) || null;
@@ -282,16 +287,17 @@ function renderCorrelation(a) {
 
 /* ------------------------------ disagreements ----------------------------- */
 
-/** The worst disagreements of the whole dataset, each row linking to the player it belongs to and to osu!. */
+/** The worst disagreements of the whole dataset, paged fifty rows at a time like the other tables; each row links to the player it belongs to and to osu!. */
 function renderDisagreements(a) {
   const list = Array.isArray(a.top_disagreements) ? a.top_disagreements : [];
   if (!list.length) {
     el.disagree.innerHTML = '<p class="empty">This dataset carries no disagreement list.</p>';
     el.disagreeNote.textContent = '';
-    el.more.hidden = true;
+    for (const p of pagerNodes('dataset')) p.hidden = true;
     return;
   }
-  const slice = list.slice(0, state.shown.dataset ?? MORE_STEP);
+  const w = pageWindow(state.view.dataset, list.length);
+  const slice = list.slice(w.start, w.end);
   el.disagree.innerHTML = `<table class="grid dis-table"><caption class="sr-only">The scores where the algorithms disagree most, ranked by spread over the mean</caption>`
     + `<thead><tr><th scope="col" class="num">#</th><th scope="col">Beatmap</th><th scope="col">Player</th><th scope="col">Structure</th>${state.algoIds.map((id) => `<th scope="col" class="num">${esc(algoLabel(id))}</th>`).join('')}<th scope="col" class="num">Spread</th></tr></thead><tbody>`
     + slice.map((r, i) => {
@@ -299,13 +305,27 @@ function renderDisagreements(a) {
       const player = r.uid == null ? '–' : `<a href="#/player/${esc(r.uid)}">#${esc(r.uid)}</a>`;
       const structure = [r.keys == null ? null : `${r.keys}K`, r.mods === '' ? 'NM' : esc(r.mods), r.ln_ratio == null ? null : `LN ${fmt(r.ln_ratio * 100, 1)}%`].filter(Boolean).join(' · ');
       const pps = state.algoIds.map((id) => `<td class="num">${fmt(num(r.pp?.[id]), 1)}</td>`).join('');
-      return `<tr><td class="num hint">${i + 1}</td><td class="map-cell">${map}${r.version ? ` <span class="hint">[${esc(r.version)}]</span>` : ''}</td>`
+      return `<tr><td class="num hint">${w.start + i + 1}</td><td class="map-cell">${map}${r.version ? ` <span class="hint">[${esc(r.version)}]</span>` : ''}</td>`
         + `<td class="num">${player}</td><td class="hint">${structure}</td>${pps}<td class="num strong">${r.spread == null ? '–' : Number(r.spread).toFixed(1) + '%'}</td></tr>`;
     }).join('') + '</tbody></table>';
-  const left = list.length - slice.length;
-  el.more.hidden = left <= 0;
-  el.more.textContent = `Show more (${Math.min(MORE_STEP, left)} of ${left} remaining)`;
-  el.disagreeNote.textContent = `Spread is (max − min) / mean over every algorithm that priced the score, so it is comparable across price levels. The engine publishes the ${list.length} widest ones; a row's beatmap links to osu! by beatmap id and its player number opens that player's view. Score ids and beatmap set ids are not part of the aggregate block, which is why the map link is the short /b/ form here.`;
+  syncPagers('dataset', w, list.length);
+  el.disagreeNote.textContent = `Spread is (max − min) / mean over every algorithm that priced the score, so it is comparable across price levels. The engine publishes the ${list.length} widest ones, ranked, and the table is paged ${w.pages === 1 ? 'in a single page' : 'at fifty rows'} with the page number in the hash, so a link reproduces the page it was copied from. A row's beatmap links to osu! by beatmap id and its player number opens that player's view. Score ids and beatmap set ids are not part of the aggregate block, which is why the map link is the short /b/ form here.`;
+}
+
+/** One pager button of the disagreement table: clamped to the pages the current list has, with the page number written into the hash like the rest of the view state. */
+function goPage(kind, from) {
+  const view = state.view.dataset;
+  if (!view) return;
+  const list = disagreeList();
+  const w = pageWindow(view, list.length);
+  const target = pageTarget(kind, w);
+  if (target === w.page || target < 1 || target > w.pages) return;
+  view.page = target;
+  writeHash(true);
+  const a = agg();
+  if (a) renderDisagreements(a);
+  // The copy above the table exists so the reader never scrolls to reach it; only the bottom copy pulls the head back.
+  if (!from || !from.classList.contains('pager-top')) pageScrollIntoView(el.disagree);
 }
 
 /* --------------------------------- render --------------------------------- */
@@ -328,16 +348,12 @@ function render() {
 }
 
 export function initDatasetView() {
-  el.more.addEventListener('click', () => {
-    state.shown.dataset = (state.shown.dataset ?? MORE_STEP) + MORE_STEP;
-    const a = agg();
-    if (a) renderDisagreements(a);
-  });
+  bindPagers('dataset', goPage);
   registerView({
     id: 'dataset',
     label: 'Dataset',
     needsShard: false,
-    parse: (q) => ({ q: q.q ?? '' }),
+    parse: (q) => ({ q: q.q ?? '', page: pageArg(q.page) }),
     path: () => '#/dataset',
     title: () => 'Dataset — mania-sr-pp-reimagined',
     sync: () => {},

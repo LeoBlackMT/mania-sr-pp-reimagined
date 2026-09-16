@@ -24,9 +24,9 @@ export const SCHEMA_VERSION = 3;
 /** Presentation order for the algorithms this repository publishes; anything else follows, sorted by id. */
 export const KNOWN_ALGOS = ['bancho', 'sunny', 'codexxy', 'reimagined'];
 
-/** Rows on one page of the two paged tables — the rankings and one player's scores. Fifty rows fill a screen at the density these tables are read at, and the page indicator then says something a reader can act on. */
+/** Rows on one page of every paged table — the rankings, one player's scores and the dataset view's disagreements. Fifty rows fill a screen at the density these tables are read at, and the page indicator then says something a reader can act on. */
 export const PAGE_ROWS = 50;
-/** Rows one "Show more" click adds to the one list that still grows in place rather than paging: the dataset view's disagreement table, which the engine publishes sixty of. */
+/** Step for the one list that still grows in place rather than paging. Nothing uses it today: the dataset view's disagreement table pages fifty rows like the other tables now. */
 export const MORE_STEP = 150;
 /** Engine warnings printed in the provenance footer. */
 export const WARN_LIMIT = 25;
@@ -596,6 +596,34 @@ export function syncPager(pager, info, w) {
 /** Paging a long table brings the reader back to its head, but only when that head has already scrolled out of sight — a table that is fully visible must not jump. */
 export function pageScrollIntoView(el) {
   if (el && el.getBoundingClientRect().top < 0) el.scrollIntoView({ block: 'start' });
+}
+
+/** Every pager of one table, top and bottom. A table long enough to scroll past its header gets a second set of controls above it, so the next page is one click away instead of a scroll back up and a scroll down again. */
+export const pagerNodes = (id) => $$(`[data-pager="${id}"]`);
+
+/** Show, hide and refresh every pager of one table at once, so the top and bottom copies can never disagree about the page or about which way they can move. The text indicator lives in one of them and every copy's buttons are patched. */
+export function syncPagers(id, w, rowCount) {
+  const nodes = pagerNodes(id);
+  for (const node of nodes) node.hidden = !rowCount;
+  for (const node of nodes) syncPager(node, $(`[data-pager-info="${id}"]`, node), w);
+}
+
+/**
+ * Wire every pager of a table to one handler.
+ *
+ * The handler is called with the target page number and the pager that was clicked, because the
+ * scroll anchor differs: clicking the top controls must keep the top controls in place, while
+ * clicking the bottom ones brings the table head back into view. Scrolling to the table for a
+ * click on the top copy would jump the reader past the very controls they are using.
+ */
+export function bindPagers(id, onPage) {
+  for (const node of pagerNodes(id)) {
+    node.addEventListener('click', (ev) => {
+      const b = ev.target.closest('button[data-page]');
+      if (!b || b.disabled) return;
+      onPage(b.dataset.page, node);
+    });
+  }
 }
 
 /* ---------------------------- 11 shell rendering -------------------------- */

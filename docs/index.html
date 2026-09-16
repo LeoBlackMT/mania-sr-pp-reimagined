@@ -131,6 +131,16 @@
       </div>
     </div>
 
+    <nav class="pager pager-top" data-pager="players" aria-label="Rankings pages, top" hidden>
+      <span class="count page-info" data-pager-info="players" role="status"></span>
+      <span class="pager-nav">
+        <button type="button" class="btn" data-page="first" title="Go to the first page">« First</button>
+        <button type="button" class="btn" data-page="prev" title="Go to the previous page">‹ Prev</button>
+        <button type="button" class="btn" data-page="next" title="Go to the next page">Next ›</button>
+        <button type="button" class="btn" data-page="last" title="Go to the last page">Last »</button>
+      </span>
+    </nav>
+
     <div class="table-wrap">
       <table class="grid rankings" id="players-table" aria-describedby="players-note">
         <caption class="sr-only">Players in the dataset with each algorithm's weighted total pp and rank</caption>
@@ -138,8 +148,8 @@
         <tbody></tbody>
       </table>
     </div>
-    <nav class="pager" id="players-pager" aria-label="Rankings pages" hidden>
-      <span class="count page-info" id="players-page-info" role="status"></span>
+    <nav class="pager" data-pager="players" aria-label="Rankings pages" hidden>
+      <span class="count page-info" data-pager-info="players" role="status"></span>
       <span class="pager-nav">
         <button type="button" class="btn" data-page="first" title="Go to the first page">« First</button>
         <button type="button" class="btn" data-page="prev" title="Go to the previous page">‹ Prev</button>
@@ -212,6 +222,16 @@
         <p class="err" id="search-warn" hidden></p>
       </div>
 
+      <nav class="pager pager-top" data-pager="scores" aria-label="Score table pages, top" hidden>
+        <span class="count page-info" data-pager-info="scores" role="status"></span>
+        <span class="pager-nav">
+          <button type="button" class="btn" data-page="first" title="Go to the first page">« First</button>
+          <button type="button" class="btn" data-page="prev" title="Go to the previous page">‹ Prev</button>
+          <button type="button" class="btn" data-page="next" title="Go to the next page">Next ›</button>
+          <button type="button" class="btn" data-page="last" title="Go to the last page">Last »</button>
+        </span>
+      </nav>
+
       <div class="table-wrap">
         <table class="grid scores" id="score-table">
           <caption class="sr-only">This player's scores with each algorithm's pp, the rank under A and B, and the breakdown</caption>
@@ -219,8 +239,8 @@
           <tbody></tbody>
         </table>
       </div>
-      <nav class="pager" id="scores-pager" aria-label="Score table pages" hidden>
-        <span class="count page-info" id="scores-page-info" role="status"></span>
+      <nav class="pager" data-pager="scores" aria-label="Score table pages" hidden>
+        <span class="count page-info" data-pager-info="scores" role="status"></span>
         <span class="pager-nav">
           <button type="button" class="btn" data-page="first" title="Go to the first page">« First</button>
           <button type="button" class="btn" data-page="prev" title="Go to the previous page">‹ Prev</button>
@@ -364,8 +384,25 @@
           <h3 class="eyebrow" id="ds-disagree-title">Widest disagreements</h3>
           <span class="hint">the scores the algorithms price most differently, each linking to its player and to osu!</span>
         </div>
+        <nav class="pager pager-top" data-pager="dataset" aria-label="Disagreement table pages, top" hidden>
+          <span class="count page-info" data-pager-info="dataset" role="status"></span>
+          <span class="pager-nav">
+            <button type="button" class="btn" data-page="first" title="Go to the first page">« First</button>
+            <button type="button" class="btn" data-page="prev" title="Go to the previous page">‹ Prev</button>
+            <button type="button" class="btn" data-page="next" title="Go to the next page">Next ›</button>
+            <button type="button" class="btn" data-page="last" title="Go to the last page">Last »</button>
+          </span>
+        </nav>
         <div class="table-wrap" id="ds-disagree"></div>
-        <p class="more"><button type="button" class="btn" id="ds-more" hidden>Show more</button></p>
+        <nav class="pager" data-pager="dataset" aria-label="Disagreement table pages" hidden>
+          <span class="count page-info" data-pager-info="dataset" role="status"></span>
+          <span class="pager-nav">
+            <button type="button" class="btn" data-page="first" title="Go to the first page">« First</button>
+            <button type="button" class="btn" data-page="prev" title="Go to the previous page">‹ Prev</button>
+            <button type="button" class="btn" data-page="next" title="Go to the next page">Next ›</button>
+            <button type="button" class="btn" data-page="last" title="Go to the last page">Last »</button>
+          </span>
+        </nav>
         <p class="hint" id="ds-disagree-note"></p>
       </section>
     </div>

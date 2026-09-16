@@ -10,8 +10,8 @@
 import { $ } from '../dom.js';
 import { csvCell, csvNum, debounce, dirClass, downloadCsv, esc, flash, fmtG, idle, num, pct, signed } from '../format.js';
 import {
-  algoLabel, compareRows, headHtml, nextSort, openPlayer, pageArg, pageScrollIntoView, pageTarget, pageWindow, patchSort,
-  playerDelta, playerMove, playerRank, playerRel, registerView, resetPaging, setSort, state, syncPager, uidKey, writeHash,
+  algoLabel, bindPagers, compareRows, headHtml, nextSort, openPlayer, pageArg, pageScrollIntoView, pageTarget, pageWindow, patchSort,
+  playerDelta, playerMove, playerRank, playerRel, registerView, resetPaging, setSort, state, syncPagers, uidKey, writeHash,
 } from '../core.js';
 import { matchesPlayer, parseQuery, playerFields } from '../search.js';
 
@@ -23,8 +23,6 @@ const el = {
   filter: $('#players-filter'),
   table: $('#players-table'),
   note: $('#players-note'),
-  pager: $('#players-pager'),
-  pageInfo: $('#players-page-info'),
 };
 
 /** How long the box waits for the typing to stop before it filters. A little longer than a keyboard repeat, so a burst of characters costs one filter pass. */
@@ -115,8 +113,7 @@ function render() {
     : `<tr><td colspan="${columns.length}" class="empty">${state.users.length ? 'No player matches the current search.' : 'This dataset contains no players.'}</td></tr>`;
   patchSort(el.table, state.sort.players || defaultSort(), columns);
 
-  el.pager.hidden = !rows.length;
-  syncPager(el.pager, el.pageInfo, w);
+  syncPagers('players', w, rows.length);
   el.filter.hidden = true;   // the results the indicator was waiting for are on screen
 
   const bad = parsed.filter((t) => t.kind === 'field' && t.spec.available === false).map((t) => t.raw);
@@ -127,7 +124,7 @@ function render() {
 }
 
 /** One pager button. The target is clamped to the pages the current filter actually has, and the page number goes into the hash like the rest of the view state. */
-function goPage(kind) {
+function goPage(kind, from) {
   const view = state.view.players;
   if (!view) return;
   const w = pageWindow(view, selected().rows.length);
@@ -136,7 +133,8 @@ function goPage(kind) {
   view.page = target;
   writeHash(true);
   render();
-  pageScrollIntoView(el.table);
+  // Clicking the controls above the table must leave the table where it is; that copy exists so the reader never has to scroll to reach it.
+  if (!from || !from.classList.contains('pager-top')) pageScrollIntoView(el.table);
 }
 
 /** Export the current sort and filter, one row per player, all of them rather than the visible page. */
@@ -219,10 +217,7 @@ export function initPlayersView() {
   el.q.addEventListener('input', onInput);
   el.reset.addEventListener('click', resetView);
   el.exportBtn.addEventListener('click', exportCsv);
-  el.pager.addEventListener('click', (ev) => {
-    const b = ev.target.closest('button[data-page]');
-    if (b) goPage(b.dataset.page);
-  });
+  bindPagers('players', goPage);
 
   registerView({
     id: 'players',

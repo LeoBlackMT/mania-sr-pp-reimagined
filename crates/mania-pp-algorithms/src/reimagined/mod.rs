@@ -68,7 +68,16 @@ pub fn channels(prepared: &Prepared, counts: &Counts) -> Channels {
 
     let coord_mod = keys::coord_transfer_mod(info.rel_gap_cross, info.keys);
     let w = keys::w_m3_keys(info.keys) * coord_mod;
-    let eff_star = pp::effective_star(r, l, info.keys, info.rel_gap_cross);
+    let eff_star = pp::effective_star(
+        r,
+        l,
+        info.keys,
+        info.rel_gap_cross,
+        info.wall_frac,
+        info.rice_cut,
+        Some(info.mean_chord),
+        Some(info.ln_ratio),
+    );
 
     // w_ref is the *same map without mods*, so the map's own OD is not priced a second time (sunny already contains it through its window parameter).
     let w_mod = windows::windows_for(info.od, &prepared.mod_set, WindowOptions::default()).perfect;
@@ -107,6 +116,10 @@ pub fn pp(prepared: &Prepared, counts: &Counts) -> f64 {
         Some(info.hp),
         c.ln_hold_share,
         info.rel_gap_cross,
+        info.wall_frac,
+        info.rice_cut,
+        Some(info.mean_chord),
+        Some(info.ln_ratio),
     )
 }
 

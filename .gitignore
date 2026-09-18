@@ -12,3 +12,4 @@ debug
 
 # Beatmap files are copyrighted and large; they are read from a local cache outside the repository.
 **/*.osu
+AGENTS.md

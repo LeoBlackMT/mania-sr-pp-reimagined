@@ -104,6 +104,14 @@ pub struct MapInfo {
     pub mean_chord: f64,
     /// Median release -> next press in a different column, in milliseconds.
     pub rel_gap_cross: Option<f64>,
+    /// Share of seconds during which at least half of the columns are held ("long-note wall").
+    ///
+    /// The key-type A axis compresses the coordination channel by this; `None` when the map has no notes.
+    pub wall_frac: Option<f64>,
+    /// Share of adjacent cross-column press gaps at or below 100 ms on the rice side ("rice cut").
+    ///
+    /// The key-type C axis compresses the regular channel by this; `None` when no cross-column pair exists.
+    pub rice_cut: Option<f64>,
 }
 
 /// A `(map, mods)` pair with every upstream calculation already done.
@@ -217,6 +225,10 @@ fn build_map_info(osu_text: &str, mods_str: &str) -> Result<MapInfo, String> {
     );
     let chord = reimagined::features::chord_stats(&note_list);
     let columns = reimagined::features::compute_column_features(&note_list, keys);
+    // The two key-type quantities are pure properties of the notes (no difficulty graph needed), so
+    // they are computed for every map rather than only when a graph is available.
+    let wall_frac = reimagined::features::wall_frac(&note_list, keys);
+    let rice_cut = reimagined::features::rice_cut_fraction(&note_list, keys);
     let holds = note_list.iter().filter(|n| n.is_hold).count();
     let ln_ratio = if note_list.is_empty() {
         0.0
@@ -238,6 +250,8 @@ fn build_map_info(osu_text: &str, mods_str: &str) -> Result<MapInfo, String> {
         ln_ratio,
         mean_chord: chord.map(|c| c.mean_chord).unwrap_or(1.0),
         rel_gap_cross: columns.map(|c| c.c_rel_gap_cross),
+        wall_frac,
+        rice_cut,
     })
 }
 

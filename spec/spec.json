@@ -1,6 +1,6 @@
 {
-  "spec_version": "v1.14",
-  "source": "mania_surface_research@1fd18e8 (Python reference implementation)",
+  "spec_version": "v1.18",
+  "source": "mania_surface_research@1a5f65c (Python reference implementation)",
   "accuracy_curve": {
     "gate": 0.8,
     "g98": 0.45,
@@ -34,7 +34,7 @@
     "min": 1,
     "max": 18,
     "ln_w_anchors": {
-      "4": 0.95,
+      "4": 1.083,
       "5": 1.0,
       "6": 1.0,
       "7": 1.15
@@ -43,7 +43,7 @@
     "ln_w_key_max": 1.2,
     "ln_w_key_step": 0.02,
     "star_key_boost_from": 7,
-    "star_key_boost": 0.03,
+    "star_key_boost": 0.0,
     "key_mods": {
       "1K": 1,
       "2K": 2,
@@ -60,6 +60,16 @@
   "channels": {
     "r_scale": 1.0,
     "acc_weight": 1.0
+  },
+  "shape": {
+    "min_keys": 5,
+    "beta": 0.04,
+    "wall_ref": 0.4,
+    "rice_cut_ref": 0.78,
+    "chord_ref_med": 2.162,
+    "chord_ref_p90": 2.696,
+    "stack_ln_max": 0.25,
+    "stack_chord_min": 2.5
   },
   "coord": {
     "transfer_beta": 0.06,

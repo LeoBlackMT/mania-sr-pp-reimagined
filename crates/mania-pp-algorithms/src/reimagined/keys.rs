@@ -16,7 +16,7 @@
 
 use std::sync::OnceLock;
 
-use mania_pp_spec::spec;
+use mania_pp_spec::{shape, spec};
 
 use crate::reimagined::mods::{clamp_py, ModSet};
 
@@ -174,6 +174,8 @@ pub fn w_m3_keys(keys: i32) -> f64 {
 /// Flat star lift applied from 7K upward (the cross-column load keeps growing while the hand layout stops changing).
 ///
 /// Returns 0.0 outside `star_key_boost_from ..= keys.max`: the reference reads this from a dict keyed by 7..18, so 19K+ has *no* boost even though [`w_m3_keys`] keeps rising.
+///
+/// That dict is **empty since v1.18** — the owner's feedback was that 7K was priced too high, with a target of roughly sunny +5% — and an empty dict is 0.0 everywhere. The code path is unchanged, the value is simply zero; the spec exports `star_key_boost_from = 7` with `star_key_boost = 0.0` so this branch still reads naturally. The research side keeps the feeling anchor 0.03 as `STAR_KEY_BOOST_RECOMMENDED` for a future swing back, and its liveness check still proves the mechanism alive by setting a value at runtime.
 pub fn star_key_boost(keys: i32) -> f64 {
     let k = &spec().keys;
     if keys >= k.star_key_boost_from && keys <= k.max {
@@ -181,6 +183,98 @@ pub fn star_key_boost(keys: i32) -> f64 {
     } else {
         0.0
     }
+}
+
+// ---------------------------------------------------------------------------
+// Key-type axes (v1.17, research `pp_formula.{wall_cut_mod, rice_cut_mod,
+// stack_boost_mod, shape_args}`)
+// ---------------------------------------------------------------------------
+//
+// Three shape modulations of the fused star rating. Their **attachment points are dictated by
+// structure**, not by taste, and the research measurements are the reason:
+//
+// * `wall_cut_mod` (A) multiplies `w * L`. The L channel is where the markup of a long-note
+//   wall lives (residual against `wall` +0.78, against `ln_ratio` +0.83).
+// * `rice_cut_mod` (C) multiplies `R`. A rice cut is pure tapping (`L ~ 0`), so multiplying
+//   `w * L` would be a no-op.
+// * `stack_boost_mod` (B) multiplies the **whole star**. Stack maps are almost entirely rice,
+//   and applying the chord factor to `w * L` measured exactly 0.00% change.
+//
+// All three are gated to `keys >= shape.min_keys` (i.e. above 4K): the owner's ruling is to
+// compress the multi-key side, never to lift 4K. That gate lives **inside** `effective_star`
+// via [`shape_args`], so a caller cannot bypass it by passing raw quantities.
+
+/// A 4-tuple of the shape quantities, gated by key count.
+///
+/// `None` in every slot means "no shape modulation": either the map is 4K or below (the gate), or the caller has no structural information. Returns `(wall_frac, rice_cut, mean_chord, ln_ratio)`, ready to spread into [`effective_star`](crate::reimagined::pp::effective_star).
+///
+/// This is the **only** place the "4K stays bit-for-bit unchanged" rule is implemented, and `effective_star` calls it internally rather than trusting its caller.
+pub fn shape_args(
+    keys: i32,
+    wall_frac: Option<f64>,
+    rice_cut: Option<f64>,
+    mean_chord: Option<f64>,
+    ln_ratio: Option<f64>,
+) -> (Option<f64>, Option<f64>, Option<f64>, Option<f64>) {
+    if keys < shape().min_keys {
+        return (None, None, None, None);
+    }
+    (wall_frac, rice_cut, mean_chord, ln_ratio)
+}
+
+/// **A axis — compress long-note walls.** Multiplies `w * L`; neutral at or below `shape.wall_ref`, full `shape.beta` at a complete wall.
+///
+/// `None` yields the neutral 1.0 (no information, no extrapolation).
+pub fn wall_cut_mod(wall_frac: Option<f64>) -> f64 {
+    let s = shape();
+    let Some(wall) = wall_frac else {
+        return 1.0;
+    };
+    if !wall.is_finite() {
+        return 1.0;
+    }
+    let span = (wall - s.wall_ref) / (1.0 - s.wall_ref);
+    clamp_py(1.0 - s.beta * clamp_py(span, 0.0, 1.0), 1.0 - s.beta, 1.0)
+}
+
+/// **C axis — compress rice cuts.** Multiplies `R`; neutral at or below `shape.rice_cut_ref`.
+///
+/// The input is the fast cross-column transfer fraction of the rice side
+/// ([`crate::reimagined::features::rice_cut_fraction`]), which is what distinguishes a rice cut
+/// from a stack without leaning on density.
+pub fn rice_cut_mod(rice_cut: Option<f64>) -> f64 {
+    let s = shape();
+    let Some(cut) = rice_cut else {
+        return 1.0;
+    };
+    if !cut.is_finite() {
+        return 1.0;
+    }
+    let span = (cut - s.rice_cut_ref) / (1.0 - s.rice_cut_ref);
+    clamp_py(1.0 - s.beta * clamp_py(span, 0.0, 1.0), 1.0 - s.beta, 1.0)
+}
+
+/// **B axis — lift stacks.** Multiplies the **whole star**; neutral at or below `shape.chord_ref_med`, capped at `shape.beta` from `shape.chord_ref_p90` on.
+///
+/// Scope-gated as well, and deliberately so: only **rice stacks** are lifted (`ln_ratio < shape.stack_ln_max` and `mean_chord >= shape.stack_chord_min`). The chord structure of a *mixed* map (long-note wall plus chords) is already priced by the L channel, so lifting it again would be double counting — and in practice it pushed the very maps the owner called overestimated even higher (3449961 +3.30%, 4973092 +3.42%, the latter ending up net **positive** under A+B+C). With the gate those two land at −3.86% / −2.72% while stacks still gain +9.08%.
+///
+/// A missing `ln_ratio` fails the gate: better to lift nothing than to lift the wrong maps.
+pub fn stack_boost_mod(mean_chord: Option<f64>, ln_ratio: Option<f64>) -> f64 {
+    let s = shape();
+    let Some(chord) = mean_chord else {
+        return 1.0;
+    };
+    let Some(ln) = ln_ratio else {
+        return 1.0;
+    };
+    if !chord.is_finite() || !ln.is_finite() {
+        return 1.0;
+    }
+    if ln >= s.stack_ln_max || chord < s.stack_chord_min {
+        return 1.0;
+    }
+    let span = (chord - s.chord_ref_med) / (s.chord_ref_p90 - s.chord_ref_med);
+    clamp_py(1.0 + s.beta * clamp_py(span, 0.0, 1.0), 1.0, 1.0 + s.beta)
 }
 
 /// Structural modulation of the LN weight by how fast the player must release one column and press another (`release -> next press in a different column`, median in ms).

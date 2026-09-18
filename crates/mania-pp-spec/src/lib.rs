@@ -20,7 +20,7 @@ use serde::Deserialize;
 /// Version of the specification this engine build was synced from.
 ///
 /// Bump this together with a research-side export; the unit test below makes a stale engine fail instead of silently reporting numbers from an older specification.
-pub const EXPECTED_SPEC_VERSION: &str = "v1.14";
+pub const EXPECTED_SPEC_VERSION: &str = "v1.18";
 
 /// Embedded export of the research specification.
 const SPEC_JSON: &str = include_str!("../../../spec/spec.json");
@@ -159,6 +159,29 @@ pub struct Diagnostics {
     pub map_factor_clamp: [f64; 2],
 }
 
+/// Key-type axes: the shape quantities that modulate the fused star rating of maps above 4K.
+///
+/// Three factors with three different attachment points (coordination channel, regular channel, whole star) — see `reimagined::keys` for why each one sits where it does. The key-count gate (`min_keys`) is what keeps 4K bit-for-bit unchanged.
+#[derive(Debug, Clone, Deserialize)]
+pub struct Shape {
+    /// Lowest key count the axes apply to: 4K and below are never modulated.
+    pub min_keys: i32,
+    /// Largest adjustment any single axis may apply (0.0 disables all three).
+    pub beta: f64,
+    /// Wall fraction at or below which the A axis stays neutral.
+    pub wall_ref: f64,
+    /// Fast-cross-column fraction at or below which the C axis stays neutral.
+    pub rice_cut_ref: f64,
+    /// Chord at which the B axis starts lifting.
+    pub chord_ref_med: f64,
+    /// Chord at which the B axis reaches its cap.
+    pub chord_ref_p90: f64,
+    /// Above this long-note share the B axis does not apply (mixed maps are already priced by the L channel).
+    pub stack_ln_max: f64,
+    /// Below this chord the B axis does not apply.
+    pub stack_chord_min: f64,
+}
+
 /// The whole exported specification.
 #[derive(Debug, Clone, Deserialize)]
 pub struct Spec {
@@ -171,9 +194,31 @@ pub struct Spec {
     pub channels: Channels,
     pub coord: Coord,
     pub accuracy: Accuracy,
+    /// Absent in exports older than v1.17; the key-type axes are then simply off.
+    pub shape: Option<Shape>,
     pub pp: Pp,
     pub nf: Nf,
     pub diagnostics: Diagnostics,
+}
+
+/// The key-type axes, defaulting to **disabled** when the export predates them.
+///
+/// A default that disables rather than guesses keeps an old export from silently pricing with
+/// invented constants; `EXPECTED_SPEC_VERSION` is what turns that situation into a loud failure.
+pub fn shape() -> &'static Shape {
+    static FALLBACK: OnceLock<Shape> = OnceLock::new();
+    spec().shape.as_ref().unwrap_or_else(|| {
+        FALLBACK.get_or_init(|| Shape {
+            min_keys: i32::MAX,
+            beta: 0.0,
+            wall_ref: 0.0,
+            rice_cut_ref: 1.0,
+            chord_ref_med: 0.0,
+            chord_ref_p90: 1.0,
+            stack_ln_max: 0.0,
+            stack_chord_min: f64::INFINITY,
+        })
+    })
 }
 
 static SPEC: OnceLock<Spec> = OnceLock::new();

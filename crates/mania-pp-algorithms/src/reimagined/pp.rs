@@ -17,7 +17,10 @@ use std::sync::OnceLock;
 
 use mania_pp_spec::spec;
 
-use crate::reimagined::keys::{coord_transfer_mod, star_key_boost, w_m3_keys};
+use crate::reimagined::keys::{
+    coord_transfer_mod, rice_cut_mod, shape_args, stack_boost_mod, star_key_boost, w_m3_keys,
+    wall_cut_mod,
+};
 use crate::reimagined::mods::{clamp_py, flat_pp_multiplier, nf_multiplier, ModSet};
 
 /// Judgement counts of a score: `[n320, n300, n200, n100, n50, miss]`.
@@ -196,17 +199,34 @@ pub fn key_sigma_scale(keys: i32, mean_chord: Option<f64>) -> f64 {
     sigma_scale_from_chord(mc)
 }
 
-/// Effective star of the three-channel fusion: `(R_SCALE * R + w * L) * (1 + boost)`.
+/// Effective star of the three-channel fusion: `(R_SCALE * R * rice_mod + w * wall_mod * L) * (1 + boost) * stack_mod`.
 ///
 /// * `w` = the key count's LN weight ([`w_m3_keys`]) modulated by the map's cross-column
 ///   transfer speed ([`coord_transfer_mod`]),
-/// * `boost` = the flat star lift from 7K upward ([`star_key_boost`]).
+/// * `boost` = the flat star lift from 7K upward ([`star_key_boost`]) — zero since v1.18,
+/// * the three shape factors (v1.17) each attach where the structure says they must:
+///   `rice_cut_mod` on `R`, `wall_cut_mod` on `w * L`, `stack_boost_mod` on the whole star.
 ///
 /// `ln_gap_cross = None` means "no structural information": the modulation is then exactly 1.0 and the feeling anchors are reproduced bit for bit.
-pub fn effective_star(r: f64, l: f64, keys: i32, ln_gap_cross: Option<f64>) -> f64 {
+///
+/// The four shape quantities are gated **here**, through [`shape_args`], so a caller passing raw values for a 4K map still gets the unmodulated star: the "4K is never touched" rule has exactly one implementation.
+#[allow(clippy::too_many_arguments)]
+pub fn effective_star(
+    r: f64,
+    l: f64,
+    keys: i32,
+    ln_gap_cross: Option<f64>,
+    wall_frac: Option<f64>,
+    rice_cut: Option<f64>,
+    mean_chord: Option<f64>,
+    ln_ratio: Option<f64>,
+) -> f64 {
     let w = w_m3_keys(keys) * coord_transfer_mod(ln_gap_cross, keys);
     let boost = star_key_boost(keys);
-    (spec().channels.r_scale * r + w * l) * (1.0 + boost)
+    let (wall, cut, chord, ln) = shape_args(keys, wall_frac, rice_cut, mean_chord, ln_ratio);
+    let star = (spec().channels.r_scale * r * rice_cut_mod(cut) + w * wall_cut_mod(wall) * l)
+        * (1.0 + boost);
+    star * stack_boost_mod(chord, ln)
 }
 
 /// The accuracy channel: a multiplier derived **directly from the judgement window**.
@@ -290,7 +310,7 @@ pub fn sunny_rebirth_pp(
 
 /// The final three-channel price.
 ///
-/// 1. `eff_star = effective_star(R, L, keys, ln_gap_cross)`,
+/// 1. `eff_star = effective_star(R, L, keys, ln_gap_cross, wall_frac, rice_cut, mean_chord, ln_ratio)`,
 /// 2. `base = sunny_rebirth_pp(eff_star, variety, 1.0, ...)` — which already carries the flat
 ///    mod multiplier and the No-Fail factor,
 /// 3. `PP = base * (1 + ACC_WEIGHT * (acc_factor - 1))`.
@@ -311,8 +331,21 @@ pub fn three_channel_pp_final(
     hp: Option<f64>,
     ln_hold_share: f64,
     ln_gap_cross: Option<f64>,
+    wall_frac: Option<f64>,
+    rice_cut: Option<f64>,
+    mean_chord: Option<f64>,
+    ln_ratio: Option<f64>,
 ) -> f64 {
-    let eff = effective_star(r, l, keys, ln_gap_cross);
+    let eff = effective_star(
+        r,
+        l,
+        keys,
+        ln_gap_cross,
+        wall_frac,
+        rice_cut,
+        mean_chord,
+        ln_ratio,
+    );
     let Some(base) = sunny_rebirth_pp(eff, variety, 1.0, total_notes, counts, m, hp, ln_hold_share)
     else {
         return f64::NAN;

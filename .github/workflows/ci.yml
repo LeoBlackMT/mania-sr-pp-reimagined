@@ -97,7 +97,11 @@ jobs:
           const calc = new mod.Calculator(lines.join('\n') + '\n', '');
           const result = JSON.parse(calc.price(300, 0, 0, 0, 0, 0));
           const got = Object.fromEntries(result.algorithms.map((a) => [a.id, a.pp]));
-          const want = { bancho: 23.361, sunny: 51.618, codexxy: 51.817, reimagined: 48.731 };
+          // Reimagined moved with the specification (research v1.17/v1.18: the key-type axes and
+          // the 4K LN anchor 0.95 -> 1.083). This 4K map is 20% holds, so the new anchor lifts it
+          // by roughly the anchor's own 14%; Bancho/Sunny/Codexxy do not read the spec and must
+          // stay put. Both facts are what makes this case worth asserting.
+          const want = { bancho: 23.361, sunny: 51.618, codexxy: 51.817, reimagined: 55.541 };
           let bad = 0;
           for (const [id, expected] of Object.entries(want)) {
             const pp = got[id];

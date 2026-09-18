@@ -94,13 +94,15 @@ Players below `--min-bancho-total` are dropped before anything is written: a bp 
 
 | Stage | median | mean | p95 |
 |---|---|---|---|
-| `prepare` per (map, mods) — cached, paid once | 27.9ms | 51.5ms | 170.5ms |
+| `prepare` per (map, mods) — cached, paid once | 33.6ms | 62.2ms | 203.7ms |
 | Bancho pp | 0.2µs | 0.3µs | 0.5µs |
-| Sunny + Codexxy (one shared upstream pass) | 60.9µs | 64.8µs | 103.6µs |
-| Reimagined pp | 0.8µs | 1.1µs | 2.0µs |
-| **total per score, four columns** | **64.8µs** | 70.8µs | 113.1µs |
+| Sunny + Codexxy (one shared upstream pass) | 61.7µs | 73.8µs | 127.3µs |
+| Reimagined pp | 0.9µs | 1.4µs | 3.4µs |
+| **total per score, four columns** | **66.2µs** | 80.6µs | 144.6µs |
 
-Read it as two very different costs. Pricing a score is microseconds — Reimagined's own arithmetic is 0.7µs, and even Bancho's complete pp calculation is half a microsecond — while the *difficulty* pass (star ratings for the full map, the rice variant and the official calculator) costs tens of milliseconds per map-and-mods pair and is cached, so a bp list pays it once per map. Sunny and Codexxy share that pass by construction, which is why they are timed together; computing them independently would roughly double that cost. For comparison, the Python research reference prices a score in ~5µs and needs ~13-16ms for its diagnostic surface channel, and the Node sunny build needs ~100-350ms per map.
+`prepare` grew from 27.9ms with research v1.17/v1.18: computing the two key-type quantities (`wall_frac` and the rice-side fast-transfer fraction) walks the note list once more, and that cost sits in the cached stage where it belongs — per score, Reimagined itself only went from 0.8µs to 0.9µs.
+
+Read it as two very different costs. Pricing a score is microseconds — Reimagined's own arithmetic is under a microsecond, and even Bancho's complete pp calculation is half a microsecond — while the *difficulty* pass (star ratings for the full map, the rice variant and the official calculator) costs tens of milliseconds per map-and-mods pair and is cached, so a bp list pays it once per map. Sunny and Codexxy share that pass by construction, which is why they are timed together; computing them independently would roughly double that cost. For comparison, the Python research reference prices a score in ~5µs and needs ~13-16ms for its diagnostic surface channel, and the Node sunny build needs ~100-350ms per map.
 
 ## Dataset layout
 
@@ -115,13 +117,13 @@ docs/data/.nojekyll             (in docs/) tells GitHub Pages not to run Jekyll
 ```jsonc
 // index.json
 { "schema_version": 3,
-  "generated_at": "2026-09-13T12:00:00Z",
-  "engine": { "name": "mania-pp-rs", "version": "0.1.0", "spec_version": "v1.14", "rosu_pp_rev": "3530ba7" },
+  "generated_at": "2026-09-17T05:18:51Z",
+  "engine": { "name": "mania-pp-rs", "version": "0.1.0", "spec_version": "v1.18", "rosu_pp_rev": "3530ba7" },
   "algorithms": [ { "id": "bancho", "label": "Bancho", "description": "…" }, … ],
   "users": [ { "uid": 21207706, "username": "Shirasu-Azusa", "fixture": "bp-lists", "scores": 100,
                "file": "players/21207706.json",
                "total_pp": { "bancho": 14923.95, "sunny": 14961.18, "codexxy": 15021.09, "reimagined": 14486.37 } } ],
-  "score_count": 32516,
+  "score_count": 32191,
   "warnings": [] }
 ```
 

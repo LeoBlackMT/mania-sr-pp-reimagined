@@ -1,6 +1,6 @@
-//! Structural features of a map: chord (simultaneous press) statistics, column-aware coordination features and the map shape profile.
+//! Structural features of a map: chord (simultaneous press) statistics, column-aware coordination features, the map shape profile and the two key-type quantities the pricing axes read.
 //!
-//! Ported from `pp_formula.chord_stats` and `coord_features.{column_of, compute_column_features, map_shape_profile}`. All three are **diagnostic**: they do not enter the price directly, they explain it (and the chord statistics feed the key-count coupling of the accuracy channel through the typical chord of a key count).
+//! Ported from `pp_formula.chord_stats` and `coord_features.{column_of, compute_column_features, map_shape_profile, compute_rice_column_features}`. Most of them are **diagnostic**: they explain a price rather than enter it. Two are not: [`wall_frac`] and [`rice_cut_fraction`] feed the key-type axes of [`crate::reimagined::keys`], and the chord statistics feed the key-count coupling of the accuracy channel through the typical chord of a key count.
 //!
 //! # Column semantics
 //!
@@ -22,6 +22,10 @@ use crate::reimagined::notes::Note;
 const PLATEAU_FRAC: f64 = 0.85;
 /// Fraction of the difficulty p90 below which a point counts as "rest".
 const REST_FRAC: f64 = 0.30;
+/// A cross-column press gap at or below this many milliseconds counts as a fast hand transfer.
+///
+/// The key-type C axis reads the fraction of such gaps; see [`rice_cut_fraction`].
+pub const FAST_CROSS_MS: f64 = 100.0;
 
 /// Python's `round(x, digits)` for floats.
 ///
@@ -281,27 +285,9 @@ pub fn map_shape_profile(notes: &[Note], keys: i32, d_values: &[f64]) -> Option<
     sorted_vals.sort_by(|a, b| a.partial_cmp(b).unwrap_or(std::cmp::Ordering::Equal));
     let p90 = sorted_vals[((0.90 * sorted_vals.len() as f64) as usize).min(sorted_vals.len() - 1)];
 
-    // Long-note wall: per second, which columns are occupied by a hold.
-    let mut occupied = vec![0u32; n_bins];
-    for n in notes {
-        if !n.is_hold {
-            continue;
-        }
-        let bit = 1u32.checked_shl(column_of(n.x, keys) as u32).unwrap_or(0);
-        let from = (n.t / 1000.0).floor() as i64;
-        let to = ((n.end / 1000.0).floor() as i64 + 1).min(dur_bins);
-        for b in from..to {
-            // The reference wraps negative indices around the list (Python semantics); a negative timestamp cannot occur in a valid `.osu`, so such bins are skipped.
-            if let Some(slot) = occupied.get_mut(b as usize) {
-                *slot |= bit;
-            }
-        }
-    }
-    let half = keys / 2 + (keys & 1);
-    let walled = occupied
-        .iter()
-        .filter(|o| o.count_ones() as i32 >= half)
-        .count();
+    // Long-note wall: delegated so "wall" has exactly one definition (see [`wall_frac`]).
+    // The guards above already returned `None` for every case that would make it `None` here.
+    let wall = wall_frac(notes, keys)?;
 
     // Object density per second.
     let mut density = vec![0i32; n_bins];
@@ -325,7 +311,118 @@ pub fn map_shape_profile(notes: &[Note], keys: i32, d_values: &[f64]) -> Option<
         d_p90: round_dec(p90, 2),
         plateau: round_dec(plateau, 3),
         rest: round_dec(rest, 3),
-        wall: round_dec(walled as f64 / n_bins as f64, 3),
+        wall,
         dens_p90,
     })
+}
+
+/// Long-note wall fraction: the share of seconds during which at least half of the columns are held.
+///
+/// The key-type A axis (`wall_cut_mod`) compresses the coordination channel by this quantity, because the research scan found the L channel's markup concentrated on walled maps (residual against `wall` +0.78).
+///
+/// This exists separately from [`map_shape_profile`] on purpose: the profile needs the per-note difficulty values and returns `None` without them, while the wall fraction is a pure property of the holds. Deriving it here — and having the profile call *this* — keeps one definition of "wall" instead of two that could drift apart.
+///
+/// `None` for an empty note list, a non-positive key count, or a duration that yields no bins (the reference's own guards).
+pub fn wall_frac(notes: &[Note], keys: i32) -> Option<f64> {
+    if notes.is_empty() || keys <= 0 {
+        return None;
+    }
+    let last_ms = notes
+        .iter()
+        .map(|n| n.end)
+        .fold(f64::NEG_INFINITY, f64::max);
+    let dur_bins = (last_ms / 1000.0) as i64 + 1;
+    if dur_bins <= 0 {
+        return None;
+    }
+    let n_bins = dur_bins as usize;
+
+    // Which columns a hold occupies, per second.
+    let mut occupied = vec![0u32; n_bins];
+    for n in notes {
+        if !n.is_hold {
+            continue;
+        }
+        let bit = 1u32.checked_shl(column_of(n.x, keys) as u32).unwrap_or(0);
+        let from = (n.t / 1000.0).floor() as i64;
+        let to = ((n.end / 1000.0).floor() as i64 + 1).min(dur_bins);
+        for b in from..to {
+            // The reference wraps negative indices around the list (Python semantics); a negative timestamp cannot occur in a valid `.osu`, so such bins are skipped.
+            if let Some(slot) = occupied.get_mut(b as usize) {
+                *slot |= bit;
+            }
+        }
+    }
+    let half = keys / 2 + (keys & 1);
+    let walled = occupied
+        .iter()
+        .filter(|o| o.count_ones() as i32 >= half)
+        .count();
+    Some(round_dec(walled as f64 / n_bins as f64, 3))
+}
+
+/// Rice-side split fraction: the share of adjacent cross-column press gaps at or below [`FAST_CROSS_MS`].
+///
+/// Ported from `coord_features.compute_rice_column_features(...)["R_frac_cross_fast"]`. The key-type C axis (`rice_cut_mod`) reads it to compress rice-cutting maps **without** using density — density cannot tell a rice cut from a stack, because both are dense; the research measurement showed the density proxy misfiling maps in both directions (10 of 12 "rice cuts" were stacks, and 7 real cuts were missed).
+///
+/// "Rice side" means holds are treated as taps, matching the R channel (`sr_rice`): every object contributes one press, and a press is one *event* per column per timestamp. Adjacent events separated by a different column give a transfer gap; a gap counts as fast when it is positive and at most [`FAST_CROSS_MS`].
+///
+/// `None` for an empty note list, a non-positive key count, or when no cross-column pair exists (the reference returns 0.0 there; `None` keeps "no information" distinct from "measured, and it is zero").
+pub fn rice_cut_fraction(notes: &[Note], keys: i32) -> Option<f64> {
+    if notes.is_empty() || keys <= 0 {
+        return None;
+    }
+
+    // One press per object (a hold contributes its head), sorted by time; ties keep the input order, as in the reference's `sorted()`.
+    let mut presses: Vec<(f64, i32)> = notes.iter().map(|n| (n.t, column_of(n.x, keys))).collect();
+    presses.sort_by(|a, b| a.0.partial_cmp(&b.0).unwrap_or(std::cmp::Ordering::Equal));
+
+    // Collapse same-timestamp, same-column duplicates into one event; `size[i]` is the number of columns pressed at that instant, and 0 marks a repeat already accounted for by the first event of its instant (the reference's `sizes` marker).
+    let mut events: Vec<(f64, i32)> = Vec::with_capacity(presses.len());
+    for p in presses {
+        if let Some(last) = events.last() {
+            if last.0 == p.0 && last.1 == p.1 {
+                continue;
+            }
+        }
+        events.push(p);
+    }
+    let mut sizes = vec![1usize; events.len()];
+    let mut i = 0usize;
+    while i < events.len() {
+        let mut j = i + 1;
+        while j < events.len() && events[j].0 == events[i].0 {
+            j += 1;
+        }
+        if j - i > 1 {
+            sizes[i] = j - i;
+            for slot in sizes.iter_mut().take(j).skip(i + 1) {
+                *slot = 0;
+            }
+        }
+        i = j;
+    }
+
+    let mut total = 0usize;
+    let mut fast = 0usize;
+    for a in 1..events.len() {
+        // Same-instant events belong to one chord, and a repeat carries no gap of its own.
+        if sizes[a] == 0 || events[a].0 == events[a - 1].0 {
+            continue;
+        }
+        if events[a].1 == events[a - 1].1 {
+            continue;
+        }
+        let gap = events[a].0 - events[a - 1].0;
+        if gap > 0.0 {
+            total += 1;
+            if gap <= FAST_CROSS_MS {
+                fast += 1;
+            }
+        }
+    }
+    if total == 0 {
+        return None;
+    }
+    Some(round_dec(fast as f64 / total as f64, 3))
 }

@@ -55,7 +55,10 @@ R = sunny star rating of the map with every hold rewritten as a tap ("rice")
 L = sunny star rating of the full map − R                     what holding notes adds
 
 w         = w_m3_keys(keys) · coord_transfer_mod(rel_gap_cross, keys)
-eff_star  = (R_SCALE · R + w · L) · (1 + star_key_boost(keys))
+eff_star  = ( R_SCALE · R · rice_cut_mod(rice_cut)
+            + w · wall_cut_mod(wall_frac) · L )
+            · (1 + star_key_boost(keys))
+            · stack_boost_mod(mean_chord, ln_ratio)
 PP        = sunny_rebirth_pp(eff_star, variety, acc_scalar, notes, counts, mods, hp, ln_share)
             · nf_factor(mods, hp, counts, ln_share)
             · accuracy_factor(perfect_window, keys, w_ref, mean_chord)
@@ -65,8 +68,9 @@ Each mechanism below is a tunable in `spec/spec.json`, exported from the researc
 
 | Mechanism | What it does |
 |---|---|
-| LN weight anchors | Feeling-anchored coordination weight per key count (4K 0.95, 5K/6K 1.00, 7K 1.15), interpolated between anchors and gently extrapolated outside them; below 1K the weight tends to zero because a single column has no cross-column coordination |
-| Star key boost | Flat star lift from 7K upward: cross-column coordination keeps growing while the hand layout stops changing |
+| LN weight anchors | Feeling-anchored coordination weight per key count (4K 1.083, 5K/6K 1.00, 7K 1.15), interpolated between anchors and gently extrapolated outside them; below 1K the weight tends to zero because a single column has no cross-column coordination |
+| Star key boost | Flat star lift from 7K upward: cross-column coordination keeps growing while the hand layout stops changing. The exported value is **0.0** since research v1.18 — the owner's feedback was that 7K was priced too high — so the mechanism is present but currently inert |
+| Key-type axes (research v1.17) | Three shape modulations, each attached where the structure puts it, and **only for key counts ≥ 5** so 4K stays untouched: `wall_cut_mod` compresses the coordination channel of long-note walls, `rice_cut_mod` compresses the regular channel of rice cuts (fast cross-column hand transfers), and `stack_boost_mod` lifts dense rice stacks — but only rice stacks, because the chord structure of a mixed map is already priced by the L channel and lifting it again would double count |
 | Cross-column transfer modulation | Makes the coordination weight follow how fast a player must release one column and press another; Sunny's own model only ever looks at the *same* column |
 | Accuracy factor | Window-derived multiplier `(w / w_ref)^−γ · chord_boost`, where `w_ref` is the *same map without mods*, so that the map's own OD is not priced twice (Sunny already contains it) |
 | No-Fail factor | Failure-risk model: effective HP (EZ halves it, HR boosts it and caps at 10), per-judgement health deltas, a life pool including EZ's extra lives, and a risk-domain exponential curve over the reconstructed net drain |

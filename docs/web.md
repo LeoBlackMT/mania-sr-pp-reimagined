@@ -72,9 +72,9 @@ docs/data/players/{uid}.json    that player's scores only, in columnar form (fet
 ```jsonc
 {
   "schema_version": 3,
-  "generated_at": "2026-09-14T04:12:33Z",
+  "generated_at": "2026-09-17T05:18:51Z",
   "engine": { "name": "mania-pp-rs", "version": "0.1.0",
-              "spec_version": "v1.14", "rosu_pp_rev": "3530ba7" },
+              "spec_version": "v1.18", "rosu_pp_rev": "3530ba7" },
   "algorithms": [
     { "id": "bancho", "label": "Bancho", "description": "osu!lazer mania pp: …" }
   ],
@@ -84,7 +84,7 @@ docs/data/players/{uid}.json    that player's scores only, in columnar form (fet
     "total_pp": { "bancho": 14923.947, "sunny": 14961.185,
                   "codexxy": 15021.095, "reimagined": 14486.368 }
   } ],
-  "score_count": 32516,
+  "score_count": 32191,
   "aggregates": { /* optional, see below */ },
   "warnings": []
 }
@@ -110,7 +110,7 @@ Precomputed by the engine so the dataset-wide modules need no shard at all — a
 
 ```jsonc
 "aggregates": {
-  "score_count": 32516,
+  "score_count": 32191,
   "layers": [ { "family": "key mode|mod family|long notes", "layer": "7K|NM|Rate-up|Rate-down|Other mods|RC|HB|LN",
                 "n": 800,
                 "median_pp": { "bancho": 512.3, "sunny": 0.0, "codexxy": 0.0, "reimagined": 0.0 },
